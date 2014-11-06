@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+
+	<table name="TRZ_STATIC">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="KEY"></column>
+		<column name="VALUE"></column>
+		<column name="VALUE_TYPE"></column>
+		<column name="KEY_DESCRIPTION"></column>
+	</table>
+	<table name="REVENUE2GROUP2PERIOD">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="FK_GROUP_ID"></column>
+		<column name="FK_PERIOD_ID"></column>
+		<column name="REVENUE"></column>
+	</table>
+	<table name="REVENUE2EMPLOYEE2PERIOD">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="FK_EMPLOYEE_ID"></column>
+		<column name="FK_PERIOD_ID"></column>
+		<column name="REVENUE"></column>
+	</table>
+	<table name="PERIOD_SETTING">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="FK_TRZ_STATIC_ID"></column>
+		<column name="FK_PERIOD_ID"></column>
+		<column name="VALUE"></column>
+	</table>
+	<table name="EMPLOYEE2GROUP2PERIOD">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="FK_EMPLOYEE_ID"></column>
+		<column name="FK_GROUP_ID"></column>
+		<column name="FK_PERIOD_ID"></column>
+	</table>
+	<table name="EMPLOYEE_SETTINGS">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="FK_PERIOD_ID"></column>
+		<column name="FK_EMPLOYEE_ID"></column>
+		<column name="BRUTO_PO_SHTAT"></column>
+		<column name="BRUTO_STANDART"></column>
+		<column name="AVANS"></column>
+		<column name="PERCENT_ALL"></column>
+		<column name="PERCENT_GROUP"></column>
+		<column name="PERCENT_PERSONAL"></column>
+	</table>
+	<table name="EMPLOYEE_SALARY">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="FK_PERIOD_ID"></column>
+		<column name="FK_EMPLOYEE_ID"></column>
+		<column name="V01"></column>
+		<column name="V02"></column>
+		<column name="V03"></column>
+		<column name="V04"></column>
+		<column name="V05"></column>
+		<column name="V06"></column>
+		<column name="V07"></column>
+		<column name="V08"></column>
+		<column name="V09"></column>
+		<column name="V10"></column>
+		<column name="V11"></column>
+		<column name="V12"></column>
+		<column name="V13"></column>
+		<column name="V14"></column>
+		<column name="V15"></column>
+		<column name="V16"></column>
+		<column name="V17"></column>
+		<column name="V18"></column>
+		<column name="V19"></column>
+		<column name="V20"></column>
+		<column name="V21"></column>
+		<column name="V22"></column>
+		<column name="V23"></column>
+	</table>
+	<table name="PERIOD">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="CODE"></column>
+		<column name="DATE_START"></column>
+		<column name="DATE_END"></column>
+		<column name="REVENUE"></column>
+	</table>
+	<table name="DEPARTMENT">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="CODE"></column>
+		<column name="LABEL"></column>
+	</table>
+	<table name="EMPLOYEE">
+		<column name="ID" jdbc-type="CHAR" property="id" type="java.util.UUID"></column>
+		<column name="FIRST_NAME"></column>
+		<column name="LAST_NAME"></column>
+		<column name="IS_ACTIVE"></column>
+		<column name="CARLO_ID"></column>
+	</table>
+</hibernate-reverse-engineering>

@@ -1,0 +1,70 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+version = '0.1.0'
+mainClassName='com.consultancygrid.trz.base.MainFrame'
+
+repositories {
+	mavenCentral()
+	
+	
+}
+
+
+sourceSets {
+	main {
+		java {
+			srcDir  'src'
+			exclude 'test/**'
+			exclude 'src/org/eclipse/**'
+		}
+	}
+}
+
+configurations {
+	
+	includeInJar
+}
+
+dependencies {
+	
+	includeInJar 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
+	includeInJar 'org.eclipse.persistence:javax.persistence:2.1.0'
+	includeInJar 'javax.ejb:ejb-api:3.0'
+	includeInJar 'commons-codec:commons-codec:1.5'
+	includeInJar 'commons-logging:commons-logging:1.2'
+	includeInJar 'org.apache.poi:poi:3.10.1'
+	includeInJar 'org.apache.poi:poi-ooxml:3.10-FINAL'
+    includeInJar 'cn.guoyukun.jdbc:oracle-ojdbc6:11.2.0.3.0'
+	includeInJar 'org.ow2.util.log:log-api:2.0.0'
+    includeInJar 'au.com.bytecode:opencsv:2.4'
+	includeInJar 'log4j:log4j:1.2.17'
+	includeInJar 'org.tinylog:tinylog:0.9.1'
+	compile 'org.hibernate:hibernate-core:4.3.6.Final'
+	compile 'org.hibernate:hibernate-entitymanager:4.3.6.Final'
+	compile 'junit:junit:4.11'
+	
+	configurations.compile.extendsFrom(configurations.includeInJar)
+	configurations.compile.extendsFrom(configurations.includeInJar)
+		
+}
+
+jar {
+	baseName = 'trzPrototype'
+	manifest {
+		attributes 'Implementation-Title': 'Prototype', 'Implementation-Version': version, 'Main-Class':mainClassName
+	}
+	into('lib') {
+		println "includeInJar: " + configurations.includeInJar.collect { File file -> file }
+		from configurations.includeInJar
+	}
+	into('resource') {
+		
+		from'resource'
+		exclude 'log'
+	}
+	
+}
