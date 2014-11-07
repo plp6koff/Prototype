@@ -26,9 +26,11 @@ import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.RevenueEmplPeriod;
-import com.consultancygrid.trz.ui.EmployeeTableModel;
-import com.consultancygrid.trz.ui.PrototypeMainFrame;
+import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
+import com.consultancygrid.trz.ui.table.GroupCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
+
+
 
 
 
@@ -114,7 +116,7 @@ public class TimePeriodComboAL extends BaseActionListener {
 
 			if (comboBox.getModel().getSelectedItem() != null) {
 				
-				EmployeeTableModel currentModel = (EmployeeTableModel) table.getModel();  
+				GroupCfgEmplsTableModel currentModel = (GroupCfgEmplsTableModel) table.getModel();  
 				currentModel.setData(tableData);
 				table.setModel(currentModel);
 				mainFrame.validate();

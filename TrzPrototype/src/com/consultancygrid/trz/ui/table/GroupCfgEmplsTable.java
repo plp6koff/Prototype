@@ -1,4 +1,4 @@
-package com.consultancygrid.trz.ui;
+package com.consultancygrid.trz.ui.table;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -12,7 +12,7 @@ import javax.swing.table.TableCellRenderer;
 
 import static com.consultancygrid.trz.base.Constants.*;
 
-public class EmployeesTable extends JTable {
+public class GroupCfgEmplsTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -95,12 +95,12 @@ public class EmployeesTable extends JTable {
 		return comp;
 	}
 
-	public EmployeesTable() throws IOException {
+	public GroupCfgEmplsTable() throws IOException {
 
 		setAutoResizeMode(HEIGHT);
 		setAutoResizeMode(WIDTH);
 		setBorder(new EmptyBorder(5, 5, 5, 5));
-		setModel(new EmployeeTableModel());
+		setModel(new GroupCfgEmplsTableModel());
 		getColumnModel().getColumn(0).setMinWidth(col0MW);
 		getColumnModel().getColumn(1).setMinWidth(col1MW);
 		getColumnModel().getColumn(2).setMinWidth(col2MW);

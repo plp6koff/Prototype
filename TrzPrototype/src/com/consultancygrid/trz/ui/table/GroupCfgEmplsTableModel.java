@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.consultancygrid.trz.ui;
+package com.consultancygrid.trz.ui.table;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -15,7 +15,7 @@ import com.consultancygrid.trz.util.ResourceLoaderUtil;
  * @author user
  *
  */
-public class EmployeeTableModel extends AbstractTableModel {
+public class GroupCfgEmplsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 5044877015250409328L;
 
@@ -23,7 +23,7 @@ public class EmployeeTableModel extends AbstractTableModel {
 	
 	private Vector data = new Vector();
 	
-	public EmployeeTableModel() throws IOException {
+	public GroupCfgEmplsTableModel() throws IOException {
 		
 	
 		tableHeaders = new Vector<String>();

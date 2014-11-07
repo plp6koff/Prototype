@@ -1,4 +1,4 @@
-package com.consultancygrid.trz.ui;
+package com.consultancygrid.trz.ui.frame;
 
 import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
 import static com.consultancygrid.trz.base.Constants.col0MW;
@@ -17,6 +17,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.io.IOException;
 import java.util.List;
+import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,10 +29,21 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import com.consultancygrid.trz.actionListener.EmplsComboAL;
 import com.consultancygrid.trz.actionListener.TimePeriodComboAL;
+import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
+import com.consultancygrid.trz.model.Employee;
+import com.consultancygrid.trz.model.EmployeeSalary;
+import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
+import com.consultancygrid.trz.render.EmployeeCustomRender;
 import com.consultancygrid.trz.render.PeriodCustomRender;
+import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
+import com.consultancygrid.trz.ui.combo.TrzComboBoxModel;
+import com.consultancygrid.trz.ui.table.GroupCfgEmplsTable;
+import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTable;
+import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 
@@ -83,12 +95,35 @@ public class PrototypeMainFrame extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 0, 0);
 		getContentPane().add(tabbedPane);
+		PersonalCfgEmplsTableModel personalCfgModel = new PersonalCfgEmplsTableModel();
+		PersonalCfgEmplsTable personalConfTable = new PersonalCfgEmplsTable();
+		Vector tableData = new Vector();		
+		Query qE = em.createQuery(" from Employee");
+				
+        JScrollPane pesonPanel = new JScrollPane(personalConfTable);
+        pesonPanel.setBounds(20, 100, col6MW*24, 300);
+		
+		
+		EmplComboBoxModel emplComboBoxModel = new EmplComboBoxModel((List<Employee>) qE.getResultList());
 
+		JComboBox comboBoxEmployees = new JComboBox<>(emplComboBoxModel);
+		
+		comboBoxEmployees.setBounds(20, 10, 300, 20);
+		comboBoxEmployees.setRenderer(new EmployeeCustomRender());
+		
+		EmplsComboAL emplsComboAL = new EmplsComboAL(this, comboBoxEmployees, personalConfTable);
+		comboBoxEmployees.addActionListener(emplsComboAL);
+		
 		JPanel firstInnerPanel = new JPanel(null);
-		tabbedPane.addTab(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CONF_TAB_LABEL),
-				firstInnerPanel);
-
+		firstInnerPanel.setLayout(null);
+		
+		
+		firstInnerPanel.setLayout(null);
+		firstInnerPanel.add(comboBoxEmployees);
+		firstInnerPanel.add(pesonPanel);
+		tabbedPane.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CONF_TAB_LABEL), firstInnerPanel);
+		
+		
 		JPanel secondInnerPanel = new JPanel(null);
 		secondInnerPanel.setLayout(null);
 
@@ -103,7 +138,7 @@ public class PrototypeMainFrame extends JFrame {
 		comboBox.setRenderer(new PeriodCustomRender());
 		secondInnerPanel.add(comboBox);
 		
-		EmployeesTable table = new EmployeesTable(); 
+		GroupCfgEmplsTable table = new GroupCfgEmplsTable(); 
 
 		JScrollPane jscp = new JScrollPane(table);
 		jscp.setBounds(20, 100, col0MW + col1MW + col2MW + col3MW + col4MW + col5MW + col6MW

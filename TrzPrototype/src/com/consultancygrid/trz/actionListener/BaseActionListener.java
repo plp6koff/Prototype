@@ -3,7 +3,7 @@ package com.consultancygrid.trz.actionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.consultancygrid.trz.ui.PrototypeMainFrame;
+import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 
 
 

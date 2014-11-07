@@ -1,4 +1,4 @@
-package com.consultancygrid.trz.ui;
+package com.consultancygrid.trz.ui.combo;
 
 import java.util.ArrayList;
 import java.util.List;
