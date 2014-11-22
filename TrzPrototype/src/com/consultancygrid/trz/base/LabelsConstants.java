@@ -56,4 +56,15 @@ public interface LabelsConstants {
 	 String PERSONAL_CFG_HEADER_COL25 = "personal_cfg_header_col25";
 	 String PERSONAL_CFG_HEADER_COL26 = "personal_cfg_header_col26";
 	 String PERSONAL_CFG_HEADER_COL27 = "personal_cfg_header_col27";
+	 
+	 String  CALENDAR_TODAY = "calendar.today";
+	 String  CALENDAR_MONTH = "calendar.month";
+	 String  CALENDAR_YEAR = "calendar.year";
+	 String  PERIOD_CODE = "period_cfg.code";
+	 String  PERIOD_REVENUE = "period_cfg.revenue";
+	 String  PERIOD_START_DATE = "period_cfg.start_date";
+	 String  PERIOD_END_DATE = "period_cfg.end_date";
+	 
+	 
+	 String SETTINGS = "settings";
 }
