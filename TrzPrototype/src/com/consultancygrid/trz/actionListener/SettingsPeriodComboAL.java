@@ -43,18 +43,20 @@ import static com.consultancygrid.trz.base.Constants.*;
 public class SettingsPeriodComboAL extends BaseActionListener {
 
 	
-	JComboBox comboBoxPeriod;
-	JComboBox comboBoxDepartment;
+	private JComboBox comboBoxPeriod;
+	private JComboBox comboBoxEmployee;
+	private JComboBox comboBoxDepartment;
 	
-	public SettingsPeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBoxPeriod,JComboBox comboBoxDepartment) {
+	public SettingsPeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBoxPeriod,JComboBox comboBoxDepartment, JComboBox comboBoxEmployee) {
 
 		super(mainFrame);
 		this.comboBoxPeriod = comboBoxPeriod;
+		this.comboBoxEmployee = comboBoxEmployee;
 		this.comboBoxDepartment = comboBoxDepartment;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
+
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
 		try {
@@ -79,6 +81,10 @@ public class SettingsPeriodComboAL extends BaseActionListener {
 					allDepartments.add(emplDP.getDepartment());
 			}
 			
+			
+			((EmplComboBoxModel)this.comboBoxEmployee.getModel()).clear();
+			this.comboBoxDepartment.setEnabled(false);
+			this.comboBoxDepartment.repaint();
 			
 			((DepartmentComboBoxModel)this.comboBoxDepartment.getModel()).addAll(allDepartments);
 			this.comboBoxDepartment.setEnabled(true);

@@ -121,14 +121,40 @@ public class PrototypeMainFrame extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 0, 0);
 		getContentPane().add(tabbedPane);
+		
+		Query qPeriod = em.createQuery(" from Period");
+		List<Period> allPeriods = (List<Period>) qPeriod.getResultList();
+		
+		GroupCfgEmplsTable table = new GroupCfgEmplsTable(); 
+		//First Tab
+		drawFirstTab(tabbedPane);
+		//Second Tab
+		drawSecondTab(tabbedPane,table, allPeriods);
+		
+		JTabbedPane tabbedPaneSettings = new JTabbedPane(JTabbedPane.TOP);
+
+		//Period Settings
+		drawCreatePeriod(tabbedPane, table, tabbedPaneSettings, allPeriods);
+		//Period to Employee
+		drawEmployee2Period(tabbedPaneSettings, allPeriods);
+		
+		em.getTransaction().commit();
+		em.close();
+		factory.close();
+	}
+	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException 
+	 */
+	private void drawFirstTab(JTabbedPane tabbedPane) throws IOException {
+		
 		PersonalCfgEmplsTableModel personalCfgModel = new PersonalCfgEmplsTableModel();
 		PersonalCfgEmplsTable personalConfTable = new PersonalCfgEmplsTable();
 		Vector tableData = new Vector();		
 		Query qE = em.createQuery(" from Employee");
-				
-        JScrollPane pesonPanel = new JScrollPane(personalConfTable);
-        pesonPanel.setBounds(20, 100, col6MW*24, 300);
-		
 		
 		EmplComboBoxModel emplComboBoxModel = new EmplComboBoxModel((List<Employee>) qE.getResultList());
 
@@ -140,33 +166,36 @@ public class PrototypeMainFrame extends JFrame {
 		EmplsComboAL emplsComboAL = new EmplsComboAL(this, comboBoxEmployees, personalConfTable);
 		comboBoxEmployees.addActionListener(emplsComboAL);
 		
+		JScrollPane pesonPanel = new JScrollPane(personalConfTable);
+	    pesonPanel.setBounds(20, 100, col6MW*24, 300);
 		JPanel firstInnerPanel = new JPanel(null);
-		firstInnerPanel.setLayout(null);
-		
-		
 		firstInnerPanel.setLayout(null);
 		firstInnerPanel.add(comboBoxEmployees);
 		firstInnerPanel.add(pesonPanel);
 		tabbedPane.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CONF_TAB_LABEL), firstInnerPanel);
-		
+	}
+	
+	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException 
+	 */
+	private void drawSecondTab(JTabbedPane tabbedPane,GroupCfgEmplsTable table,List<Period> allPeriods) throws IOException {
 		
 		JPanel secondInnerPanel = new JPanel(null);
 		secondInnerPanel.setLayout(null);
 
-		Query qPeriod = em.createQuery(" from Period");
-
-		List<Period> allPeriods = (List<Period>) qPeriod.getResultList();
-		
 		TrzComboBoxModel trzComboBoxModel = new TrzComboBoxModel(allPeriods);
 
 		JComboBox comboBox = new JComboBox<>(trzComboBoxModel);
-		
 		comboBox.setBounds(20, 10, 300, 20);
 		comboBox.setRenderer(new PeriodCustomRender());
 		secondInnerPanel.add(comboBox);
 		
-		GroupCfgEmplsTable table = new GroupCfgEmplsTable(); 
-
+		TimePeriodComboAL tPCAL = new TimePeriodComboAL(this, comboBox, table);
+		
 		JScrollPane jscp = new JScrollPane(table);
 		jscp.setBounds(20, 100, col0MW + col1MW + col2MW + col3MW + col4MW + col5MW + col6MW
 		// TODO comment until it is required
@@ -174,15 +203,51 @@ public class PrototypeMainFrame extends JFrame {
 				+ col9MW + col10MW + 100, 600);
 		secondInnerPanel.add(jscp);
 		tabbedPane.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.GROUP_TAB_LABEL), secondInnerPanel);
+		
+		comboBox.addActionListener(tPCAL);
+	}
+	
+	/**
+	 * This methods should add the first 3 combo boxes for the add period to employee
+	 * @param tabbedPaneSettings
+	 * @param allPeriods
+	 */
+	private void drawEmployee2Period(JTabbedPane tabbedPaneSettings, List<Period> allPeriods) {
+		
+		JPanel panLinkPeriod2Empl = new JPanel(null);
+		JComboBox comboBoxEmployees1 = new JComboBox<>(new EmplComboBoxModel());
+		JComboBox comboBoxPeriod1 = new JComboBox<>(new TrzComboBoxModel(allPeriods));
+		JComboBox comboBoxDepartment1 = new JComboBox<>(new DepartmentComboBoxModel());
+		
+		comboBoxEmployees1.setBounds(760, 50, 300, 20);
+		comboBoxEmployees1.setRenderer(new EmployeeCustomRender());
+		comboBoxEmployees1.setEnabled(false);
+		
+		comboBoxPeriod1.setBounds(40, 50, 300, 20);
+		comboBoxPeriod1.setRenderer(new PeriodCustomRender());
+		
+		comboBoxDepartment1.setBounds(400, 50, 300, 20);
+		comboBoxDepartment1.setRenderer(new DepartmentCustomRender());
+		comboBoxDepartment1.setEnabled(false);
+		
+		comboBoxEmployees1.addActionListener(new SettingsEmployeeComboAL(this,panLinkPeriod2Empl, comboBoxPeriod1, comboBoxDepartment1, comboBoxEmployees1,tabbedPaneSettings));
+		panLinkPeriod2Empl.add(comboBoxEmployees1);
+		comboBoxPeriod1.addActionListener(new SettingsPeriodComboAL(this, comboBoxPeriod1, comboBoxDepartment1, comboBoxEmployees1));
+		panLinkPeriod2Empl.add(comboBoxPeriod1);
+		comboBoxDepartment1.addActionListener(new SettingsDepartmentComboAL(this, comboBoxPeriod1, comboBoxDepartment1, comboBoxEmployees1));
+		panLinkPeriod2Empl.add(comboBoxDepartment1);
+		tabbedPaneSettings.addTab("Add Employee to Period", panLinkPeriod2Empl);
+	}
+	
+	
+	
+	private void drawCreatePeriod(JTabbedPane tabbedPane, GroupCfgEmplsTable table, JTabbedPane tabbedPaneSettings, List<Period> allPeriods) throws IOException {
+		
+		
+		TrzComboBoxModel trzComboBoxModel = new TrzComboBoxModel(allPeriods);
 
+		JComboBox comboBox = new JComboBox<>(trzComboBoxModel);
 		
-		//Third panel 
-		//JPanel thirdInnerPanel = new JPanel(null);
-		//thirdInnerPanel.setEnabled(false);
-		//tabbedPane.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SALARY_BY_MOF_TAB_LABEL), thirdInnerPanel);
-		//thirdInnerPanel.addTab();
-		
-		JTabbedPane tabbedPaneSettings = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SETTINGS), null, tabbedPaneSettings, null);
 		
 		JPanel panSetCrtPeriod = new JPanel(null);
@@ -237,92 +302,52 @@ public class PrototypeMainFrame extends JFrame {
 		TimePeriodComboAL tPCAL = new TimePeriodComboAL(this, comboBox, table);
 		
 		
-		int y = 120;
-		int delta = 50;
+		int y = 150;
+		int delta = 30;
 
 		Query qPeriodTrzStatic = em.createQuery(" from TrzStatic");
 		List<TrzStatic> trzResult =	(List<TrzStatic>) qPeriodTrzStatic.getResultList();
+		
 		HashMap<TrzStatic, JTextField> map = new HashMap<TrzStatic, JTextField> ();
 		for (TrzStatic singleStatic : trzResult) {
-			y = y + delta;
-			int tempY = y; 
+			
 			JLabel lblPeriodSetting = new JLabel(singleStatic.getKeyDescription());
-			lblPeriodSetting.setBounds(40, tempY , 300, 14);
+			lblPeriodSetting.setBounds(40, y , 250, 25);
 			panSetCrtPeriod.add(lblPeriodSetting);
-			
-			
 			JTextField textFieldValue = new JTextField();
-			textFieldValue.setBounds(400, tempY, 146, 23);
+			textFieldValue.setBounds(300, y, 150, 25);
 			textFieldValue.setColumns(10);
 			panSetCrtPeriod.add(textFieldValue);
-			
 			map.put(singleStatic, textFieldValue);
+			y = y + delta;
 		}
-		
-		int z = (y + (trzResult.size()*50));
+		y = y + 50;
 		Query qPeriodDepartment = em.createQuery(" from Department");
 		List<Department> deptResult =	(List<Department>) qPeriodDepartment.getResultList();
 		
 		HashMap<Department, JTextField> mapDept = new HashMap<Department, JTextField> ();
 		for (Department singleDept : deptResult) {
-			z = z + delta;
-			int tempZ = z; 
+			
 			JLabel lblDept = new JLabel("Revenue for department -" + singleDept.getCode());
-			lblDept.setBounds(40, tempZ , 300, 14);
+			lblDept.setBounds(40, y , 250, 25);
 			panSetCrtPeriod.add(lblDept);
 			
-			
 			JTextField textFieldValue = new JTextField();
-			textFieldValue.setBounds(400, tempZ, 146, 23);
+			textFieldValue.setBounds(300, y, 150, 25);
 			textFieldValue.setColumns(10);
 			textFieldValue.setText("0.0");
 			panSetCrtPeriod.add(textFieldValue);
-			
 			mapDept.put(singleDept, textFieldValue);
+			y = y + delta;
 		}
 		
 		
-		JButton btnSavePeriod = new JButton("Save");
-		btnSavePeriod.setBounds(20, z + (deptResult.size()*50), 100,20);
+		JButton btnSavePeriod = new JButton("Save Period");
+		btnSavePeriod.setBounds(20, y + 50, 200 , 25);
 		panSetCrtPeriod.add(btnSavePeriod);
 		SavePeriodAL sPAL = new SavePeriodAL(this, datePickerStart, datePickerEnd, textFieldCode, textFieldRevenue, map,mapDept);
 		
-		btnSavePeriod.addActionListener(sPAL);      
+		btnSavePeriod.addActionListener(sPAL);
 		comboBox.addActionListener(tPCAL);
-
-		
-		//Connect Period to Employee
-		JPanel panLinkPeriod2Empl = new JPanel(null);
-
-		tabbedPaneSettings.addTab("Add Employee to Period", panLinkPeriod2Empl);
-		
-
-		
-		
-		JComboBox comboBoxEmployees1 = new JComboBox<>(emplComboBoxModel);
-		JComboBox comboBoxPeriod1 = new JComboBox<>(new TrzComboBoxModel(allPeriods));
-		JComboBox comboBoxDepartment1 = new JComboBox<>(new DepartmentComboBoxModel());
-		
-		comboBoxEmployees1.setBounds(760, 50, 300, 20);
-		comboBoxEmployees1.setRenderer(new EmployeeCustomRender());
-		comboBoxEmployees1.setEnabled(false);
-		
-		comboBoxPeriod1.setBounds(40, 50, 300, 20);
-		comboBoxPeriod1.setRenderer(new PeriodCustomRender());
-		
-		comboBoxDepartment1.setBounds(400, 50, 300, 20);
-		comboBoxDepartment1.setRenderer(new DepartmentCustomRender());
-		comboBoxDepartment1.setEnabled(false);
-		
-		comboBoxEmployees1.addActionListener(new SettingsEmployeeComboAL(this,panLinkPeriod2Empl, comboBoxPeriod1, comboBoxDepartment1, comboBoxEmployees1,tabbedPaneSettings));
-		panLinkPeriod2Empl.add(comboBoxEmployees1);
-		comboBoxPeriod1.addActionListener(new SettingsPeriodComboAL(this, comboBoxPeriod1, comboBoxDepartment1));
-		panLinkPeriod2Empl.add(comboBoxPeriod1);
-		comboBoxDepartment1.addActionListener(new SettingsDepartmentComboAL(this, comboBoxPeriod1, comboBoxDepartment1, comboBoxEmployees1));
-		panLinkPeriod2Empl.add(comboBoxDepartment1);
-		
-		em.getTransaction().commit();
-		em.close();
-		factory.close();
 	}
 }

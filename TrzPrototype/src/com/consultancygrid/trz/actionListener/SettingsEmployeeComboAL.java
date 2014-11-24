@@ -78,73 +78,73 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
 
 			JLabel lblEmpl1 = new JLabel("Revenue:");
-			lblEmpl1.setBounds(50, 100 , 100, 30);
+			lblEmpl1.setBounds(50, 100 , 100, 25);
 			lblEmpl1.setText("Revenue : ");
 			panLinkPeriod2Empl.add(lblEmpl1);
 			
 			JTextField textFieldValue = new JTextField();
-			textFieldValue.setBounds(200, 100 , 200, 25);
+			textFieldValue.setBounds(150, 100 , 200, 25);
 			textFieldValue.setText("0.0");
 			panLinkPeriod2Empl.add(textFieldValue);
 			
 			
 			JButton btnSavePeriod = new JButton("Save");
-			btnSavePeriod.setBounds(200, 800, 100 ,25);
+			btnSavePeriod.setBounds(20, 300, 100 ,25);
 			panLinkPeriod2Empl.add(btnSavePeriod);
 			
-			JLabel lblFieldSettings = new JLabel("Employee settings:");
-			lblFieldSettings.setBounds(20, 130 , 200, 25);
+			JLabel lblFieldSettings = new JLabel("Employee settings");
+			lblFieldSettings.setBounds(20, 150 , 200, 25);
 			panLinkPeriod2Empl.add(lblFieldSettings);
 			
 			
 			JLabel lblBrutoStat = new JLabel("Bruto Stat :");
-			lblBrutoStat.setBounds(50, 150 , 100, 25);
+			lblBrutoStat.setBounds(50, 200 , 100, 25);
 			panLinkPeriod2Empl.add(lblBrutoStat);
 			JTextField textBrutoStat = new JTextField();
-			textBrutoStat.setBounds(150, 150 , 100, 25);
+			textBrutoStat.setBounds(150, 200 , 100, 25);
 			panLinkPeriod2Empl.add(textBrutoStat);
 			
 			JLabel lblBrutoStad = new JLabel("Bruto Standart :");
-			lblBrutoStad.setBounds(300, 150 , 100, 25);
+			lblBrutoStad.setBounds(300, 200 , 100, 25);
 			panLinkPeriod2Empl.add(lblBrutoStad);
 			JTextField textBrutoStad = new JTextField();
-			textBrutoStad.setBounds(430, 150 , 100, 25);
+			textBrutoStad.setBounds(430, 200 , 100, 25);
 			panLinkPeriod2Empl.add(textBrutoStad);
 			
 			JLabel lblAvans = new JLabel("Avans :");
-			lblAvans.setBounds(50, 200 , 100, 25);
+			lblAvans.setBounds(50, 230 , 100, 25);
 			panLinkPeriod2Empl.add(lblAvans);
 			JTextField textBrutoAvans = new JTextField();
-			textBrutoAvans.setBounds(150, 200 , 100, 25);
+			textBrutoAvans.setBounds(150, 230 , 100, 25);
 			panLinkPeriod2Empl.add(textBrutoAvans);
 			
 			JLabel lblBrutoPercentAll = new JLabel("Percent All :");
-			lblBrutoPercentAll.setBounds(300, 200 , 200, 25);
+			lblBrutoPercentAll.setBounds(300, 230 , 200, 25);
 			panLinkPeriod2Empl.add(lblBrutoPercentAll);
 			JTextField textPercentAll = new JTextField();
-			textPercentAll.setBounds(430, 200 , 100, 25);
+			textPercentAll.setBounds(430, 230 , 100, 25);
 			panLinkPeriod2Empl.add(textPercentAll);
 			
 			
 			JLabel lblPercentGroup = new JLabel("Percent group :");
-			lblPercentGroup.setBounds(50, 250 , 100, 25);
+			lblPercentGroup.setBounds(50, 260 , 100, 25);
 			panLinkPeriod2Empl.add(lblPercentGroup);
 			JTextField textPercentGroup = new JTextField();
-			textPercentGroup.setBounds(150, 250 , 100, 25);
+			textPercentGroup.setBounds(150, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textPercentGroup);
 			
 			JLabel lblPercentPerson = new JLabel("Percent Personal :");
-			lblPercentPerson.setBounds(300, 250 , 200, 25);
+			lblPercentPerson.setBounds(300, 260 , 200, 25);
 			panLinkPeriod2Empl.add(lblPercentPerson);
 			JTextField textPercentPerson = new JTextField();
-			textPercentPerson.setBounds(430, 250 , 100, 25);
+			textPercentPerson.setBounds(430, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textPercentPerson);
 			
 			JLabel lblOnBoard = new JLabel("On Boarding percentage :");
-			lblOnBoard.setBounds(550, 250 , 200, 25);
+			lblOnBoard.setBounds(550, 260 , 200, 25);
 			panLinkPeriod2Empl.add(lblOnBoard);
 			JTextField textOnBoard = new JTextField();
-			textOnBoard.setBounds(700, 250 , 100, 25);
+			textOnBoard.setBounds(700, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textOnBoard);
 			
 //			JLabel lblFieldSalary = new JLabel("Employee salary:");
