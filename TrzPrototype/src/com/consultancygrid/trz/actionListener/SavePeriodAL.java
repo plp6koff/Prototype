@@ -18,8 +18,10 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.base.Constants;
+import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.PeriodSetting;
+import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 
@@ -31,14 +33,16 @@ public class SavePeriodAL extends BaseActionListener{
 	private JTextField fieldRevenue;
 	
 	private HashMap<TrzStatic, JTextField> map ;
+	private HashMap<Department, JTextField> mapDept;
 	
-	public SavePeriodAL(PrototypeMainFrame mainFrame, JDatePickerImpl datePickerFrom, JDatePickerImpl datePickerTo, JTextField fieldCode, JTextField fieldRevenue, 	HashMap<TrzStatic, JTextField> map ) {
+	public SavePeriodAL(PrototypeMainFrame mainFrame, JDatePickerImpl datePickerFrom, JDatePickerImpl datePickerTo, JTextField fieldCode, JTextField fieldRevenue, 	HashMap<TrzStatic, JTextField> map,HashMap<Department, JTextField> mapDept ) {
 		super(mainFrame);
 		this.datePickerTo = datePickerTo;
 		this.datePickerFrom = datePickerFrom;
 		this.fieldCode = fieldCode;
 		this.fieldRevenue = fieldRevenue;
 		this.map = 	map; 
+		this.mapDept = mapDept;
 	}
 
 	@Override
@@ -80,6 +84,14 @@ public class SavePeriodAL extends BaseActionListener{
 				em.persist(ps);
 			}
 			
+			for (Entry<Department, JTextField> entry : mapDept.entrySet()) {
+				
+				RevenueDeptPeriod rdp = new RevenueDeptPeriod();
+				rdp.setPeriod(tempPeriod);
+				rdp.setRevenue(BigDecimal.valueOf(Double.valueOf(entry.getValue().getText())));
+				rdp.setDepartment(entry.getKey());
+				em.persist(rdp);
+			}
 			
 		} catch (Exception e1) {
 			Logger.error(e1);

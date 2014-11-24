@@ -66,5 +66,9 @@ public class EmplComboBoxModel implements ComboBoxModel<Employee> {
 		comboBoxItemList.add(employee);
 	}
 	
+	public void addAll(List<Employee> employees) {
+		comboBoxItemList.clear();
+		comboBoxItemList.addAll(employees);
+	}	
 	
 }
