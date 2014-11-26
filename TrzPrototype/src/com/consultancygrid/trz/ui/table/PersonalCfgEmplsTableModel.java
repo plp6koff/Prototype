@@ -4,11 +4,13 @@
 package com.consultancygrid.trz.ui.table;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
 import com.consultancygrid.trz.base.LabelsConstants;
+import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 /**
@@ -19,13 +21,16 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 5044877015250409328L;
 
-	private Vector<String> tableHeaders = new Vector<String>();
+	//private boolean[][] editable_cells;
 	
+	private Vector<String> tableHeaders = new Vector<String>();
+
 	private Vector data = new Vector();
+
+	private List<EmployeeSalary> emplSals;
 	
 	public PersonalCfgEmplsTableModel() throws IOException {
-		
-	
+
 		tableHeaders = new Vector<String>();
 		// Init headers
 		tableHeaders.add(ResourceLoaderUtil
@@ -80,9 +85,13 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL24));
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL25));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL26));
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getColumnCount()
 	 */
 	@Override
@@ -90,13 +99,15 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 		// TODO Auto-generated method stub
 		return tableHeaders.size();
 	}
-	
+
 	@Override
 	public String getColumnName(int col) {
-	return tableHeaders.get(col);
+		return tableHeaders.get(col);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
 	@Override
@@ -105,33 +116,56 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 		return data.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
-		
+
 		if (data.size() == 0) {
 			return null;
 		}
-		Vector<Object> o = (Vector<Object>)data.get(rowIndex);
+		Vector<Object> o = (Vector<Object>) data.get(rowIndex);
 		if (o != null) {
 			return o.get(columnIndex);
 		} else {
 			return "EMPTY";
 		}
-		
+
 	}
-	
+
 	public Vector<String> getTableHeaders() {
 		return tableHeaders;
 	}
-	
-	public void setData(Vector data) {
-		
-        this.data = data;       //  <-- Update the data
-        fireTableDataChanged(); //  <-- fire the event so the table is notified. If you change only one cell you need to call the appropriate fire event
-    }
 
+	public void setData(Vector data) {
+
+		this.data = data; // <-- Update the data
+		fireTableDataChanged(); // <-- fire the event so the table is notified.
+								// If you change only one cell you need to call
+								// the appropriate fire event
+	}
+
+	public List<EmployeeSalary> getEmplSals() {
+		return emplSals;
+	}
+
+	public void setEmplSals(List<EmployeeSalary> emplSals) {
+		this.emplSals = emplSals;
+	}
+
+//	@Override
+//	public boolean isCellEditable(int row, int col) { 
+//		return this.editable_cells[row][col];
+//	}
+//
+//	public void setCellEditable(int row, int col, boolean value) {
+//	        this.editable_cells[row][col] = value; // set cell true/false
+//	        this.fireTableCellUpdated(row, col);
+//	  }
+	
+	
 }

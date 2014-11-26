@@ -11,6 +11,8 @@ import static com.consultancygrid.trz.base.Constants.col5MW;
 import static com.consultancygrid.trz.base.Constants.col6MW;
 import static com.consultancygrid.trz.base.Constants.col9MW;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -33,17 +35,23 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.SpringLayout;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import com.consultancygrid.trz.actionListener.EditRowAL;
 import com.consultancygrid.trz.actionListener.EmplsComboAL;
 import com.consultancygrid.trz.actionListener.SavePeriodAL;
+import com.consultancygrid.trz.actionListener.SaveRowAL;
 import com.consultancygrid.trz.actionListener.SettingsDepartmentComboAL;
 import com.consultancygrid.trz.actionListener.SettingsEmployeeComboAL;
 import com.consultancygrid.trz.actionListener.SettingsPeriodComboAL;
@@ -56,6 +64,7 @@ import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.render.DepartmentCustomRender;
 import com.consultancygrid.trz.render.EmployeeCustomRender;
+import com.consultancygrid.trz.render.HeaderRenderer;
 import com.consultancygrid.trz.render.PeriodCustomRender;
 import com.consultancygrid.trz.ui.combo.DepartmentComboBoxModel;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
@@ -70,6 +79,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JToggleButton;
+import javax.swing.table.JTableHeader;
 
 
 public class PrototypeMainFrame extends JFrame {
@@ -151,8 +161,11 @@ public class PrototypeMainFrame extends JFrame {
 	 */
 	private void drawFirstTab(JTabbedPane tabbedPane) throws IOException {
 		
+		JPanel firstInnerPanel = new JPanel(null);         
+		
 		PersonalCfgEmplsTableModel personalCfgModel = new PersonalCfgEmplsTableModel();
 		PersonalCfgEmplsTable personalConfTable = new PersonalCfgEmplsTable();
+		personalConfTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		Vector tableData = new Vector();		
 		Query qE = em.createQuery(" from Employee");
 		
@@ -163,12 +176,25 @@ public class PrototypeMainFrame extends JFrame {
 		comboBoxEmployees.setBounds(20, 10, 300, 20);
 		comboBoxEmployees.setRenderer(new EmployeeCustomRender());
 		
+		JButton editRow = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
+		editRow.setBounds(340, 10, 150, 20);
+		editRow.addActionListener(new EditRowAL(this, personalConfTable,comboBoxEmployees));
+		firstInnerPanel.add(editRow);
+		
+		JButton saveRow = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
+		saveRow.setBounds(510, 10, 150, 20);
+		saveRow.addActionListener(new SaveRowAL(this, personalConfTable,comboBoxEmployees));
+		firstInnerPanel.add(saveRow);
+		
 		EmplsComboAL emplsComboAL = new EmplsComboAL(this, comboBoxEmployees, personalConfTable);
 		comboBoxEmployees.addActionListener(emplsComboAL);
 		
 		JScrollPane pesonPanel = new JScrollPane(personalConfTable);
-	    pesonPanel.setBounds(20, 100, col6MW*24, 300);
-		JPanel firstInnerPanel = new JPanel(null);
+		pesonPanel.setLayout(new ScrollPaneLayout());
+		JTableHeader header = personalConfTable.getTableHeader();
+	    header.setDefaultRenderer(new HeaderRenderer(header.getDefaultRenderer()));
+	    pesonPanel.setBounds(20, 100, 1278 , 300);
+	    pesonPanel.setAutoscrolls(true);
 		firstInnerPanel.setLayout(null);
 		firstInnerPanel.add(comboBoxEmployees);
 		firstInnerPanel.add(pesonPanel);
@@ -211,8 +237,9 @@ public class PrototypeMainFrame extends JFrame {
 	 * This methods should add the first 3 combo boxes for the add period to employee
 	 * @param tabbedPaneSettings
 	 * @param allPeriods
+	 * @throws IOException 
 	 */
-	private void drawEmployee2Period(JTabbedPane tabbedPaneSettings, List<Period> allPeriods) {
+	private void drawEmployee2Period(JTabbedPane tabbedPaneSettings, List<Period> allPeriods) throws IOException {
 		
 		JPanel panLinkPeriod2Empl = new JPanel(null);
 		JComboBox comboBoxEmployees1 = new JComboBox<>(new EmplComboBoxModel());
@@ -236,7 +263,7 @@ public class PrototypeMainFrame extends JFrame {
 		panLinkPeriod2Empl.add(comboBoxPeriod1);
 		comboBoxDepartment1.addActionListener(new SettingsDepartmentComboAL(this, comboBoxPeriod1, comboBoxDepartment1, comboBoxEmployees1));
 		panLinkPeriod2Empl.add(comboBoxDepartment1);
-		tabbedPaneSettings.addTab("Add Employee to Period", panLinkPeriod2Empl);
+		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_HEADER), panLinkPeriod2Empl);
 	}
 	
 	
@@ -252,7 +279,7 @@ public class PrototypeMainFrame extends JFrame {
 		
 		JPanel panSetCrtPeriod = new JPanel(null);
 
-		tabbedPaneSettings.addTab("Create Period",panSetCrtPeriod);
+		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_HEADER),panSetCrtPeriod);
 		
 		
 		JLabel lblCode = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_CODE));
@@ -328,7 +355,7 @@ public class PrototypeMainFrame extends JFrame {
 		HashMap<Department, JTextField> mapDept = new HashMap<Department, JTextField> ();
 		for (Department singleDept : deptResult) {
 			
-			JLabel lblDept = new JLabel("Revenue for department -" + singleDept.getCode());
+			JLabel lblDept = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE_DEPT)+ singleDept.getCode());
 			lblDept.setBounds(40, y , 250, 25);
 			panSetCrtPeriod.add(lblDept);
 			
@@ -342,7 +369,7 @@ public class PrototypeMainFrame extends JFrame {
 		}
 		
 		
-		JButton btnSavePeriod = new JButton("Save Period");
+		JButton btnSavePeriod = new JButton( ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_SAVE));
 		btnSavePeriod.setBounds(20, y + 50, 200 , 25);
 		panSetCrtPeriod.add(btnSavePeriod);
 		SavePeriodAL sPAL = new SavePeriodAL(this, datePickerStart, datePickerEnd, textFieldCode, textFieldRevenue, map,mapDept);

@@ -26,6 +26,7 @@ import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.EmplDeptPeriod;
 import com.consultancygrid.trz.model.Employee;
+import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.RevenueDeptPeriod;
@@ -75,6 +76,7 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 
 			em.getTransaction().begin();
 
+			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 			Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
 
 			JLabel lblEmpl1 = new JLabel("Revenue:");
@@ -82,13 +84,14 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			lblEmpl1.setText("Revenue : ");
 			panLinkPeriod2Empl.add(lblEmpl1);
 			
+			
+			
 			JTextField textFieldValue = new JTextField();
 			textFieldValue.setBounds(150, 100 , 200, 25);
 			textFieldValue.setText("0.0");
 			panLinkPeriod2Empl.add(textFieldValue);
 			
-			
-			JButton btnSavePeriod = new JButton("Save");
+			JButton btnSavePeriod = new JButton("Add Employee to Period");
 			btnSavePeriod.setBounds(20, 300, 100 ,25);
 			panLinkPeriod2Empl.add(btnSavePeriod);
 			
@@ -147,9 +150,13 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			textOnBoard.setBounds(700, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textOnBoard);
 			
-//			JLabel lblFieldSalary = new JLabel("Employee salary:");
-//			lblFieldSalary.setBounds(20, 300 , 200, 25);
-//			panLinkPeriod2Empl.add(lblFieldSalary);
+			
+			EmployeeSettings emplSettings = new EmployeeSettings();
+			//em.persist(emplSettings);
+			
+			//JLabel lblFieldSalary = new JLabel("Employee salary:");
+			//lblFieldSalary.setBounds(20, 300 , 200, 25);
+			//panLinkPeriod2Empl.add(lblFieldSalary);
 			
 			
 			this.panLinkPeriod2Empl.validate();

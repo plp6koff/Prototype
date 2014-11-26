@@ -57,6 +57,28 @@ public interface LabelsConstants {
 	 String PERSONAL_CFG_HEADER_COL26 = "personal_cfg_header_col26";
 	 String PERSONAL_CFG_HEADER_COL27 = "personal_cfg_header_col27";
 	 
+	 String PERSONAL_CFG_EDIT_BTN = "personal_cfg_edit_btn";
+	 String PERSONAL_CFG_SAVE_BTN = "personal_cfg_save_btn";
+	 String PERSONAL_CFG_WARN1 = "personal_cfg_warn1";
+	 String PERSONAL_CFG_INFO1 = "personal_cfg_info1";
+	 String PERSONAL_CFG_WARN2 = "personal_cfg_warn2";
+	 
+	 String SET_TAB_HEADER = "settings_tab_header";
+	 String SET_TAB_CRT_PERIOD_HEADER = "settings_tab_create_period_header";
+	 
+	 String SET_TAB_CRT_PERIOD_HEAD = "settings_tab_create_period_header";
+	 String SET_TAB_CRT_PERIOD_CODE = "settings_tab_create_period_code";
+	 String SET_TAB_CRT_PERIOD_START = "settings_tab_create_period_startDate";
+	 String SET_TAB_CRT_PERIOD_END = "settings_tab_create_period_endDate";
+	 String SET_TAB_CRT_PERIOD_REVENUE = "settings_tab_create_period_revenue";
+	 String SET_TAB_CRT_PERIOD_REVENUE_DEPT = "settings_tab_create_period_revenue_department";
+	 String SET_TAB_CRT_PERIOD_SAVE = "settings_tab_create_period_save";
+	 
+	 String SET_TAB_EMPL2PER_HEADER = "settings_tab_empl2period_header";
+	 
+	 String ALERT_MSG_INFO = "alert_msg_info";
+     String ALERT_MSG_WARN = "alert_msg_warn";
+	 
 	 String  CALENDAR_TODAY = "calendar.today";
 	 String  CALENDAR_MONTH = "calendar.month";
 	 String  CALENDAR_YEAR = "calendar.year";

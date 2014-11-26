@@ -15,45 +15,85 @@ import static com.consultancygrid.trz.base.Constants.*;
 public class PersonalCfgEmplsTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
+	
+	private boolean enableEdit = false;
+	
+	private int rowEditable = 0;
 
 	public Component prepareRenderer(TableCellRenderer renderer, int Index_row, int Index_col) {
 		//TODO implement if  needed
 		Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+		
+		if (enableEdit) {
+			if ((Index_row == rowEditable) && (Index_col == 5 || Index_col == 7 || Index_col ==9 )) {
+			comp.setBackground(Color.yellow);
+			
+			}
+		}
 		return comp;
 	}
 
 	public PersonalCfgEmplsTable() throws IOException {
-
-		setAutoResizeMode(HEIGHT);
-		setAutoResizeMode(WIDTH);
-		setBorder(new EmptyBorder(5, 5, 5, 5));
+		
+		setAutoResizeMode(AUTO_RESIZE_ALL_COLUMNS);
+		setBorder(new EmptyBorder(1, 1, 1, 1));
 		setModel(new PersonalCfgEmplsTableModel());
-		getColumnModel().getColumn(0).setMinWidth(col6MW);
-		getColumnModel().getColumn(1).setMinWidth(col6MW);
-		getColumnModel().getColumn(2).setMinWidth(col6MW);
-		getColumnModel().getColumn(3).setMinWidth(col6MW);
-		getColumnModel().getColumn(4).setMinWidth(col6MW);
-		getColumnModel().getColumn(5).setMinWidth(col6MW);
-		getColumnModel().getColumn(6).setMinWidth(col6MW);
-		getColumnModel().getColumn(7).setMinWidth(col6MW);
-		getColumnModel().getColumn(8).setMinWidth(col6MW);
-		getColumnModel().getColumn(9).setMinWidth(col6MW);
-		getColumnModel().getColumn(10).setMinWidth(col6MW);
-		getColumnModel().getColumn(11).setMinWidth(col6MW);
-		getColumnModel().getColumn(12).setMinWidth(col6MW);
-		getColumnModel().getColumn(13).setMinWidth(col6MW);
-		getColumnModel().getColumn(14).setMinWidth(col6MW);
-		getColumnModel().getColumn(15).setMinWidth(col6MW);
-		getColumnModel().getColumn(16).setMinWidth(col6MW);
-		getColumnModel().getColumn(17).setMinWidth(col6MW);
-		getColumnModel().getColumn(18).setMinWidth(col6MW);
-		getColumnModel().getColumn(19).setMinWidth(col6MW);
-		getColumnModel().getColumn(20).setMinWidth(col6MW);
-		getColumnModel().getColumn(21).setMinWidth(col6MW);
-		getColumnModel().getColumn(22).setMinWidth(col6MW);
-		getColumnModel().getColumn(23).setMinWidth(col6MW);
-		getColumnModel().getColumn(24).setMinWidth(col6MW);
-		getColumnModel().getColumn(25).setMinWidth(col6MW);
+		getColumnModel().getColumn(0).setMinWidth(100);
+		getColumnModel().getColumn(1).setMinWidth(100);
+		getColumnModel().getColumn(2).setMinWidth(150);
+		getColumnModel().getColumn(3).setMinWidth(300);
+		getColumnModel().getColumn(4).setMinWidth(350);
+		getColumnModel().getColumn(5).setMinWidth(300);
+		getColumnModel().getColumn(6).setMinWidth(50);
+		getColumnModel().getColumn(7).setMinWidth(150);
+		getColumnModel().getColumn(8).setMinWidth(150);
+		getColumnModel().getColumn(9).setMinWidth(150);
+		getColumnModel().getColumn(10).setMinWidth(300);
+		getColumnModel().getColumn(11).setMinWidth(350);
+		getColumnModel().getColumn(12).setMinWidth(100);
+		getColumnModel().getColumn(13).setMinWidth(50);
+		getColumnModel().getColumn(14).setMinWidth(100);
+		getColumnModel().getColumn(15).setMinWidth(100);
+		getColumnModel().getColumn(16).setMinWidth(150);
+		getColumnModel().getColumn(17).setMinWidth(150);
+		getColumnModel().getColumn(18).setMinWidth(150);
+		getColumnModel().getColumn(19).setMinWidth(50);
+		getColumnModel().getColumn(20).setMinWidth(70);
+		getColumnModel().getColumn(21).setMinWidth(100);
+		getColumnModel().getColumn(22).setMinWidth(70);
+		getColumnModel().getColumn(23).setMinWidth(50);
+		getColumnModel().getColumn(24).setMinWidth(100);
+		getColumnModel().getColumn(25).setMinWidth(100);
+		
+		getColumnModel().getColumn(26).setMinWidth(250);
 	}
 
+	public boolean isEnableEdit() {
+		return enableEdit;
+	}
+
+	public void setEnableEdit(boolean enableEdit) {
+		this.enableEdit = enableEdit;
+	}
+
+	@Override
+	public boolean isCellEditable(int row, int column) {
+		
+		if (enableEdit) {
+			
+			return ((row == rowEditable) && (column == 5 || column == 7 || column ==9 ));
+		} else {
+			return enableEdit;
+		}
+	}
+
+	public int getRowEditable() {
+		return rowEditable;
+	}
+
+	public void setRowEditable(int rowEditable) {
+		this.rowEditable = rowEditable;
+	}
+	
+	
 }

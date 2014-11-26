@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
@@ -32,6 +33,7 @@ import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.GroupCfgEmplsTableModel;
 import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
+
 
 
 
@@ -82,13 +84,14 @@ public class EmplsComboAL extends BaseActionListener {
 
 			
 			Employee employee = ((Employee) comboBox.getModel().getSelectedItem());
-			Query q = em.createQuery(" from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId");
+			Query q = em.createQuery(" from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.dateEnd desc");
 			q.setParameter("employeeId", employee.getId());
 			List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q.getResultList();
-
+			((PersonalCfgEmplsTableModel)table.getModel()).setEmplSals(emplSals);
 		    Vector tableData = new Vector();
 			for (EmployeeSalary emplSal : emplSals) {
 				Vector<Object> oneRow = new Vector<Object>();
+				oneRow.add(emplSal.getPeriod().getCode());
 				oneRow.add(emplSal.getV01());
 				oneRow.add(emplSal.getV02());
 				oneRow.add(emplSal.getV03());
@@ -112,6 +115,7 @@ public class EmplsComboAL extends BaseActionListener {
 				oneRow.add(emplSal.getV21());
 				oneRow.add(emplSal.getV22());
 				oneRow.add(emplSal.getV23());
+				oneRow.add(Constants.EMPTY_STRING);
 				oneRow.add(Constants.EMPTY_STRING);
 				oneRow.add(Constants.EMPTY_STRING);
 				tableData.add(oneRow);
