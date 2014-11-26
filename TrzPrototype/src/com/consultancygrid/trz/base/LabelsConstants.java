@@ -76,6 +76,21 @@ public interface LabelsConstants {
 	 
 	 String SET_TAB_EMPL2PER_HEADER = "settings_tab_empl2period_header";
 	 
+	 String SET_TAB_EMPL2PER_REVENUE = "settings_tab_empl2period_revenue";
+	 String SET_TAB_EMPL2PER_EMPL_SET = "settings_tab_empl2period_empl_settings";
+	 String SET_TAB_EMPL2PER_BRUTOSTAT = "settings_tab_empl2period_brutoStat";
+	 String SET_TAB_EMPL2PER_AVANS = "settings_tab_empl2period_avans";
+	 String SET_TAB_EMPL2PER_BRUTOSANDARD = "settings_tab_empl2period_brutoStandart";
+	 String SET_TAB_EMPL2PER_PERCENT_ALL = "settings_tab_empl2period_percentAll";
+	 String SET_TAB_EMPL2PER_PERSONAL_PERCENT = "settings_tab_empl2period_percentPersonal";
+	 String SET_TAB_EMPL2PER_PERCENT_GROUP = "settings_tab_empl2period_percentGroup";
+	 String SET_TAB_EMPL2PER_ON_BOARD = "settings_tab_empl2period_onBoardPercentage";
+	 String SET_TAB_EMPL2PER_SAVE = "settings_tab_empl2period_save";
+
+	 String COMBO_PERIOD = "combo.period.select";
+	 String COMBO_DEP_ = "combo.department.select";
+	 String COMBO_EMPL = "combo.employee.select";
+	 
 	 String ALERT_MSG_INFO = "alert_msg_info";
      String ALERT_MSG_WARN = "alert_msg_warn";
 	 

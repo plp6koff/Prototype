@@ -1,13 +1,16 @@
 package com.consultancygrid.trz.render;
 
 import java.awt.Component;
+import java.io.IOException;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Employee;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class EmployeeCustomRender implements ListCellRenderer {
 
@@ -25,7 +28,12 @@ public class EmployeeCustomRender implements ListCellRenderer {
 			  renderer.setText(tempEmployee.getFirstName() + " " +tempEmployee.getLastName());
 			  
 		  } else {
-			  renderer.setText("Select employee ...");
+			  try {
+				renderer.setText(ResourceLoaderUtil.getLabels(LabelsConstants.COMBO_EMPL));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		  }
 		  
 		  return renderer;

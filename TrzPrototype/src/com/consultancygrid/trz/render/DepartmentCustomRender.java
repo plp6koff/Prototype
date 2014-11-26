@@ -1,13 +1,16 @@
 package com.consultancygrid.trz.render;
 
 import java.awt.Component;
+import java.io.IOException;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class DepartmentCustomRender implements ListCellRenderer {
 
@@ -22,10 +25,15 @@ public class DepartmentCustomRender implements ListCellRenderer {
 		  if (value instanceof Department) {
 			  
 			  Department tempDepartment = (Department) value;
-			  renderer.setText("Department : " + tempDepartment.getCode());
+			  renderer.setText(tempDepartment.getCode());
 			  
 		  } else {
-			  renderer.setText("Select Department ...");
+			  try {
+				renderer.setText(ResourceLoaderUtil.getLabels(LabelsConstants.COMBO_DEP_));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		  }
 		  
 		  return renderer;

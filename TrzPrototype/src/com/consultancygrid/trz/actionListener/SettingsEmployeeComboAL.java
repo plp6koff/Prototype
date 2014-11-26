@@ -79,9 +79,8 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 			Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
 
-			JLabel lblEmpl1 = new JLabel("Revenue:");
+			JLabel lblEmpl1 = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE));
 			lblEmpl1.setBounds(50, 100 , 100, 25);
-			lblEmpl1.setText("Revenue : ");
 			panLinkPeriod2Empl.add(lblEmpl1);
 			
 			
@@ -91,37 +90,37 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			textFieldValue.setText("0.0");
 			panLinkPeriod2Empl.add(textFieldValue);
 			
-			JButton btnSavePeriod = new JButton("Add Employee to Period");
-			btnSavePeriod.setBounds(20, 300, 100 ,25);
+			JButton btnSavePeriod = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_SAVE));
+			btnSavePeriod.setBounds(20, 300, 250 ,25);
 			panLinkPeriod2Empl.add(btnSavePeriod);
 			
-			JLabel lblFieldSettings = new JLabel("Employee settings");
+			JLabel lblFieldSettings = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_EMPL_SET));
 			lblFieldSettings.setBounds(20, 150 , 200, 25);
 			panLinkPeriod2Empl.add(lblFieldSettings);
 			
 			
-			JLabel lblBrutoStat = new JLabel("Bruto Stat :");
+			JLabel lblBrutoStat = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSTAT));
 			lblBrutoStat.setBounds(50, 200 , 100, 25);
 			panLinkPeriod2Empl.add(lblBrutoStat);
 			JTextField textBrutoStat = new JTextField();
 			textBrutoStat.setBounds(150, 200 , 100, 25);
 			panLinkPeriod2Empl.add(textBrutoStat);
 			
-			JLabel lblBrutoStad = new JLabel("Bruto Standart :");
+			JLabel lblBrutoStad = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD));
 			lblBrutoStad.setBounds(300, 200 , 100, 25);
 			panLinkPeriod2Empl.add(lblBrutoStad);
 			JTextField textBrutoStad = new JTextField();
 			textBrutoStad.setBounds(430, 200 , 100, 25);
 			panLinkPeriod2Empl.add(textBrutoStad);
 			
-			JLabel lblAvans = new JLabel("Avans :");
+			JLabel lblAvans = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_AVANS));
 			lblAvans.setBounds(50, 230 , 100, 25);
 			panLinkPeriod2Empl.add(lblAvans);
 			JTextField textBrutoAvans = new JTextField();
 			textBrutoAvans.setBounds(150, 230 , 100, 25);
 			panLinkPeriod2Empl.add(textBrutoAvans);
 			
-			JLabel lblBrutoPercentAll = new JLabel("Percent All :");
+			JLabel lblBrutoPercentAll = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL));
 			lblBrutoPercentAll.setBounds(300, 230 , 200, 25);
 			panLinkPeriod2Empl.add(lblBrutoPercentAll);
 			JTextField textPercentAll = new JTextField();
@@ -129,21 +128,21 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			panLinkPeriod2Empl.add(textPercentAll);
 			
 			
-			JLabel lblPercentGroup = new JLabel("Percent group :");
+			JLabel lblPercentGroup = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP));
 			lblPercentGroup.setBounds(50, 260 , 100, 25);
 			panLinkPeriod2Empl.add(lblPercentGroup);
 			JTextField textPercentGroup = new JTextField();
 			textPercentGroup.setBounds(150, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textPercentGroup);
 			
-			JLabel lblPercentPerson = new JLabel("Percent Personal :");
+			JLabel lblPercentPerson = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT));
 			lblPercentPerson.setBounds(300, 260 , 200, 25);
 			panLinkPeriod2Empl.add(lblPercentPerson);
 			JTextField textPercentPerson = new JTextField();
 			textPercentPerson.setBounds(430, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textPercentPerson);
 			
-			JLabel lblOnBoard = new JLabel("On Boarding percentage :");
+			JLabel lblOnBoard = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD));
 			lblOnBoard.setBounds(550, 260 , 200, 25);
 			panLinkPeriod2Empl.add(lblOnBoard);
 			JTextField textOnBoard = new JTextField();

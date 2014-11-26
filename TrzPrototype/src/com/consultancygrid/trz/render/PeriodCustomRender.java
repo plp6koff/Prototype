@@ -1,6 +1,7 @@
 package com.consultancygrid.trz.render;
 
 import java.awt.Component;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultListCellRenderer;
@@ -8,8 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.util.DateTimeTools;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class PeriodCustomRender implements ListCellRenderer {
 
@@ -28,7 +31,12 @@ public class PeriodCustomRender implements ListCellRenderer {
 			  renderer.setText(sdf.format(tempPeriod.getDateStart()) + " - " + sdf.format(tempPeriod.getDateEnd()));
 			  
 		  } else {
-			  renderer.setText("Select period ...");
+			  try {
+				renderer.setText(ResourceLoaderUtil.getLabels(LabelsConstants.COMBO_PERIOD));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		  }
 		  
 		  return renderer;
