@@ -24,11 +24,14 @@ public class PersonalCfgEmplsTable extends JTable {
 		//TODO implement if  needed
 		Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 		
-		if (enableEdit) {
-			if ((Index_row == rowEditable) && (Index_col == 5 || Index_col == 7 || Index_col ==9 )) {
+		if (enableEdit && this.getSelectedRow() >= 0) {
+			if ((Index_row == rowEditable) && (Index_col == 1 || Index_col == 7 || Index_col == 17 || Index_col == 21 )) {
 			comp.setBackground(Color.yellow);
 			
 			}
+		} 
+		if (Index_col == 0) {
+			comp.setBackground(Color.green);
 		}
 		return comp;
 	}
@@ -81,7 +84,7 @@ public class PersonalCfgEmplsTable extends JTable {
 		
 		if (enableEdit) {
 			
-			return ((row == rowEditable) && (column == 5 || column == 7 || column ==9 ));
+			return ((row == rowEditable) && (column == 1 || column == 7 || column == 17 || column == 21 ));
 		} else {
 			return enableEdit;
 		}

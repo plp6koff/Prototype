@@ -5,6 +5,7 @@ import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,14 +68,18 @@ public class SaveRowAL extends BaseActionListener{
 			personalConfTable.setRowEditable(-1);
 			personalConfTable.setEnableEdit(false);
 			
-			//TODO i -> period
-			// i + employee -> sallary
 			if (employee != null) {
-				//TODO i -> period
 				EmployeeSalary emplSallary = model.getEmplSals().get(i);
-				//TODO set the needed data
-				// i + employee -> sallary
+				String v01Str = (String) model.getValueAt(i, 1);
+				String v07Str = (String) model.getValueAt(i, 7);
+				String v17Str = (String) model.getValueAt(i, 17);
+				String v21Str = (String) model.getValueAt(i, 21);
+				emplSallary.setV01(parseValue(emplSallary.getV01(),v01Str));
+				emplSallary.setV07(parseValue(emplSallary.getV07(),v07Str));
+				emplSallary.setV17(parseValue(emplSallary.getV17(),v17Str));
+				emplSallary.setV21(parseValue(emplSallary.getV21(),v21Str));
 				em.merge(emplSallary);
+				
 				JOptionPane.showMessageDialog(mainFrame, 
 						 ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_INFO1)  + employee.getFirstName() + " " + employee.getLastName() +" !", 
 						 ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_INFO), JOptionPane.INFORMATION_MESSAGE);
@@ -98,4 +103,15 @@ public class SaveRowAL extends BaseActionListener{
 		}	
 	}
 	
+	
+	private BigDecimal parseValue(BigDecimal initValue, String newValStr) {
+		
+		BigDecimal result = initValue;
+		try {
+			double parsedDoub = Double.valueOf(newValStr);
+			return BigDecimal.valueOf(parsedDoub);
+		} catch (Exception e)  {
+			 return initValue;
+		}
+	}
 }

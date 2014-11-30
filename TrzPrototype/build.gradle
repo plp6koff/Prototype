@@ -31,9 +31,7 @@ configurations {
 
 dependencies {
 	
-	includeInJar 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
 	includeInJar 'org.eclipse.persistence:javax.persistence:2.1.0'
-	includeInJar 'javax.ejb:ejb-api:3.0'
 	includeInJar 'commons-codec:commons-codec:1.5'
 	includeInJar 'commons-logging:commons-logging:1.2'
 	includeInJar 'org.apache.poi:poi:3.10.1'
@@ -61,10 +59,13 @@ jar {
 		println "includeInJar: " + configurations.includeInJar.collect { File file -> file }
 		from configurations.includeInJar
 	}
-	into('resource') {
+	into('resources') {
 		
-		from'resource'
-		exclude 'log'
+		from 'src/resources'
 	}
-	
+	into('META-INF') {
+		from  'src/META-INF'
+	}
 }
+
+

@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.persistence.EntityManager;
@@ -35,6 +37,7 @@ import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.combo.TrzComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.GroupCfgEmplsTableModel;
+import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 import static com.consultancygrid.trz.base.Constants.*;
@@ -79,11 +82,20 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 			Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
 
+			Query q = em.createQuery(" from EmployeeSettings as settings  where  settings.employee.id = :employeeId order by settings.period.dateEnd desc");
+			q.setParameter("employeeId", empl.getId());
+			List<EmployeeSettings> emplSettingsList = (List<EmployeeSettings>) q.getResultList();
+			EmployeeSettings initSettings = null;
+			if (emplSettingsList != null && !emplSettingsList.isEmpty()) {
+				initSettings = emplSettingsList.get(0);
+			}
+			
+			
 			JLabel lblEmpl1 = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE));
 			lblEmpl1.setBounds(50, 100 , 100, 25);
 			panLinkPeriod2Empl.add(lblEmpl1);
 			
-			
+			Map<String, JTextField>  map = new HashMap<String, JTextField>();
 			
 			JTextField textFieldValue = new JTextField();
 			textFieldValue.setBounds(150, 100 , 200, 25);
@@ -106,12 +118,14 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			textBrutoStat.setBounds(150, 200 , 100, 25);
 			panLinkPeriod2Empl.add(textBrutoStat);
 			
+			
 			JLabel lblBrutoStad = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD));
 			lblBrutoStad.setBounds(300, 200 , 100, 25);
 			panLinkPeriod2Empl.add(lblBrutoStad);
 			JTextField textBrutoStad = new JTextField();
 			textBrutoStad.setBounds(430, 200 , 100, 25);
 			panLinkPeriod2Empl.add(textBrutoStad);
+			
 			
 			JLabel lblAvans = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_AVANS));
 			lblAvans.setBounds(50, 230 , 100, 25);
@@ -135,12 +149,14 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			textPercentGroup.setBounds(150, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textPercentGroup);
 			
+			
 			JLabel lblPercentPerson = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT));
 			lblPercentPerson.setBounds(300, 260 , 200, 25);
 			panLinkPeriod2Empl.add(lblPercentPerson);
 			JTextField textPercentPerson = new JTextField();
 			textPercentPerson.setBounds(430, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textPercentPerson);
+			
 			
 			JLabel lblOnBoard = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD));
 			lblOnBoard.setBounds(550, 260 , 200, 25);
@@ -149,6 +165,24 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			textOnBoard.setBounds(700, 260 , 100, 25);
 			panLinkPeriod2Empl.add(textOnBoard);
 			
+			if (initSettings != null) {
+				textBrutoStat.setText(initSettings.getBrutoPoShtat().toString());
+				textBrutoStad.setText(initSettings.getBrutoStandart().toString());
+				textBrutoAvans.setText(initSettings.getAvans().toString());
+				textPercentAll.setText(initSettings.getPercentAll().toString());
+				textPercentGroup.setText(initSettings.getPercentGroup().toString());
+				textPercentPerson.setText(initSettings.getPercentPersonal().toString());
+				textOnBoard.setText(initSettings.getPersonOnboardingPercentage().toString());
+			}
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSTAT, textBrutoStat);
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD, textBrutoStad);
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_AVANS, textBrutoAvans);
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL, textPercentAll);
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP, textPercentGroup);
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT, textPercentPerson);
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD, textOnBoard);
+			
+			btnSavePeriod.addActionListener(new AddEmpl2PeriodAL(mainFrame, comboBoxPeriod, comboBoxDepartment, comboBoxEmployee, textFieldValue, map, initSettings));
 			
 			EmployeeSettings emplSettings = new EmployeeSettings();
 			//em.persist(emplSettings);
@@ -174,4 +208,6 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			}
 		}
 	}
+	
+	
 }
