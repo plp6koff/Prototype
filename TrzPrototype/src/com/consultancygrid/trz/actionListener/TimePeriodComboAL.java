@@ -203,15 +203,21 @@ public class TimePeriodComboAL extends BaseActionListener {
 			Department department, int allEmployeesCount, Period period, BigInteger emplDept, Double percentAll) throws IOException {
 
 		Vector<Object> oneRow = new Vector<Object>();
+		//a0
 		oneRow.add(department.getCode());
+		//b1
 		oneRow.add(employee.getFirstName() + " " + employee.getLastName());
+		//c2
 		oneRow.add(period.getRevenue().toString());// To be extracted from db
+		//d3
 		oneRow.add(allEmployeesCount);// To be provided as param
 		int profitAll = period.getRevenue().intValue() - emplDept.intValue();
+		//e4
 		oneRow.add(profitAll);
+		//f5
 		oneRow.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE1));
-
+		//g6
 		oneRow.add(percentAll);
 		// TODO comment until it is required
 		double personalFactor = 1.0;

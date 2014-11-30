@@ -48,7 +48,10 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import com.consultancygrid.trz.actionListener.EditRowAL;
+import com.consultancygrid.trz.actionListener.CancelGroupRowAL;
+import com.consultancygrid.trz.actionListener.CancelPersonalRowAL;
+import com.consultancygrid.trz.actionListener.EditGroupRowAL;
+import com.consultancygrid.trz.actionListener.EditPersonRowAL;
 import com.consultancygrid.trz.actionListener.EmplsComboAL;
 import com.consultancygrid.trz.actionListener.SavePeriodAL;
 import com.consultancygrid.trz.actionListener.SaveRowAL;
@@ -178,13 +181,18 @@ public class PrototypeMainFrame extends JFrame {
 		
 		JButton editRow = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
 		editRow.setBounds(340, 10, 150, 20);
-		editRow.addActionListener(new EditRowAL(this, personalConfTable,comboBoxEmployees));
+		editRow.addActionListener(new EditPersonRowAL(this, personalConfTable,comboBoxEmployees));
 		firstInnerPanel.add(editRow);
 		
 		JButton saveRow = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
 		saveRow.setBounds(510, 10, 150, 20);
 		saveRow.addActionListener(new SaveRowAL(this, personalConfTable,comboBoxEmployees));
 		firstInnerPanel.add(saveRow);
+		
+		JButton cancel = new JButton("Cancel");
+		cancel.setBounds(690, 10, 150, 20);
+		cancel.addActionListener(new CancelPersonalRowAL(this, personalConfTable,comboBoxEmployees));
+		firstInnerPanel.add(cancel);
 		
 		EmplsComboAL emplsComboAL = new EmplsComboAL(this, comboBoxEmployees, personalConfTable);
 		comboBoxEmployees.addActionListener(emplsComboAL);
@@ -219,6 +227,21 @@ public class PrototypeMainFrame extends JFrame {
 		comboBox.setBounds(20, 10, 300, 20);
 		comboBox.setRenderer(new PeriodCustomRender());
 		secondInnerPanel.add(comboBox);
+		
+		JButton editRow = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
+		editRow.setBounds(340, 10, 150, 20);
+		editRow.addActionListener(new EditGroupRowAL(this, table,comboBox));
+		secondInnerPanel.add(editRow);
+		
+		JButton cancel = new JButton("Cancel");
+		cancel.setBounds(690, 10, 150, 20);
+		cancel.addActionListener(new CancelGroupRowAL(this, table,comboBox));
+		secondInnerPanel.add(cancel);
+		
+		JButton saveRow = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
+		saveRow.setBounds(510, 10, 150, 20);
+		//saveRow.addActionListener(new SaveRowAL(this, personalConfTable,comboBoxEmployees));
+		secondInnerPanel.add(saveRow);
 		
 		TimePeriodComboAL tPCAL = new TimePeriodComboAL(this, comboBox, table);
 		

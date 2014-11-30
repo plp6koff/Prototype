@@ -57,6 +57,7 @@ public class SettingsPeriodComboAL extends BaseActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 
+		
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
 		try {
@@ -69,19 +70,10 @@ public class SettingsPeriodComboAL extends BaseActionListener {
 
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 
-			//Query q = em.createQuery("from EmplDeptPeriod as emplDeptP  where  emplDeptP.period.id = :periodId");
 			Query q = em.createQuery(" select distinct emplDeptP.department from EmplDeptPeriod as emplDeptP  where  emplDeptP.period.id = :periodId");
 			q.setParameter("periodId", period.getId());
 			List<Department> allDepartments = (List<Department>) q.getResultList();
 		
-//		    //Query q1 = em.createQuery("from Employee");
-//		    //List<Employee> allEmpls = (List<Employee>) q1.getResultList();
-//			List<Department> allDepartments = new ArrayList<Department>();
-//			for (EmplDeptPeriod emplDP : allEmplDeptPeriods) {
-//					allDepartments.add(emplDP.getDepartment());
-//			}
-			
-			
 			((EmplComboBoxModel)this.comboBoxEmployee.getModel()).clear();
 			this.comboBoxDepartment.setEnabled(false);
 			this.comboBoxDepartment.repaint();

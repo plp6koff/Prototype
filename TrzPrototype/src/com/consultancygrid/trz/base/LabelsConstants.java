@@ -87,6 +87,10 @@ public interface LabelsConstants {
 	 String SET_TAB_EMPL2PER_ON_BOARD = "settings_tab_empl2period_onBoardPercentage";
 	 String SET_TAB_EMPL2PER_SAVE = "settings_tab_empl2period_save";
 
+	 String SET_TAB_EMPL2PER_SUCCESS = "settings_tab_empl2period_ok";
+	 String SET_TAB_EMPL2PER_ERROR = "settings_tab_empl2period_ko";
+	 
+	 
 	 String COMBO_PERIOD = "combo.period.select";
 	 String COMBO_DEP_ = "combo.department.select";
 	 String COMBO_EMPL = "combo.employee.select";

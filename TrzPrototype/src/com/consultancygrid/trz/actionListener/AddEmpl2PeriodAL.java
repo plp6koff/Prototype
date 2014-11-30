@@ -2,27 +2,24 @@ package com.consultancygrid.trz.actionListener;
 
 import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
-import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.jdatepicker.impl.JDatePickerImpl;
 import org.pmw.tinylog.Logger;
 
-import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.EmplDeptPeriod;
@@ -30,20 +27,27 @@ import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.PeriodSetting;
-import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.RevenueEmplPeriod;
-import com.consultancygrid.trz.model.TrzStatic;
+import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
+import com.consultancygrid.trz.ui.combo.TrzComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
-import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
+/**
+ * Action listener for add employee to period and department
+ * @author a.palapeshkov@gmail.com
+ *
+ */
 public class AddEmpl2PeriodAL extends BaseActionListener{
 
+	private JPanel panLinkPeriod2Empl;
+	private JPanel createForm;
 	private JComboBox comboBoxPeriod;
 	private JComboBox comboBoxDepartment;
 	private JComboBox comboBoxEmployee;
 	private JTextField fieldRevenue;
 	private EmployeeSettings initSettings;
+	private RevenueEmplPeriod initREP;
 	private Map<String,JTextField> map ;
 	
 	public AddEmpl2PeriodAL(PrototypeMainFrame mainFrame,
@@ -52,7 +56,10 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 			JComboBox comboBoxEmployee, 
 			JTextField fieldRevenue, 	
 			Map<String,JTextField> map,
-			EmployeeSettings initSettings
+			EmployeeSettings initSettings,
+			RevenueEmplPeriod initREP,
+			JPanel panLinkPeriod2Empl,
+			JPanel createForm
 			) {
 		
 		super(mainFrame);
@@ -62,6 +69,9 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 		this.fieldRevenue = fieldRevenue;
 		this.map = 	map; 
 		this.initSettings = initSettings;
+		this.initREP = initREP;
+		this.panLinkPeriod2Empl = panLinkPeriod2Empl;
+		this.createForm = createForm;
 	}
 
 	@Override
@@ -78,92 +88,54 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 			Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
 			Department dept = ((Department) comboBoxDepartment.getModel().getSelectedItem());
-
-			Query q = em.createQuery(" from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.dateEnd desc");
-			q.setParameter("employeeId", empl.getId());
-			List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q.getResultList();
-			EmplDeptPeriod eDP = new EmplDeptPeriod();
-			eDP.setDepartment(dept);
-			eDP.setEmployee(empl);
-			eDP.setPeriod(period);
 			
-			RevenueEmplPeriod rEP = new RevenueEmplPeriod();
-			rEP.setEmployee(empl);
-			rEP.setPeriod(period);
-			rEP.setRevenue(BigDecimal.valueOf(Double.valueOf(fieldRevenue.getText())));
-			em.persist(rEP);
-			
-			JTextField textBrutoStat = map.get(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSTAT);
-			JTextField textBrutoStad = map.get(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD);
-			JTextField textBrutoAvans = map.get(LabelsConstants.SET_TAB_EMPL2PER_AVANS);
-			JTextField textPercentAll = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL);
-			JTextField textPercentGroup = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP);
-			JTextField textPercentPerson = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT);
-			JTextField  textOnBoard = map.get(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD);
-			
-			
-			EmployeeSettings settings =   new EmployeeSettings();
-			settings.setPeriod(period);
-			settings.setEmployee(empl);
-			settings.setAvans(parseValue(BigDecimal.ZERO,textBrutoAvans.getText()));
-			settings.setBrutoPoShtat(parseValue(BigDecimal.ZERO,textBrutoStat.getText()));
-			settings.setBrutoStandart(parseValue(BigDecimal.ZERO,textBrutoStad.getText()));
-			settings.setPercentGroup(parseValue(BigDecimal.ZERO,textPercentGroup.getText()));
-			settings.setPercentPersonal(parseValue(BigDecimal.ZERO,textPercentPerson.getText()));
-			settings.setPercentAll(parseValue(BigDecimal.ZERO,textOnBoard.getText()));
-			//TODO
-			BigDecimal tempOnBoard = parseValue(BigDecimal.ZERO,textBrutoAvans.getText());
-			if (BigDecimal.ONE.compareTo(tempOnBoard) == 1) {
-				BigDecimal tempToAdd = parseValue(BigDecimal.ZERO,"0.15");
-				settings.setPersonOnboardingPercentage(tempOnBoard.add(tempToAdd));
-			} else {
-				settings.setPersonOnboardingPercentage(tempOnBoard);
+			createEmplDeptPeriod(em, period, empl, dept);
+			createSettings(em, period, empl);
+			createSalary(em, period, empl);
+				
+			reinitForm(em);	
+			try {
+				JOptionPane.showMessageDialog(mainFrame, JOptionPane.INFORMATION_MESSAGE ,
+						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_SUCCESS), JOptionPane.INFORMATION_MESSAGE);
+			} catch (HeadlessException | IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
-			em.persist(settings);
-				
-				
-			EmployeeSalary salary = new EmployeeSalary();
-			if (emplSals != null && !emplSals.isEmpty()) {
-				
-				EmployeeSalary lastSalary = emplSals.get(0);
-				salary.setV01(lastSalary.getV01());
-				salary.setV02(lastSalary.getV02());
-				salary.setV03(lastSalary.getV03());
-				salary.setV04(lastSalary.getV04());
-				salary.setV05(lastSalary.getV05());
-				salary.setV06(lastSalary.getV06());
-				salary.setV07(lastSalary.getV07());
-				salary.setV08(lastSalary.getV08());
-				salary.setV09(lastSalary.getV09());
-				salary.setV10(lastSalary.getV10());
-				salary.setV11(lastSalary.getV11());
-				salary.setV12(lastSalary.getV12());
-				salary.setV13(lastSalary.getV13());
-				salary.setV14(lastSalary.getV14());
-				salary.setV15(lastSalary.getV15());
-				salary.setV16(lastSalary.getV16());
-				salary.setV17(lastSalary.getV17());
-			    salary.setV18(lastSalary.getV18());
-			    salary.setV19(lastSalary.getV19());
-			    salary.setV20(lastSalary.getV20());
-			    salary.setV21(lastSalary.getV21());
-			    salary.setV22(lastSalary.getV22());
-			    salary.setV23(lastSalary.getV23());
-				
-				salary.setEmployee(empl);
-				salary.setPeriod(period);
-			} 
-			em.persist(salary);
-			
 		} catch (Exception e1) {
 			Logger.error(e1);
-
+			try {
+				JOptionPane.showMessageDialog(mainFrame, JOptionPane.ERROR_MESSAGE ,
+						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ERROR), JOptionPane.ERROR_MESSAGE);
+			} catch (HeadlessException | IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			if (em!= null && em.isOpen()) {
+				em.getTransaction().rollback();
+				em.close();
+			}
 		} finally {
 			if (em!= null && em.isOpen()) {
 				em.getTransaction().commit();
 				em.close();
 			}
 		}	
+	}
+	
+	private void reinitForm(EntityManager em) {
+		
+		createForm.setVisible(false);
+		this.panLinkPeriod2Empl.remove(createForm);
+		
+		EmplComboBoxModel empModel = (EmplComboBoxModel) this.comboBoxEmployee.getModel();
+		
+		this.comboBoxEmployee.setEnabled(false);
+		this.comboBoxDepartment.setEnabled(false);
+		Query qPeriod = em.createQuery(" from Period");
+		List<Period> allPeriods = (List<Period>) qPeriod.getResultList();
+		this.comboBoxPeriod.setModel(new TrzComboBoxModel(allPeriods));
+		this.panLinkPeriod2Empl.validate();
+		this.panLinkPeriod2Empl.repaint();
 	}
 	
 	private BigDecimal parseValue(BigDecimal initValue, String newValStr) {
@@ -175,5 +147,97 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 		} catch (Exception e)  {
 			 return initValue;
 		}
+	}
+	
+	private void createEmplDeptPeriod(EntityManager em, Period period,Employee empl, Department dept) {
+		
+		EmplDeptPeriod eDP = new EmplDeptPeriod();
+		eDP.setDepartment(dept);
+		eDP.setEmployee(empl);
+		eDP.setPeriod(period);
+		
+		if (initREP != null ) {
+			initREP.setRevenue(BigDecimal.valueOf(Double.valueOf(fieldRevenue.getText())));
+			//em.merge(initREP);
+		} else {
+			RevenueEmplPeriod rEP = new RevenueEmplPeriod();
+			rEP.setEmployee(empl);
+			rEP.setPeriod(period);
+			rEP.setRevenue(BigDecimal.valueOf(Double.valueOf(fieldRevenue.getText())));
+			em.persist(rEP);
+		}
+	}
+	
+	private void createSettings(EntityManager em, Period period,Employee empl) {
+		
+		JTextField textBrutoStat = map.get(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSTAT);
+		JTextField textBrutoStad = map.get(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD);
+		JTextField textBrutoAvans = map.get(LabelsConstants.SET_TAB_EMPL2PER_AVANS);
+		JTextField textPercentAll = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL);
+		JTextField textPercentGroup = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP);
+		JTextField textPercentPerson = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT);
+		JTextField  textOnBoard = map.get(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD);
+		
+		
+		EmployeeSettings settings =   new EmployeeSettings();
+		settings.setPeriod(period);
+		settings.setEmployee(empl);
+		settings.setAvans(parseValue(BigDecimal.ZERO,textBrutoAvans.getText()));
+		settings.setBrutoPoShtat(parseValue(BigDecimal.ZERO,textBrutoStat.getText()));
+		settings.setBrutoStandart(parseValue(BigDecimal.ZERO,textBrutoStad.getText()));
+		settings.setPercentGroup(parseValue(BigDecimal.ZERO,textPercentGroup.getText()));
+		settings.setPercentPersonal(parseValue(BigDecimal.ZERO,textPercentPerson.getText()));
+		settings.setPercentAll(parseValue(BigDecimal.ZERO,textPercentAll.getText()));
+		//TODO
+		BigDecimal tempOnBoard = parseValue(BigDecimal.ZERO,textOnBoard.getText());
+		if (BigDecimal.ONE.compareTo(tempOnBoard) == 1) {
+			BigDecimal tempToAdd = parseValue(BigDecimal.ZERO,"0.15");
+			settings.setPersonOnboardingPercentage(tempOnBoard.add(tempToAdd));
+		} else {
+			settings.setPersonOnboardingPercentage(tempOnBoard);
+		}
+		em.persist(settings);
+	}
+	
+	
+	
+	
+	private void createSalary(EntityManager em, Period period, Employee empl) {
+		
+		Query q = em.createQuery(" from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.dateEnd desc");
+		q.setParameter("employeeId", empl.getId());
+		List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q.getResultList();
+		
+		EmployeeSalary salary = new EmployeeSalary();
+		if (emplSals != null && !emplSals.isEmpty()) {
+			
+			EmployeeSalary lastSalary = emplSals.get(0);
+			salary.setV01(lastSalary.getV01());
+			salary.setV02(lastSalary.getV02());
+			salary.setV03(lastSalary.getV03());
+			salary.setV04(lastSalary.getV04());
+			salary.setV05(lastSalary.getV05());
+			salary.setV06(lastSalary.getV06());
+			salary.setV07(lastSalary.getV07());
+			salary.setV08(lastSalary.getV08());
+			salary.setV09(lastSalary.getV09());
+			salary.setV10(lastSalary.getV10());
+			salary.setV11(lastSalary.getV11());
+			salary.setV12(lastSalary.getV12());
+			salary.setV13(lastSalary.getV13());
+			salary.setV14(lastSalary.getV14());
+			salary.setV15(lastSalary.getV15());
+			salary.setV16(lastSalary.getV16());
+			salary.setV17(lastSalary.getV17());
+		    salary.setV18(lastSalary.getV18());
+		    salary.setV19(lastSalary.getV19());
+		    salary.setV20(lastSalary.getV20());
+		    salary.setV21(lastSalary.getV21());
+		    salary.setV22(lastSalary.getV22());
+		    salary.setV23(lastSalary.getV23());
+		} 
+		salary.setEmployee(empl);
+		salary.setPeriod(period);
+		em.persist(salary);
 	}
 }

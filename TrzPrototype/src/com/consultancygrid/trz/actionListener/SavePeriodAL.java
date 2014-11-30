@@ -2,7 +2,9 @@ package com.consultancygrid.trz.actionListener;
 
 import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,18 +14,21 @@ import java.util.Map.Entry;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.base.Constants;
+import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.PeriodSetting;
 import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class SavePeriodAL extends BaseActionListener{
 
@@ -68,9 +73,6 @@ public class SavePeriodAL extends BaseActionListener{
 			Date selectedDateFrom = (Date) datePickerTo.getModel().getValue();
 			//Date selectedDateFrom = selectedValue1 != null ? selectedValue1.getTime() : new Date();
 			
-			
-			
-			
 			tempPeriod.setDateStart(selectedDateFrom);
 			tempPeriod.setDateEnd(selectedDateTo);
 			em.persist(tempPeriod);
@@ -93,8 +95,27 @@ public class SavePeriodAL extends BaseActionListener{
 				em.persist(rdp);
 			}
 			
+			try {
+				JOptionPane.showMessageDialog(mainFrame, JOptionPane.INFORMATION_MESSAGE ,
+						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_SUCCESS), JOptionPane.INFORMATION_MESSAGE);
+			} catch (HeadlessException | IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
 		} catch (Exception e1) {
 			Logger.error(e1);
+			try {
+				JOptionPane.showMessageDialog(mainFrame, JOptionPane.ERROR_MESSAGE ,
+						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ERROR), JOptionPane.ERROR_MESSAGE);
+			} catch (HeadlessException | IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			if (em!= null && em.isOpen()) {
+				em.getTransaction().rollback();
+				em.close();
+			}
 
 		} finally {
 			if (em!= null && em.isOpen()) {

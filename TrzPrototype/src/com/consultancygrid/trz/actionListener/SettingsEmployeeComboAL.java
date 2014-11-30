@@ -89,81 +89,94 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			if (emplSettingsList != null && !emplSettingsList.isEmpty()) {
 				initSettings = emplSettingsList.get(0);
 			}
+			Query q1 = em.createQuery(" from RevenueEmplPeriod as rEP  where  rEP.employee.id = :employeeId and rEP.period.id = :periodId");
+			q1.setParameter("employeeId", empl.getId());
+			q1.setParameter("periodId", period.getId());
+			List<RevenueEmplPeriod> initRevenueEmplPeriods = (List<RevenueEmplPeriod>) q1.getResultList();
+			RevenueEmplPeriod initREP = (initRevenueEmplPeriods!=null && !initRevenueEmplPeriods.isEmpty()) ? initRevenueEmplPeriods.get(0) : null;
 			
+			JPanel createFormPanel = new JPanel();
+			createFormPanel.setLayout(null);
+			createFormPanel.setBounds(10, 45 , 900, 600);
 			
 			JLabel lblEmpl1 = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE));
 			lblEmpl1.setBounds(50, 100 , 100, 25);
-			panLinkPeriod2Empl.add(lblEmpl1);
+			createFormPanel.add(lblEmpl1);
 			
 			Map<String, JTextField>  map = new HashMap<String, JTextField>();
 			
 			JTextField textFieldValue = new JTextField();
 			textFieldValue.setBounds(150, 100 , 200, 25);
-			textFieldValue.setText("0.0");
-			panLinkPeriod2Empl.add(textFieldValue);
+			if (initREP != null) {
+				textFieldValue.setText(initREP.getRevenue().toString());
+			} else {
+				textFieldValue.setText("0.0");	
+			}
+			
+			createFormPanel.add(textFieldValue);
 			
 			JButton btnSavePeriod = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_SAVE));
 			btnSavePeriod.setBounds(20, 300, 250 ,25);
-			panLinkPeriod2Empl.add(btnSavePeriod);
+			createFormPanel.add(btnSavePeriod);
 			
 			JLabel lblFieldSettings = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_EMPL_SET));
 			lblFieldSettings.setBounds(20, 150 , 200, 25);
-			panLinkPeriod2Empl.add(lblFieldSettings);
+			createFormPanel.add(lblFieldSettings);
 			
 			
 			JLabel lblBrutoStat = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSTAT));
 			lblBrutoStat.setBounds(50, 200 , 100, 25);
-			panLinkPeriod2Empl.add(lblBrutoStat);
+			createFormPanel.add(lblBrutoStat);
 			JTextField textBrutoStat = new JTextField();
 			textBrutoStat.setBounds(150, 200 , 100, 25);
-			panLinkPeriod2Empl.add(textBrutoStat);
+			createFormPanel.add(textBrutoStat);
 			
 			
 			JLabel lblBrutoStad = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD));
 			lblBrutoStad.setBounds(300, 200 , 100, 25);
-			panLinkPeriod2Empl.add(lblBrutoStad);
+			createFormPanel.add(lblBrutoStad);
 			JTextField textBrutoStad = new JTextField();
 			textBrutoStad.setBounds(430, 200 , 100, 25);
-			panLinkPeriod2Empl.add(textBrutoStad);
+			createFormPanel.add(textBrutoStad);
 			
 			
 			JLabel lblAvans = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_AVANS));
 			lblAvans.setBounds(50, 230 , 100, 25);
-			panLinkPeriod2Empl.add(lblAvans);
+			createFormPanel.add(lblAvans);
 			JTextField textBrutoAvans = new JTextField();
 			textBrutoAvans.setBounds(150, 230 , 100, 25);
-			panLinkPeriod2Empl.add(textBrutoAvans);
+			createFormPanel.add(textBrutoAvans);
 			
 			JLabel lblBrutoPercentAll = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL));
 			lblBrutoPercentAll.setBounds(300, 230 , 200, 25);
-			panLinkPeriod2Empl.add(lblBrutoPercentAll);
+			createFormPanel.add(lblBrutoPercentAll);
 			JTextField textPercentAll = new JTextField();
 			textPercentAll.setBounds(430, 230 , 100, 25);
-			panLinkPeriod2Empl.add(textPercentAll);
+			createFormPanel.add(textPercentAll);
 			
 			
 			JLabel lblPercentGroup = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP));
 			lblPercentGroup.setBounds(50, 260 , 100, 25);
-			panLinkPeriod2Empl.add(lblPercentGroup);
+			createFormPanel.add(lblPercentGroup);
 			JTextField textPercentGroup = new JTextField();
 			textPercentGroup.setBounds(150, 260 , 100, 25);
-			panLinkPeriod2Empl.add(textPercentGroup);
+			createFormPanel.add(textPercentGroup);
 			
 			
 			JLabel lblPercentPerson = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT));
 			lblPercentPerson.setBounds(300, 260 , 200, 25);
-			panLinkPeriod2Empl.add(lblPercentPerson);
+			createFormPanel.add(lblPercentPerson);
 			JTextField textPercentPerson = new JTextField();
 			textPercentPerson.setBounds(430, 260 , 100, 25);
-			panLinkPeriod2Empl.add(textPercentPerson);
+			createFormPanel.add(textPercentPerson);
 			
 			
 			JLabel lblOnBoard = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD));
 			lblOnBoard.setBounds(550, 260 , 200, 25);
-			panLinkPeriod2Empl.add(lblOnBoard);
+			createFormPanel.add(lblOnBoard);
 			JTextField textOnBoard = new JTextField();
 			textOnBoard.setBounds(700, 260 , 100, 25);
-			panLinkPeriod2Empl.add(textOnBoard);
+			createFormPanel.add(textOnBoard);
 			
 			if (initSettings != null) {
 				textBrutoStat.setText(initSettings.getBrutoPoShtat().toString());
@@ -182,16 +195,12 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			map.put(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT, textPercentPerson);
 			map.put(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD, textOnBoard);
 			
-			btnSavePeriod.addActionListener(new AddEmpl2PeriodAL(mainFrame, comboBoxPeriod, comboBoxDepartment, comboBoxEmployee, textFieldValue, map, initSettings));
-			
-			EmployeeSettings emplSettings = new EmployeeSettings();
-			//em.persist(emplSettings);
-			
-			//JLabel lblFieldSalary = new JLabel("Employee salary:");
-			//lblFieldSalary.setBounds(20, 300 , 200, 25);
-			//panLinkPeriod2Empl.add(lblFieldSalary);
-			
-			
+			btnSavePeriod.addActionListener(new AddEmpl2PeriodAL(mainFrame, comboBoxPeriod, comboBoxDepartment, comboBoxEmployee, 
+																 textFieldValue, map, initSettings, initREP,
+																 panLinkPeriod2Empl,
+																 createFormPanel));
+			this.panLinkPeriod2Empl.add(createFormPanel);
+			createFormPanel.validate();
 			this.panLinkPeriod2Empl.validate();
 			this.panLinkPeriod2Empl.repaint();
 			this.tabbedPaneSettings.validate();

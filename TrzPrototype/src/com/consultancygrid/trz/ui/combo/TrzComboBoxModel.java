@@ -3,6 +3,9 @@ package com.consultancygrid.trz.ui.combo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 
@@ -64,6 +67,5 @@ public class TrzComboBoxModel implements ComboBoxModel<Period> {
 		
 		comboBoxItemList.add(perdiod);
 	}
-	
 	
 }

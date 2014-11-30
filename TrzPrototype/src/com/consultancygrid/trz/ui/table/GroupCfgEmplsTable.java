@@ -16,6 +16,12 @@ public class GroupCfgEmplsTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
+	private boolean enableEdit = false;
+	
+	private int rowEditable = 0;
+	
+	private Set editableY = new HashSet<>();
+	
 	public Component prepareRenderer(TableCellRenderer renderer, int Index_row,
 			int Index_col) {
 		// get the current row
@@ -92,6 +98,18 @@ public class GroupCfgEmplsTable extends JTable {
 		} else {
 			comp.setBackground(Color.white);
 		}
+		
+		
+		if (enableEdit && editableY.contains(this.getSelectedRow())) {
+			if ((Index_row == rowEditable 
+					|| Index_row == rowEditable + 1 
+					|| Index_row == rowEditable + 2) 
+					&& (Index_col == 6)) {
+			comp.setBackground(Color.yellow);
+			
+			}
+		} 
+		
 		return comp;
 	}
 
@@ -113,6 +131,43 @@ public class GroupCfgEmplsTable extends JTable {
 		//getColumnModel().getColumn(8).setMinWidth(col8MW);
 		getColumnModel().getColumn(7).setMinWidth(col9MW);
 		getColumnModel().getColumn(8).setMinWidth(col10MW);
+		int y = 0;
+		while (y < 100) {
+			editableY.add(y);
+			y = y + 7;
+			
+		}
+	}
+	
+	public boolean isEnableEdit() {
+		return enableEdit;
 	}
 
+	public void setEnableEdit(boolean enableEdit) {
+		this.enableEdit = enableEdit;
+	}
+
+	@Override
+	public boolean isCellEditable(int Index_row, int Index_col) {
+		
+		if (enableEdit && editableY.contains(Index_row)) {
+			
+			return ((Index_row == rowEditable || Index_row == rowEditable + 1 || Index_row == rowEditable + 2) 
+					&& (Index_col == 6));
+		} else {
+			return enableEdit;
+		}
+	}
+
+	public int getRowEditable() {
+		return rowEditable;
+	}
+
+	public void setRowEditable(int rowEditable) {
+		this.rowEditable = rowEditable;
+	}
+
+	public Set getEditableRows() {
+		return this.editableY;
+	}
 }
