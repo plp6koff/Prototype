@@ -88,36 +88,71 @@ public class EmplsComboAL extends BaseActionListener {
 			q.setParameter("employeeId", employee.getId());
 			List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q.getResultList();
 			((PersonalCfgEmplsTableModel)table.getModel()).setEmplSals(emplSals);
+			
+			
 		    Vector tableData = new Vector();
 			for (EmployeeSalary emplSal : emplSals) {
+				
+				//TODO select for each 
+				EmployeeSettings emplSettings = null;
 				Vector<Object> oneRow = new Vector<Object>();
+				//0
 				oneRow.add(emplSal.getPeriod().getCode());
+				//1
 				oneRow.add(emplSal.getV01());
+				//2
 				oneRow.add(emplSal.getV02());
+				//3
 				oneRow.add(emplSal.getV03());
+				//4
 				oneRow.add(emplSal.getV04());
+				//5
 				oneRow.add(emplSal.getV05());
+				//6
+				oneRow.add(Constants.EMPTY_STRING);
+				//7
 				oneRow.add(emplSal.getV06());
+				//8
 				oneRow.add(emplSal.getV07());
+				//9
 				oneRow.add(emplSal.getV08());
+				//10
 				oneRow.add(emplSal.getV09());
+				//11
 				oneRow.add(emplSal.getV10());
+				//12
 				oneRow.add(emplSal.getV11());
+				//13
+				oneRow.add(Constants.EMPTY_STRING);
+				//14
 				oneRow.add(emplSal.getV12());
+				//15
 				oneRow.add(emplSal.getV13());
+				//16
 				oneRow.add(emplSal.getV14());
+				//17
 				oneRow.add(emplSal.getV15());
+				//18
 				oneRow.add(emplSal.getV16());
+				//19
+				oneRow.add(Constants.EMPTY_STRING);
+				//20
 				oneRow.add(emplSal.getV17());
+				//21
 				oneRow.add(emplSal.getV18());
+				//22
 				oneRow.add(emplSal.getV19());
+				//23
+				oneRow.add(Constants.EMPTY_STRING);
+				//24
 				oneRow.add(emplSal.getV20());
+				//25
 				oneRow.add(emplSal.getV21());
+				//26
 				oneRow.add(emplSal.getV22());
+				//27
 				oneRow.add(emplSal.getV23());
-				oneRow.add(Constants.EMPTY_STRING);
-				oneRow.add(Constants.EMPTY_STRING);
-				oneRow.add(Constants.EMPTY_STRING);
+				//28
 				tableData.add(oneRow);
 				
 			}
@@ -198,43 +233,7 @@ public class EmplsComboAL extends BaseActionListener {
 		}
 	}
 	
-	/**
-	 * Responsible for population of group settings first row for each Employee
-	 * 
-	 * @param tableData
-	 * @param employee
-	 * @param department
-	 * @param tableHeaders
-	 * @throws IOException
-	 */
-	private double add1thRow(Vector tableData, Employee employee,
-			Department department, int allEmployeesCount, Period period, BigInteger emplDept, Double percentAll) throws IOException {
-
-		Vector<Object> oneRow = new Vector<Object>();
-		oneRow.add(department.getCode());
-		oneRow.add(employee.getFirstName() + " " + employee.getLastName());
-		oneRow.add(period.getRevenue().toString());// To be extracted from db
-		oneRow.add(allEmployeesCount);// To be provided as param
-		int profitAll = period.getRevenue().intValue() - emplDept.intValue();
-		oneRow.add(profitAll);
-		oneRow.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE1));
-
-		oneRow.add(percentAll);
-		// TODO comment until it is required
-		double personalFactor = 1.0;
-		double jobDonePercent = 1.0;
-		//oneRow.add("1");
-		//oneRow.add("1");
-
-		// TODO last 2 columns to be token from the Excel
-		double result = calculateBonusAll(profitAll, percentAll, personalFactor, jobDonePercent, allEmployeesCount);
-		oneRow.add(result);
-		oneRow.add(calculateTotalAll(period.getRevenue(),percentAll));
-		tableData.add(oneRow);
-		return result;
-
-	}
+	
 	
 	private Double calculateTotalAll(BigDecimal revenuPeriond, Double percentAll){
 		
@@ -246,32 +245,7 @@ public class EmplsComboAL extends BaseActionListener {
 		return  profitAll * (((percentAll * personalFactor) / allEployees)/(100 * jobDonePercent));
 	}
 
-	private double add2thRow(Vector tableData, Employee employee,
-			Department department, BigInteger revenueDept, BigInteger emplDept, Double percentGroup) throws IOException {
-		Vector<Object> oneRow = new Vector<Object>();
-		oneRow.add(department.getCode());
-		oneRow.add(EMPTY_STRING);
-		oneRow.add(revenueDept.toString());// To be extracted from db
-		int allEmployeesDept = department.getEmplDeptPeriods().size();
-		oneRow.add(allEmployeesDept);// To be provided as
-	    int profitGroup = revenueDept.intValue()-emplDept.intValue();
-		oneRow.add(profitGroup);
-		oneRow.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE2));
-
-		oneRow.add(percentGroup);
-		// TODO comment until it is required
-		//oneRow.add("1");
-		//oneRow.add("1");
-		double personalFactor = 1.0;
-		double jobDonePercent = 1.0;
-		// TODO last 2 columns to be token from the Excel
-		double result = calculateBonusGroup(profitGroup, percentGroup, personalFactor, jobDonePercent, allEmployeesDept); 
-		oneRow.add(result);
-		oneRow.add(calculateTotalGroup(revenueDept.intValue()-emplDept.intValue(), percentGroup));
-		tableData.add(oneRow);
-		return result;
-	}
+	
 	
 	private Double calculateTotalGroup(int base, Double percentGroup){
 		
@@ -283,31 +257,7 @@ public class EmplsComboAL extends BaseActionListener {
 		return  profitGroup * (((personalFactor * personalFactor) / allEployeesDept)/(100 * jobDonePercent));
 	}
 
-	private double add3thRow(Vector tableData, Employee employee,
-			Department department, BigInteger revenueEmp, Double percentPersonal) throws IOException {
-		Vector<Object> oneRow = new Vector<Object>();
-		oneRow.add(department.getCode());
-		oneRow.add(EMPTY_STRING);
-		oneRow.add(EMPTY_STRING);// To be extracted from db
-		oneRow.add(EMPTY_STRING);// To be provided as param
-		final double profitPersonal = revenueEmp.doubleValue();
-		oneRow.add(profitPersonal);
-		oneRow.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE3));
-
-		oneRow.add(percentPersonal);
-		// TODO comment until it is required
-		final double personalFactor = 1.0;
-		final double jobDonePercent = 1.0;
-		//oneRow.add("1");
-		//oneRow.add("1");
-		// TODO last 2 columns to be token from the Excel
-		double result = calculateBonusPersonal(profitPersonal, percentPersonal.doubleValue(), personalFactor, jobDonePercent); 
-		oneRow.add(result);
-		oneRow.add(calculateTotalPersonal(1, percentPersonal));
-		tableData.add(oneRow);
-		return result;
-	}
+	
 	
 	private Double calculateTotalPersonal(int base, Double percentPersonal){
 		
@@ -319,62 +269,10 @@ public class EmplsComboAL extends BaseActionListener {
 		return  profitPersonal * (( percentPersonal * personalFactor )/(100 * jobDonePercent));
 	}
 
-	private void add4thRow(Vector tableData, Employee employee,
-			Department department, double bonus) throws IOException {
-		Vector<Object> oneRow = new Vector<Object>();
-		oneRow.add(department.getCode());
-		oneRow.add(EMPTY_STRING);
-		oneRow.add(EMPTY_STRING);// To be extracted from db
-		oneRow.add(EMPTY_STRING);// To be provided as param
-		oneRow.add(EMPTY_STRING);
-		//oneRow.add(EMPTY_STRING);
+	
 
-		// FIXME how to extract the follow 3 digits
-		//oneRow.add(EMPTY_STRING);
-		oneRow.add(EMPTY_STRING);
-		oneRow.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE));
+	
 
-		// TODO last 2 columns to be token from the Excel
-		oneRow.add(bonus);
-		oneRow.add(EMPTY_STRING);
-		tableData.add(oneRow);
-	}
-
-	private void add5thRow(Vector tableData, Employee employee,
-			Department department) throws IOException {
-		Vector<Object> oneRow = new Vector<Object>();
-		oneRow.add(department.getCode());
-		oneRow.add(EMPTY_STRING);
-		oneRow.add(EMPTY_STRING);// To be extracted from db
-		oneRow.add(EMPTY_STRING);// To be provided as param
-		oneRow.add(EMPTY_STRING);
-		oneRow.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.GROUP_CONF_COL8_VALUE));
-
-		// FIXME how to extract the follow 3 digits
-		oneRow.add("9.5- HOW TO GET THIS PERCENT??");// TO BE detected the formula;
-		// TODO comment until it is required
-		//oneRow.add(EMPTY_STRING);
-		//oneRow.add(EMPTY_STRING);
-
-		// TODO last 2 columns to be token from the Excel
-		oneRow.add("DIGIT_HOW TO CALCULATE");
-		oneRow.add(EMPTY_STRING);
-		tableData.add(oneRow);
-	}
-
-	private void addEmptyDelimeterRow(Vector tableData, Employee employee,
-			Department department) {
-
-		Vector<Object> oneRow = new Vector<Object>();
-		int i = 0;
-		// TODO comment until it is required made them 11
-		while (i < 9) {
-			oneRow.add(EMPTY_STRING);
-			i++;
-		}
-		tableData.add(oneRow);
-	}
+	
 
 }

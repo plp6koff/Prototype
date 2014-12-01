@@ -55,9 +55,11 @@ public class CancelGroupRowAL extends BaseActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			
-			groupConfTable.clearSelection();
-			groupConfTable.validate();
-			groupConfTable.repaint();
+		this.groupConfTable.setEditingRow(-1);
+		this.groupConfTable.setEnableEdit(false);
+		this.groupConfTable.clearSelection();
+		this.groupConfTable.validate();
+		this.groupConfTable.repaint();
 	}
 	
 }

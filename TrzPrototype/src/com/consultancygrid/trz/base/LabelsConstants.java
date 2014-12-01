@@ -108,4 +108,5 @@ public interface LabelsConstants {
 	 
 	 
 	 String SETTINGS = "settings";
+	 String BUTT_CANCEL = "button_cancel";
 }

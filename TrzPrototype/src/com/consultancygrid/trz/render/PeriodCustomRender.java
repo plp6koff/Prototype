@@ -28,7 +28,7 @@ public class PeriodCustomRender implements ListCellRenderer {
 		  if (value instanceof Period) {
 			  
 			  Period tempPeriod = (Period) value;
-			  renderer.setText(sdf.format(tempPeriod.getDateStart()) + " - " + sdf.format(tempPeriod.getDateEnd()));
+			  renderer.setText(tempPeriod.getCode());
 			  
 		  } else {
 			  try {

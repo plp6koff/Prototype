@@ -35,7 +35,7 @@ import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
-public class SaveRowAL extends BaseActionListener{
+public class SavePersonRowAL extends BaseActionListener{
 
 	private PersonalCfgEmplsTable personalConfTable;
 	private JComboBox comboBoxEmployee;
@@ -43,7 +43,7 @@ public class SaveRowAL extends BaseActionListener{
 	private HashMap<TrzStatic, JTextField> map ;
 	private HashMap<Department, JTextField> mapDept;
 	
-	public SaveRowAL(PrototypeMainFrame mainFrame, PersonalCfgEmplsTable personalConfTable, JComboBox comboBoxEmployee) {
+	public SavePersonRowAL(PrototypeMainFrame mainFrame, PersonalCfgEmplsTable personalConfTable, JComboBox comboBoxEmployee) {
 		super(mainFrame);
 		this.personalConfTable = personalConfTable;
 		this.comboBoxEmployee = comboBoxEmployee;

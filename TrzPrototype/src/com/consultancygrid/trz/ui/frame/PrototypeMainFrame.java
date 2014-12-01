@@ -11,16 +11,9 @@ import static com.consultancygrid.trz.base.Constants.col5MW;
 import static com.consultancygrid.trz.base.Constants.col6MW;
 import static com.consultancygrid.trz.base.Constants.col9MW;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -35,14 +28,12 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.ScrollPaneLayout;
-import javax.swing.SpringLayout;
+import javax.swing.table.JTableHeader;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -54,12 +45,11 @@ import com.consultancygrid.trz.actionListener.EditGroupRowAL;
 import com.consultancygrid.trz.actionListener.EditPersonRowAL;
 import com.consultancygrid.trz.actionListener.EmplsComboAL;
 import com.consultancygrid.trz.actionListener.SavePeriodAL;
-import com.consultancygrid.trz.actionListener.SaveRowAL;
+import com.consultancygrid.trz.actionListener.SavePersonRowAL;
 import com.consultancygrid.trz.actionListener.SettingsDepartmentComboAL;
 import com.consultancygrid.trz.actionListener.SettingsEmployeeComboAL;
 import com.consultancygrid.trz.actionListener.SettingsPeriodComboAL;
 import com.consultancygrid.trz.actionListener.TimePeriodComboAL;
-import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
@@ -76,13 +66,6 @@ import com.consultancygrid.trz.ui.table.GroupCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
-
-import javax.swing.JSeparator;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JToggleButton;
-import javax.swing.table.JTableHeader;
 
 
 public class PrototypeMainFrame extends JFrame {
@@ -186,10 +169,10 @@ public class PrototypeMainFrame extends JFrame {
 		
 		JButton saveRow = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
 		saveRow.setBounds(510, 10, 150, 20);
-		saveRow.addActionListener(new SaveRowAL(this, personalConfTable,comboBoxEmployees));
+		saveRow.addActionListener(new SavePersonRowAL(this, personalConfTable,comboBoxEmployees));
 		firstInnerPanel.add(saveRow);
 		
-		JButton cancel = new JButton("Cancel");
+		JButton cancel = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.BUTT_CANCEL));
 		cancel.setBounds(690, 10, 150, 20);
 		cancel.addActionListener(new CancelPersonalRowAL(this, personalConfTable,comboBoxEmployees));
 		firstInnerPanel.add(cancel);
