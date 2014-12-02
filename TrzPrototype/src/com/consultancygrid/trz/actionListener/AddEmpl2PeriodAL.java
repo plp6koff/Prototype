@@ -158,7 +158,7 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 		
 		if (initREP != null ) {
 			initREP.setRevenue(BigDecimal.valueOf(Double.valueOf(fieldRevenue.getText())));
-			//em.merge(initREP);
+			em.merge(initREP);
 		} else {
 			RevenueEmplPeriod rEP = new RevenueEmplPeriod();
 			rEP.setEmployee(empl);

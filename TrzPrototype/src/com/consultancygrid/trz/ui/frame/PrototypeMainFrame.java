@@ -17,6 +17,7 @@ import java.awt.Font;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -113,7 +114,7 @@ public class PrototypeMainFrame extends JFrame {
 		em.getTransaction().begin();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1800, 900);
+		setBounds(100, 100, 1700, 600);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 0, 0);
@@ -262,8 +263,43 @@ public class PrototypeMainFrame extends JFrame {
 		comboBoxDepartment1.setBounds(400, 50, 300, 20);
 		comboBoxDepartment1.setRenderer(new DepartmentCustomRender());
 		comboBoxDepartment1.setEnabled(false);
+	
+		JPanel createFormPanel = new JPanel();
+		createFormPanel.setLayout(null);
+		createFormPanel.setBounds(10, 45 , 1000, 600);
 		
-		comboBoxEmployees1.addActionListener(new SettingsEmployeeComboAL(this,panLinkPeriod2Empl, comboBoxPeriod1, comboBoxDepartment1, comboBoxEmployees1,tabbedPaneSettings));
+		JLabel lblEmpl1 = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE));
+		lblEmpl1.setBounds(50, 100 , 100, 25);
+		createFormPanel.add(lblEmpl1);
+		
+		int count = 0;
+		
+		JTextField textFieldValue = new JTextField();
+		textFieldValue.setBounds(150, 100 , 200, 25);
+		textFieldValue.setText("0.0");	
+		createFormPanel.add(textFieldValue,++count);
+		JButton btnSavePeriod = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_SAVE));
+		btnSavePeriod.setBounds(20, 300, 250 ,25);
+		createFormPanel.add(btnSavePeriod,++count);
+		JLabel lblFieldSettings = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_EMPL_SET));
+		lblFieldSettings.setBounds(20, 150 , 200, 25);
+		createFormPanel.add(lblFieldSettings,++count);
+		
+		addTextField(createFormPanel, LabelsConstants.SET_TAB_EMPL2PER_BRUTOSTAT, 50, 200, 200, count, 100);
+		addTextField(createFormPanel, LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD, 350, 520, 200, count, 100);
+		addTextField(createFormPanel, LabelsConstants.SET_TAB_EMPL2PER_AVANS, 50, 200, 230, count, 100);
+		addTextField(createFormPanel, LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL, 350, 520, 230, count, 200);
+		addTextField(createFormPanel, LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP, 650, 820, 230, count, 100);
+		addTextField(createFormPanel, LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT, 50, 200, 260, count, 200);
+		addTextField(createFormPanel, LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD_ALL, 350, 520, 260, count, 200);
+		addTextField(createFormPanel, LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD_GROUP, 650, 820, 260, count, 200);
+		
+		createFormPanel.setVisible(false);
+		panLinkPeriod2Empl.add(createFormPanel);
+		
+		comboBoxEmployees1.addActionListener(
+				new SettingsEmployeeComboAL(this,panLinkPeriod2Empl,comboBoxPeriod1,comboBoxDepartment1,comboBoxEmployees1,createFormPanel));
+		
 		panLinkPeriod2Empl.add(comboBoxEmployees1);
 		comboBoxPeriod1.addActionListener(new SettingsPeriodComboAL(this, comboBoxPeriod1, comboBoxDepartment1, comboBoxEmployees1));
 		panLinkPeriod2Empl.add(comboBoxPeriod1);
@@ -272,6 +308,17 @@ public class PrototypeMainFrame extends JFrame {
 		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_HEADER), panLinkPeriod2Empl);
 	}
 	
+	
+	private JTextField addTextField(JPanel ancestor, String labelConstant, int xlbl, int xtxt  , int y , int count, int lblLght ) throws IOException {
+		
+		JLabel label = new JLabel(ResourceLoaderUtil.getLabels(labelConstant));
+		label.setBounds(xlbl, y , lblLght, 25);
+		ancestor.add(label,++count);
+		JTextField text = new JTextField();
+		text.setBounds(xtxt, y , 100, 25);
+		ancestor.add(text, ++count);
+		return text;
+	}
 	
 	
 	private void drawCreatePeriod(JTabbedPane tabbedPane, GroupCfgEmplsTable table, JTabbedPane tabbedPaneSettings, List<Period> allPeriods) throws IOException {
