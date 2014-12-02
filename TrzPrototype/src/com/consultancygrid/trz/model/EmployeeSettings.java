@@ -35,23 +35,27 @@ public class EmployeeSettings implements java.io.Serializable {
 	private BigDecimal percentAll;
 	private BigDecimal percentGroup;
 	private BigDecimal percentPersonal;
-	private BigDecimal personOnboardingPercentage;
+	private BigDecimal personAllOnboardingPercent;
+	private BigDecimal personGroupOnboardingPercent;
 
 	public EmployeeSettings() {
 	}
 
 	public EmployeeSettings(UUID id, Employee employee, Period period,
-			BigDecimal personOnboardingPercentage) {
+			BigDecimal personAllOnboardingPercent,
+			BigDecimal personGroupOnboardingPercent) {
 		this.id = id;
 		this.employee = employee;
 		this.period = period;
-		this.personOnboardingPercentage = personOnboardingPercentage;
+		this.personAllOnboardingPercent = personAllOnboardingPercent;
+		this.personGroupOnboardingPercent = personGroupOnboardingPercent;
 	}
 
 	public EmployeeSettings(UUID id, Employee employee, Period period,
 			BigDecimal brutoPoShtat, BigDecimal brutoStandart,
 			BigDecimal avans, BigDecimal percentAll, BigDecimal percentGroup,
-			BigDecimal percentPersonal, BigDecimal personOnboardingPercentage) {
+			BigDecimal percentPersonal, BigDecimal personAllOnboardingPercent,
+			BigDecimal personGroupOnboardingPercent) {
 		this.id = id;
 		this.employee = employee;
 		this.period = period;
@@ -61,7 +65,8 @@ public class EmployeeSettings implements java.io.Serializable {
 		this.percentAll = percentAll;
 		this.percentGroup = percentGroup;
 		this.percentPersonal = percentPersonal;
-		this.personOnboardingPercentage = personOnboardingPercentage;
+		this.personAllOnboardingPercent = personAllOnboardingPercent;
+		this.personGroupOnboardingPercent = personGroupOnboardingPercent;
 	}
 
 	@GenericGenerator(name = "est_trz_uuid_gen", strategy = "com.consultancygrid.trz.model.CustomUUIDGenerator")
@@ -151,14 +156,24 @@ public class EmployeeSettings implements java.io.Serializable {
 		this.percentPersonal = percentPersonal;
 	}
 
-	@Column(name = "PERSON_ONBOARDING_PERCENTAGE", nullable = false, precision = 22, scale = 0)
-	public BigDecimal getPersonOnboardingPercentage() {
-		return this.personOnboardingPercentage;
+	@Column(name = "PERSON_ALL_ONBOARDING_PERCNT", nullable = false, precision = 22, scale = 0)
+	public BigDecimal getPersonAllOnboardingPercent() {
+		return this.personAllOnboardingPercent;
 	}
 
-	public void setPersonOnboardingPercentage(
-			BigDecimal personOnboardingPercentage) {
-		this.personOnboardingPercentage = personOnboardingPercentage;
+	public void setPersonAllOnboardingPercent(
+			BigDecimal personAllOnboardingPercent) {
+		this.personAllOnboardingPercent = personAllOnboardingPercent;
+	}
+	
+	@Column(name = "PERSON_GROUP_ONBOARDING_PERCNT", nullable = false, precision = 22, scale = 0)
+	public BigDecimal getPersonGroupOnboardingPercent() {
+		return this.personGroupOnboardingPercent;
+	}
+
+	public void setPersonGroupOnboardingPercent(
+			BigDecimal personGroupOnboardingPercent) {
+		this.personGroupOnboardingPercent = personGroupOnboardingPercent;
 	}
 
 }

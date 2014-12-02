@@ -36,7 +36,7 @@ public class GroupCfgEmplsTable extends JTable {
 		Set totalXValues = new HashSet<>();
 		Set totalYValues = new HashSet<>();
 
-		int totalX = 7;
+		int totalX = 8;
 		int totalY = 3;
 
 		Set profitXValues = new HashSet<>();
@@ -49,7 +49,7 @@ public class GroupCfgEmplsTable extends JTable {
 
 		profitXValues.add(profitX);
 		profitXValues.add(profitX = +6);
-		//profitXValues.add(profitX = +7);
+		profitXValues.add(profitX = +7);
 		//profitXValues.add(profitX = +8);
 
 		Set totalProfitXValues = new HashSet<>();
@@ -60,7 +60,7 @@ public class GroupCfgEmplsTable extends JTable {
 
 		totalProfitXValues.add(totalProfitX);
 		totalProfitXValues.add(totalProfitX += 2);
-		//totalProfitXValues.add(totalProfitX += 1);
+		totalProfitXValues.add(totalProfitX += 1);
 		//totalProfitXValues.add(totalProfitX += 1);
 		while (x < 100) {
 			xValue.add(x);
@@ -72,7 +72,7 @@ public class GroupCfgEmplsTable extends JTable {
 			profitGroupYValues.add(profitGroupY);
 
 			totalProfitYValues.add(totalProfitY);
-			// Init them all
+			// init them all
 			x = x + 7;
 			y = y + 7;
 			totalX = totalX + 7;
@@ -101,10 +101,13 @@ public class GroupCfgEmplsTable extends JTable {
 		
 		
 		if (enableEdit && editableY.contains(this.getSelectedRow())) {
-			if ((Index_row == rowEditable 
+			if (((Index_row == rowEditable 
 					|| Index_row == rowEditable + 1 
 					|| Index_row == rowEditable + 2) 
-					&& (Index_col == 6)) {
+					&& (Index_col == 6))
+				|| ((Index_row == rowEditable 
+						|| Index_row == rowEditable + 1) 
+						&& (Index_col == 7))) {
 			comp.setBackground(Color.yellow);
 			
 			}
@@ -127,10 +130,10 @@ public class GroupCfgEmplsTable extends JTable {
 		getColumnModel().getColumn(5).setMinWidth(col5MW);
 		getColumnModel().getColumn(6).setMinWidth(col6MW);
 		// TODO comment until it is required
-		//getColumnModel().getColumn(7).setMinWidth(col7MW);
-		//getColumnModel().getColumn(8).setMinWidth(col8MW);
 		getColumnModel().getColumn(7).setMinWidth(col9MW);
-		getColumnModel().getColumn(8).setMinWidth(col10MW);
+		//getColumnModel().getColumn(8).setMinWidth(col8MW);
+		getColumnModel().getColumn(8).setMinWidth(col6MW);
+		getColumnModel().getColumn(9).setMinWidth(col10MW);
 		int y = 0;
 		while (y < 100) {
 			editableY.add(y);
@@ -152,8 +155,13 @@ public class GroupCfgEmplsTable extends JTable {
 		
 		if (enableEdit && editableY.contains(Index_row)) {
 			
-			return ((Index_row == rowEditable || Index_row == rowEditable + 1 || Index_row == rowEditable + 2) 
-					&& (Index_col == 6));
+			return (((Index_row == rowEditable 
+					|| Index_row == rowEditable + 1 
+					|| Index_row == rowEditable + 2) 
+					&& (Index_col == 6))
+				|| ((Index_row == rowEditable 
+						|| Index_row == rowEditable + 1) 
+						&& (Index_col == 7)));
 		} else {
 			return enableEdit;
 		}

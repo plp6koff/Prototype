@@ -176,7 +176,8 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 		JTextField textPercentAll = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL);
 		JTextField textPercentGroup = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP);
 		JTextField textPercentPerson = map.get(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT);
-		JTextField  textOnBoard = map.get(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD);
+		JTextField  textOnBoard_all = map.get(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD_ALL);
+		JTextField  textOnBoard_group = map.get(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD_GROUP);
 		
 		
 		EmployeeSettings settings =   new EmployeeSettings();
@@ -188,13 +189,19 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 		settings.setPercentGroup(parseValue(BigDecimal.ZERO,textPercentGroup.getText()));
 		settings.setPercentPersonal(parseValue(BigDecimal.ZERO,textPercentPerson.getText()));
 		settings.setPercentAll(parseValue(BigDecimal.ZERO,textPercentAll.getText()));
-		//TODO
-		BigDecimal tempOnBoard = parseValue(BigDecimal.ZERO,textOnBoard.getText());
-		if (BigDecimal.ONE.compareTo(tempOnBoard) == 1) {
+		BigDecimal tempOnBoard_all = parseValue(BigDecimal.ZERO,textOnBoard_all.getText());
+		if (BigDecimal.ONE.compareTo(tempOnBoard_all) == 1) {
 			BigDecimal tempToAdd = parseValue(BigDecimal.ZERO,"0.15");
-			settings.setPersonOnboardingPercentage(tempOnBoard.add(tempToAdd));
+			settings.setPersonAllOnboardingPercent(tempOnBoard_all.add(tempToAdd));
 		} else {
-			settings.setPersonOnboardingPercentage(tempOnBoard);
+			settings.setPersonAllOnboardingPercent(tempOnBoard_all);
+		}
+		BigDecimal tempOnBoard_gr = parseValue(BigDecimal.ZERO,textOnBoard_group.getText());
+		if (BigDecimal.ONE.compareTo(tempOnBoard_gr) == 1) {
+			BigDecimal tempToAdd = parseValue(BigDecimal.ZERO,"0.15");
+			settings.setPersonGroupOnboardingPercent(tempOnBoard_gr.add(tempToAdd));
+		} else {
+			settings.setPersonGroupOnboardingPercent(tempOnBoard_gr);
 		}
 		em.persist(settings);
 	}

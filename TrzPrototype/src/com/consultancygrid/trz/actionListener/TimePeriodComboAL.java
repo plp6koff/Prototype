@@ -98,14 +98,12 @@ public class TimePeriodComboAL extends BaseActionListener {
 						if (employee.getEmployeeSettingses() != null && employee.getEmployeeSettingses().size() >0) {
 							emplSettings = employee.getEmployeeSettingses().iterator().next();
 						}
-						Double percentAll = getEmployeePercentAll(emplSettings);
-						Double percentGroup = getEmployeePercentGroup(emplSettings);
 						Double percentPersonal = getEmployeePercentPersonal(emplSettings);
 						
 						BigInteger emplBonus = getEmployeeRevenue(em, period, employee);
 						
-						double bonusAll = add1thRow(tableData, employee, department, allEmployeesCount.intValue(), period,emplBonus, percentAll);
-						double bonusGroup = add2thRow(tableData, employee, department,depBonus,emplBonus, percentGroup);
+						double bonusAll = add1thRow(tableData, employee, department, allEmployeesCount.intValue(), period,emplBonus,  emplSettings);
+						double bonusGroup = add2thRow(tableData, employee, department,depBonus,emplBonus,  emplSettings);
 						double bonusPersonal = add3thRow(tableData, employee, department, emplBonus, percentPersonal);
 						add4thRow(tableData, employee, department, bonusAll + bonusGroup + bonusPersonal);
 						add5thRow(tableData, employee, department);
@@ -190,6 +188,29 @@ public class TimePeriodComboAL extends BaseActionListener {
 		}
 	}
 	
+	
+	private Double getEmployeePercentAllOnboard(EmployeeSettings emplSettings) {
+		if (emplSettings != null) {
+			BigDecimal temp 
+			  = emplSettings.getPersonAllOnboardingPercent() != null ? emplSettings.getPersonAllOnboardingPercent() : BigDecimal.valueOf(1);
+			  return temp.doubleValue();
+		} else {
+			//TODO defailt value
+			return BigDecimal.valueOf(1).doubleValue();
+		}
+	}
+	
+	private Double getEmployeePercentGroupOnboard(EmployeeSettings emplSettings) {
+		if (emplSettings != null) {
+			BigDecimal temp 
+			  = emplSettings.getPersonGroupOnboardingPercent() != null ? emplSettings.getPersonGroupOnboardingPercent() : BigDecimal.valueOf(1);
+			  return temp.doubleValue();
+		} else {
+			//TODO defailt value
+			return BigDecimal.valueOf(1).doubleValue();
+		}
+	}
+	
 	/**
 	 * Responsible for population of group settings first row for each Employee
 	 * 
@@ -200,7 +221,7 @@ public class TimePeriodComboAL extends BaseActionListener {
 	 * @throws IOException
 	 */
 	private double add1thRow(Vector tableData, Employee employee,
-			Department department, int allEmployeesCount, Period period, BigInteger emplDept, Double percentAll) throws IOException {
+			Department department, int allEmployeesCount, Period period, BigInteger emplDept, EmployeeSettings employeeSettings) throws IOException {
 
 		Vector<Object> oneRow = new Vector<Object>();
 		//a0
@@ -218,11 +239,12 @@ public class TimePeriodComboAL extends BaseActionListener {
 		oneRow.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE1));
 		//g6
+		Double percentAll = getEmployeePercentAll(employeeSettings);
 		oneRow.add(percentAll);
 		// TODO comment until it is required
-		double personalFactor = 1.0;
+		double personalFactor =  getEmployeePercentAllOnboard(employeeSettings);
 		double jobDonePercent = 1.0;
-		//oneRow.add("1");
+		oneRow.add(personalFactor);
 		//oneRow.add("1");
 
 		// TODO last 2 columns to be token from the Excel
@@ -245,7 +267,7 @@ public class TimePeriodComboAL extends BaseActionListener {
 	}
 
 	private double add2thRow(Vector tableData, Employee employee,
-			Department department, BigInteger revenueDept, BigInteger emplDept, Double percentGroup) throws IOException {
+			Department department, BigInteger revenueDept, BigInteger emplDept, EmployeeSettings employeeSettings) throws IOException {
 		Vector<Object> oneRow = new Vector<Object>();
 		oneRow.add(department.getCode());
 		oneRow.add(EMPTY_STRING);
@@ -257,11 +279,12 @@ public class TimePeriodComboAL extends BaseActionListener {
 		oneRow.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE2));
 
+		Double percentGroup =  getEmployeePercentGroup(employeeSettings);
 		oneRow.add(percentGroup);
 		// TODO comment until it is required
+		double personalFactor = getEmployeePercentGroupOnboard(employeeSettings);
+		oneRow.add(personalFactor);
 		//oneRow.add("1");
-		//oneRow.add("1");
-		double personalFactor = 1.0;
 		double jobDonePercent = 1.0;
 		// TODO last 2 columns to be token from the Excel
 		double result = calculateBonusGroup(profitGroup, percentGroup, personalFactor, jobDonePercent, allEmployeesDept); 
@@ -297,7 +320,7 @@ public class TimePeriodComboAL extends BaseActionListener {
 		// TODO comment until it is required
 		final double personalFactor = 1.0;
 		final double jobDonePercent = 1.0;
-		//oneRow.add("1");
+		oneRow.add("1");
 		//oneRow.add("1");
 		// TODO last 2 columns to be token from the Excel
 		double result = calculateBonusPersonal(profitPersonal, percentPersonal.doubleValue(), personalFactor, jobDonePercent); 
@@ -325,7 +348,7 @@ public class TimePeriodComboAL extends BaseActionListener {
 		oneRow.add(EMPTY_STRING);// To be extracted from db
 		oneRow.add(EMPTY_STRING);// To be provided as param
 		oneRow.add(EMPTY_STRING);
-		//oneRow.add(EMPTY_STRING);
+		oneRow.add(EMPTY_STRING);
 
 		// FIXME how to extract the follow 3 digits
 		//oneRow.add(EMPTY_STRING);
@@ -353,7 +376,7 @@ public class TimePeriodComboAL extends BaseActionListener {
 		// FIXME how to extract the follow 3 digits
 		oneRow.add("9.5- HOW TO GET THIS PERCENT??");// TO BE detected the formula;
 		// TODO comment until it is required
-		//oneRow.add(EMPTY_STRING);
+		oneRow.add(EMPTY_STRING);
 		//oneRow.add(EMPTY_STRING);
 
 		// TODO last 2 columns to be token from the Excel
@@ -368,7 +391,7 @@ public class TimePeriodComboAL extends BaseActionListener {
 		Vector<Object> oneRow = new Vector<Object>();
 		int i = 0;
 		// TODO comment until it is required made them 11
-		while (i < 9) {
+		while (i < 10) {
 			oneRow.add(EMPTY_STRING);
 			i++;
 		}

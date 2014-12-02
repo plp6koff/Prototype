@@ -89,13 +89,20 @@ public class SaveGroupRowAL extends BaseActionListener{
 						
 						EmployeeSettings settings = allSettings.get(0);
 						
-						String v1 = (String) model.getValueAt(i, 6);
-						String v2 = (String) model.getValueAt(i+1, 6);
-						String v3 = (String) model.getValueAt(i+2, 6);
+						String percentAll = (String) model.getValueAt(i, 6);
+						String percentGroup = (String) model.getValueAt(i+1, 6);
+						String percentPersonal = (String) model.getValueAt(i+2, 6);
 						
-						settings.setPercentAll(parseValue(settings.getPercentAll(), v1));
-						settings.setPercentGroup(parseValue(settings.getPercentGroup(), v2));
-						settings.setPercentPersonal(parseValue(settings.getPercentPersonal(), v3));
+						String onBoardAll = (String) model.getValueAt(i, 7);
+						String onBoardGroup = (String) model.getValueAt(i+1, 7);
+						
+						settings.setPercentAll(parseValue(settings.getPercentAll(), percentAll));
+						settings.setPercentGroup(parseValue(settings.getPercentGroup(), percentGroup));
+						settings.setPercentPersonal(parseValue(settings.getPercentPersonal(), percentPersonal));
+						
+						settings.setPersonAllOnboardingPercent(parseValue(settings.getPersonAllOnboardingPercent(), onBoardAll));
+						settings.setPersonGroupOnboardingPercent(parseValue(settings.getPersonGroupOnboardingPercent(), onBoardGroup));
+						
 						em.merge(settings);
 						
 						JOptionPane.showMessageDialog(mainFrame, 

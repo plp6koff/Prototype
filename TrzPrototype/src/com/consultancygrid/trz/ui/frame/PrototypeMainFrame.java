@@ -9,6 +9,7 @@ import static com.consultancygrid.trz.base.Constants.col3MW;
 import static com.consultancygrid.trz.base.Constants.col4MW;
 import static com.consultancygrid.trz.base.Constants.col5MW;
 import static com.consultancygrid.trz.base.Constants.col6MW;
+import static com.consultancygrid.trz.base.Constants.col7MW;
 import static com.consultancygrid.trz.base.Constants.col9MW;
 
 import java.awt.EventQueue;
@@ -112,7 +113,7 @@ public class PrototypeMainFrame extends JFrame {
 		em.getTransaction().begin();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1500, 900);
+		setBounds(100, 100, 1800, 900);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 0, 0);
@@ -184,7 +185,7 @@ public class PrototypeMainFrame extends JFrame {
 		pesonPanel.setLayout(new ScrollPaneLayout());
 		JTableHeader header = personalConfTable.getTableHeader();
 	    header.setDefaultRenderer(new HeaderRenderer(header.getDefaultRenderer()));
-	    pesonPanel.setBounds(20, 100, 1278 , 300);
+	    pesonPanel.setBounds(20, 100, 1500 , 300);
 	    pesonPanel.setAutoscrolls(true);
 		firstInnerPanel.setLayout(null);
 		firstInnerPanel.add(comboBoxEmployees);
@@ -215,8 +216,7 @@ public class PrototypeMainFrame extends JFrame {
 		editRow.setBounds(340, 10, 150, 20);
 		editRow.addActionListener(new EditGroupRowAL(this, table,comboBox));
 		secondInnerPanel.add(editRow);
-		
-		JButton cancel = new JButton("Cancel");
+		JButton cancel = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.BUTT_CANCEL));
 		cancel.setBounds(690, 10, 150, 20);
 		cancel.addActionListener(new CancelGroupRowAL(this, table,comboBox));
 		secondInnerPanel.add(cancel);
@@ -229,10 +229,10 @@ public class PrototypeMainFrame extends JFrame {
 		TimePeriodComboAL tPCAL = new TimePeriodComboAL(this, comboBox, table);
 		
 		JScrollPane jscp = new JScrollPane(table);
-		jscp.setBounds(20, 100, col0MW + col1MW + col2MW + col3MW + col4MW + col5MW + col6MW
-		// TODO comment until it is required
-		//		+ col7MW + col8MW 
-				+ col9MW + col10MW + 100, 600);
+		jscp.setLayout(new ScrollPaneLayout());
+		jscp.setBounds(20, 100, col0MW + col1MW + col2MW + col3MW + col4MW + col5MW + col6MW + col7MW 
+				// + col8MW 
+				+ col9MW + col10MW + 200, 600);
 		secondInnerPanel.add(jscp);
 		tabbedPane.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.GROUP_TAB_LABEL), secondInnerPanel);
 		

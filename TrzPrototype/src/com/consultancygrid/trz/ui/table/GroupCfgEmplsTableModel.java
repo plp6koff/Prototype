@@ -41,9 +41,9 @@ public class GroupCfgEmplsTableModel extends AbstractTableModel {
 		tableHeaders.add(" ");
 		tableHeaders.add("%");
 		// TODO comment until it is required
-		/*
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_HEADER_COL7));
+		/*
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_HEADER_COL8));
 		*/		

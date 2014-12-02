@@ -9,15 +9,15 @@ public interface Constants {
 	
 	int col1MW = 120;
 	
-	int col2MW = 100;
+	int col2MW = 200;
 	
-	int col3MW = 100;
+	int col3MW = 260;
 	
-	int col4MW = 100;
+	int col4MW = 260;
 	
-	int col5MW = 100;
+	int col5MW = 80;
 	
-	int col6MW = 60;
+	int col6MW = 50;
 	
 	int col7MW = 60;
 	
@@ -25,7 +25,7 @@ public interface Constants {
 	
 	int col9MW = 200;
 	
-	int col10MW = 200;
+	int col10MW = 150;
 
 	String PERSISTENCE_UNIT_NAME = "trzUnit";
 	

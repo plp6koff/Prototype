@@ -84,7 +84,8 @@ public interface LabelsConstants {
 	 String SET_TAB_EMPL2PER_PERCENT_ALL = "settings_tab_empl2period_percentAll";
 	 String SET_TAB_EMPL2PER_PERSONAL_PERCENT = "settings_tab_empl2period_percentPersonal";
 	 String SET_TAB_EMPL2PER_PERCENT_GROUP = "settings_tab_empl2period_percentGroup";
-	 String SET_TAB_EMPL2PER_ON_BOARD = "settings_tab_empl2period_onBoardPercentage";
+	 String SET_TAB_EMPL2PER_ON_BOARD_ALL = "settings_tab_empl2period_onBoardPercentage_all";
+	 String SET_TAB_EMPL2PER_ON_BOARD_GROUP = "settings_tab_empl2period_onBoardPercentage_group";
 	 String SET_TAB_EMPL2PER_SAVE = "settings_tab_empl2period_save";
 
 	 String SET_TAB_EMPL2PER_SUCCESS = "settings_tab_empl2period_ok";

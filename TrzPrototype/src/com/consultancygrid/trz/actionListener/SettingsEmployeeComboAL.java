@@ -97,7 +97,7 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			
 			JPanel createFormPanel = new JPanel();
 			createFormPanel.setLayout(null);
-			createFormPanel.setBounds(10, 45 , 900, 600);
+			createFormPanel.setBounds(10, 45 , 1000, 600);
 			
 			JLabel lblEmpl1 = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE));
 			lblEmpl1.setBounds(50, 100 , 100, 25);
@@ -128,15 +128,15 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			lblBrutoStat.setBounds(50, 200 , 100, 25);
 			createFormPanel.add(lblBrutoStat);
 			JTextField textBrutoStat = new JTextField();
-			textBrutoStat.setBounds(150, 200 , 100, 25);
+			textBrutoStat.setBounds(200, 200 , 100, 25);
 			createFormPanel.add(textBrutoStat);
 			
 			
 			JLabel lblBrutoStad = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD));
-			lblBrutoStad.setBounds(300, 200 , 100, 25);
+			lblBrutoStad.setBounds(350, 200 , 100, 25);
 			createFormPanel.add(lblBrutoStad);
 			JTextField textBrutoStad = new JTextField();
-			textBrutoStad.setBounds(430, 200 , 100, 25);
+			textBrutoStad.setBounds(520, 200 , 100, 25);
 			createFormPanel.add(textBrutoStad);
 			
 			
@@ -144,39 +144,48 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			lblAvans.setBounds(50, 230 , 100, 25);
 			createFormPanel.add(lblAvans);
 			JTextField textBrutoAvans = new JTextField();
-			textBrutoAvans.setBounds(150, 230 , 100, 25);
+			textBrutoAvans.setBounds(200, 230 , 100, 25);
 			createFormPanel.add(textBrutoAvans);
 			
 			JLabel lblBrutoPercentAll = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL));
-			lblBrutoPercentAll.setBounds(300, 230 , 200, 25);
+			lblBrutoPercentAll.setBounds(350, 230 , 200, 25);
 			createFormPanel.add(lblBrutoPercentAll);
 			JTextField textPercentAll = new JTextField();
-			textPercentAll.setBounds(430, 230 , 100, 25);
+			textPercentAll.setBounds(520, 230 , 100, 25);
 			createFormPanel.add(textPercentAll);
 			
 			
 			JLabel lblPercentGroup = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP));
-			lblPercentGroup.setBounds(50, 260 , 100, 25);
+			lblPercentGroup.setBounds(650, 230 , 100, 25);
 			createFormPanel.add(lblPercentGroup);
 			JTextField textPercentGroup = new JTextField();
-			textPercentGroup.setBounds(150, 260 , 100, 25);
+			textPercentGroup.setBounds(810, 230 , 100, 25);
 			createFormPanel.add(textPercentGroup);
 			
 			
 			JLabel lblPercentPerson = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT));
-			lblPercentPerson.setBounds(300, 260 , 200, 25);
+			lblPercentPerson.setBounds(50, 260 , 200, 25);
 			createFormPanel.add(lblPercentPerson);
 			JTextField textPercentPerson = new JTextField();
-			textPercentPerson.setBounds(430, 260 , 100, 25);
+			textPercentPerson.setBounds(200, 260 , 100, 25);
 			createFormPanel.add(textPercentPerson);
 			
 			
-			JLabel lblOnBoard = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD));
-			lblOnBoard.setBounds(550, 260 , 200, 25);
-			createFormPanel.add(lblOnBoard);
-			JTextField textOnBoard = new JTextField();
-			textOnBoard.setBounds(700, 260 , 100, 25);
-			createFormPanel.add(textOnBoard);
+			JLabel lblOnBoardAll = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD_ALL));
+			lblOnBoardAll.setBounds(350, 260 , 200, 25);
+			createFormPanel.add(lblOnBoardAll);
+			JTextField textOnBoardAll = new JTextField();
+			textOnBoardAll.setBounds(520, 260 , 100, 25);
+			createFormPanel.add(textOnBoardAll);
+			
+			JLabel lblOnBoardGroup = new JLabel(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD_GROUP));
+			lblOnBoardGroup.setBounds(650, 260 , 200, 25);
+			createFormPanel.add(lblOnBoardGroup);
+			JTextField textOnBoardGroup = new JTextField();
+			textOnBoardGroup.setBounds(810, 260 , 100, 25);
+			createFormPanel.add(textOnBoardGroup);
+			
+						
 			
 			if (initSettings != null) {
 				textBrutoStat.setText(initSettings.getBrutoPoShtat().toString());
@@ -185,7 +194,8 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 				textPercentAll.setText(initSettings.getPercentAll().toString());
 				textPercentGroup.setText(initSettings.getPercentGroup().toString());
 				textPercentPerson.setText(initSettings.getPercentPersonal().toString());
-				textOnBoard.setText(initSettings.getPersonOnboardingPercentage().toString());
+				textOnBoardAll.setText(initSettings.getPersonAllOnboardingPercent() != null ? initSettings.getPersonAllOnboardingPercent().toString() : "1.0");
+				textOnBoardGroup.setText(initSettings.getPersonGroupOnboardingPercent() != null ? initSettings.getPersonGroupOnboardingPercent().toString() : "1.0");
 			}
 			map.put(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSTAT, textBrutoStat);
 			map.put(LabelsConstants.SET_TAB_EMPL2PER_BRUTOSANDARD, textBrutoStad);
@@ -193,7 +203,8 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			map.put(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_ALL, textPercentAll);
 			map.put(LabelsConstants.SET_TAB_EMPL2PER_PERCENT_GROUP, textPercentGroup);
 			map.put(LabelsConstants.SET_TAB_EMPL2PER_PERSONAL_PERCENT, textPercentPerson);
-			map.put(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD, textOnBoard);
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD_ALL, textOnBoardAll);
+			map.put(LabelsConstants.SET_TAB_EMPL2PER_ON_BOARD_GROUP, textOnBoardGroup);
 			
 			btnSavePeriod.addActionListener(new AddEmpl2PeriodAL(mainFrame, comboBoxPeriod, comboBoxDepartment, comboBoxEmployee, 
 																 textFieldValue, map, initSettings, initREP,
@@ -201,12 +212,12 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 																 createFormPanel));
 			this.panLinkPeriod2Empl.add(createFormPanel);
 			createFormPanel.validate();
-			this.panLinkPeriod2Empl.validate();
+			this.panLinkPeriod2Empl.revalidate();
 			this.panLinkPeriod2Empl.repaint();
-			this.tabbedPaneSettings.validate();
+			this.tabbedPaneSettings.revalidate();
+			this.tabbedPaneSettings.repaint();
+			textOnBoardGroup.validate();
 			this.mainFrame.validate();
-			
-			
 			
 		} catch (Exception e1) {
 			Logger.error(e1);
