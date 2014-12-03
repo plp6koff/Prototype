@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: Prototype
-Implementation-Version: 0.1.0
-Main-Class: com.consultancygrid.trz.ui.frame.PrototypeMainFrame
-

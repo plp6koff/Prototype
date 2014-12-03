@@ -1,14 +1,11 @@
 package com.consultancygrid.trz.actionListener;
 
+import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
+
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,31 +13,17 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.base.LabelsConstants;
-import com.consultancygrid.trz.model.Department;
-import com.consultancygrid.trz.model.EmplDeptPeriod;
 import com.consultancygrid.trz.model.Employee;
-import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.RevenueEmplPeriod;
-import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
-import com.consultancygrid.trz.ui.combo.TrzComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
-import com.consultancygrid.trz.ui.table.GroupCfgEmplsTableModel;
-import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
-import com.consultancygrid.trz.util.ResourceLoaderUtil;
-
-import static com.consultancygrid.trz.base.Constants.*;
 /**
  * ACtion Listener for code list
  * 
@@ -88,8 +71,9 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 			Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
 
-			Query q = em.createQuery(" from EmployeeSettings as settings  where  settings.employee.id = :employeeId order by settings.period.dateEnd desc");
+			Query q = em.createQuery(" from EmployeeSettings as settings  where  settings.employee.id = :employeeId and settings.period.id =:periodId order by settings.period.dateEnd desc");
 			q.setParameter("employeeId", empl.getId());
+			q.setParameter("periodId", period.getId());
 			List<EmployeeSettings> emplSettingsList = (List<EmployeeSettings>) q.getResultList();
 			EmployeeSettings initSettings = null;
 			if (emplSettingsList != null && !emplSettingsList.isEmpty()) {
@@ -127,6 +111,15 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 				textPercentPerson.setText(initSettings.getPercentPersonal().toString());
 				textOnBoardAll.setText(initSettings.getPersonAllOnboardingPercent() != null ? initSettings.getPersonAllOnboardingPercent().toString() : "1.0");
 				textOnBoardGroup.setText(initSettings.getPersonGroupOnboardingPercent() != null ? initSettings.getPersonGroupOnboardingPercent().toString() : "1.0");
+			} else {
+				textBrutoStat.setText("0.0");
+				textBrutoStad.setText("0.0");
+				textBrutoAvans.setText("0.0");
+				textPercentAll.setText("0.0");
+				textPercentGroup.setText("0.0");
+				textPercentPerson.setText("0.0");
+				textOnBoardAll.setText("1.0");
+				textOnBoardGroup.setText("1.0");
 			}
 			
 			Map<String, JTextField>  map = new HashMap<String, JTextField>();

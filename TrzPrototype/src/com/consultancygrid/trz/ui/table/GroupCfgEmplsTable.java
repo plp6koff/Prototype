@@ -118,9 +118,9 @@ public class GroupCfgEmplsTable extends JTable {
 
 	public GroupCfgEmplsTable() throws IOException {
 
-		setAutoResizeMode(HEIGHT);
-		setAutoResizeMode(WIDTH);
-		setBorder(new EmptyBorder(5, 5, 5, 5));
+		
+		setAutoResizeMode(AUTO_RESIZE_ALL_COLUMNS);
+		setBorder(new EmptyBorder(1, 1, 1, 1));
 		setModel(new GroupCfgEmplsTableModel());
 		getColumnModel().getColumn(0).setMinWidth(col0MW);
 		getColumnModel().getColumn(1).setMinWidth(col1MW);

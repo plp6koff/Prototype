@@ -31,6 +31,7 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 	
 	public PersonalCfgEmplsTableModel() throws IOException {
 
+		
 		tableHeaders = new Vector<String>();
 		// Init headers
 		tableHeaders.add(ResourceLoaderUtil
@@ -157,15 +158,5 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 		this.emplSals = emplSals;
 	}
 
-//	@Override
-//	public boolean isCellEditable(int row, int col) { 
-//		return this.editable_cells[row][col];
-//	}
-//
-//	public void setCellEditable(int row, int col, boolean value) {
-//	        this.editable_cells[row][col] = value; // set cell true/false
-//	        this.fireTableCellUpdated(row, col);
-//	  }
-	
 	
 }

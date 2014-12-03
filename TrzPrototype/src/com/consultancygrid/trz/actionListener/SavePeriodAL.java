@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -36,11 +37,12 @@ public class SavePeriodAL extends BaseActionListener{
 	private JDatePickerImpl datePickerFrom;
 	private JTextField fieldCode;
 	private JTextField fieldRevenue;
+	private JPanel createFormPanel;
 	
 	private HashMap<TrzStatic, JTextField> map ;
 	private HashMap<Department, JTextField> mapDept;
 	
-	public SavePeriodAL(PrototypeMainFrame mainFrame, JDatePickerImpl datePickerFrom, JDatePickerImpl datePickerTo, JTextField fieldCode, JTextField fieldRevenue, 	HashMap<TrzStatic, JTextField> map,HashMap<Department, JTextField> mapDept ) {
+	public SavePeriodAL(PrototypeMainFrame mainFrame, JDatePickerImpl datePickerFrom, JDatePickerImpl datePickerTo, JTextField fieldCode, JTextField fieldRevenue, 	HashMap<TrzStatic, JTextField> map,HashMap<Department, JTextField> mapDept ,JPanel createFormPanel) {
 		super(mainFrame);
 		this.datePickerTo = datePickerTo;
 		this.datePickerFrom = datePickerFrom;
@@ -48,6 +50,7 @@ public class SavePeriodAL extends BaseActionListener{
 		this.fieldRevenue = fieldRevenue;
 		this.map = 	map; 
 		this.mapDept = mapDept;
+		this.createFormPanel = createFormPanel;
 	}
 
 	@Override
@@ -64,9 +67,32 @@ public class SavePeriodAL extends BaseActionListener{
 			Period tempPeriod = new Period();
 			tempPeriod.setCode(fieldCode.getText());
 			
+			String code  = this.fieldCode.getText();
+			if (code == null || "".equals(code) || code.length() > 7) {
+				JOptionPane.showMessageDialog(mainFrame,  
+						ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_ERR_CODE),
+						ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR) , JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			String revenue  = this.fieldRevenue.getText();
+			if (revenue == null || "".equals(revenue)) {
+				JOptionPane.showMessageDialog(mainFrame,
+						ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_ERR_REVENUE),  
+						ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR), JOptionPane.ERROR_MESSAGE);
+				return;
+			} 
+			try {
 			tempPeriod.setRevenue((fieldRevenue != null 
 					               && !Constants.EMPTY_STRING.equals(fieldRevenue))
 					               ? BigDecimal.valueOf(Long.valueOf(fieldRevenue.getText())): BigDecimal.ZERO);
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(mainFrame, 
+						ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_ERR_REVENUE),
+						ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR), JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
 			
 			Date selectedDateTo = (Date) datePickerFrom.getModel().getValue();
 			//Date selectedDateTo = selectedValue != null ? selectedValue.getTime() : new Date();
@@ -95,21 +121,30 @@ public class SavePeriodAL extends BaseActionListener{
 				em.persist(rdp);
 			}
 			
+			this.createFormPanel.setVisible(false);
+			this.createFormPanel.repaint();
+			this.fieldCode.setText("");
+			this.fieldRevenue.setText("0.0");
+			datePickerFrom.getModel().setSelected(false);
+			datePickerFrom.repaint();
+			datePickerTo.getModel().setSelected(false);
+			datePickerTo.repaint();
+			
 			try {
-				JOptionPane.showMessageDialog(mainFrame, JOptionPane.INFORMATION_MESSAGE ,
-						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_SUCCESS), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(mainFrame, 
+						ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_SUCCESS),
+						ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_INFO), JOptionPane.INFORMATION_MESSAGE);
 			} catch (HeadlessException | IOException e2) {
-				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 			
 		} catch (Exception e1) {
 			Logger.error(e1);
 			try {
-				JOptionPane.showMessageDialog(mainFrame, JOptionPane.ERROR_MESSAGE ,
-						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ERROR), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(mainFrame, 
+						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_ERR), 
+						 ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR),JOptionPane.ERROR_MESSAGE);
 			} catch (HeadlessException | IOException e2) {
-				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 			if (em!= null && em.isOpen()) {

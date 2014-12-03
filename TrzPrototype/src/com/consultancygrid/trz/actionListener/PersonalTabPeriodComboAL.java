@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import java.util.Vector;
 
 import javax.persistence.EntityManager;
@@ -32,15 +30,6 @@ import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 
 
-
-
-
-
-
-
-
-
-
 import static com.consultancygrid.trz.base.Constants.*;
 /**
  * ACtion Listener for code list
@@ -49,13 +38,13 @@ import static com.consultancygrid.trz.base.Constants.*;
  *
  */
 
-public class TimePeriodComboAL extends BaseActionListener {
+public class PersonalTabPeriodComboAL extends BaseActionListener {
 
 	
 	JComboBox comboBox;
 	JTable table;
 	
-	public TimePeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBox,JTable table) {
+	public PersonalTabPeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBox,JTable table) {
 
 		super(mainFrame);
 		this.comboBox = comboBox;
@@ -374,13 +363,12 @@ public class TimePeriodComboAL extends BaseActionListener {
 				.getLabels(LabelsConstants.GROUP_CONF_COL8_VALUE));
 
 		// FIXME how to extract the follow 3 digits
-		oneRow.add("9.5- HOW TO GET THIS PERCENT??");// TO BE detected the formula;
+		oneRow.add(EMPTY_STRING);// TO BE detected the formula;
 		// TODO comment until it is required
 		oneRow.add(EMPTY_STRING);
 		//oneRow.add(EMPTY_STRING);
-
 		// TODO last 2 columns to be token from the Excel
-		oneRow.add("DIGIT_HOW TO CALCULATE");
+		oneRow.add(EMPTY_STRING);
 		oneRow.add(EMPTY_STRING);
 		tableData.add(oneRow);
 	}

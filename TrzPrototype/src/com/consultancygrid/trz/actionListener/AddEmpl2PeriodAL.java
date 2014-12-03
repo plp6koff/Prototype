@@ -208,7 +208,6 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 	
 	
 	
-	
 	private void createSalary(EntityManager em, Period period, Employee empl) {
 		
 		Query q = em.createQuery(" from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.dateEnd desc");

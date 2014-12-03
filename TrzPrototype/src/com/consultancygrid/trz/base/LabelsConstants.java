@@ -74,6 +74,11 @@ public interface LabelsConstants {
 	 String SET_TAB_CRT_PERIOD_REVENUE_DEPT = "settings_tab_create_period_revenue_department";
 	 String SET_TAB_CRT_PERIOD_SAVE = "settings_tab_create_period_save";
 	 
+	 String SET_TAB_CRT_PERIOD_ERR_CODE = "settings_tab_create_period_error_code";
+	 String SET_TAB_CRT_PERIOD_ERR_REVENUE = "settings_tab_create_period_error_revenue";
+	 String SET_TAB_CRT_PERIOD_ERR="settings_tab_create_period_err";
+	 String SET_TAB_CRT_PERIOD_SUCCESS="settings_tab_create_period_success";
+	 
 	 String SET_TAB_EMPL2PER_HEADER = "settings_tab_empl2period_header";
 	 
 	 String SET_TAB_EMPL2PER_REVENUE = "settings_tab_empl2period_revenue";
@@ -92,12 +97,15 @@ public interface LabelsConstants {
 	 String SET_TAB_EMPL2PER_ERROR = "settings_tab_empl2period_ko";
 	 
 	 
+	 
 	 String COMBO_PERIOD = "combo.period.select";
 	 String COMBO_DEP_ = "combo.department.select";
 	 String COMBO_EMPL = "combo.employee.select";
 	 
 	 String ALERT_MSG_INFO = "alert_msg_info";
      String ALERT_MSG_WARN = "alert_msg_warn";
+     String ALERT_MSG_ERR = "alert_msg_error";
+     String ALERT_MSG_OK = "alert_msg_success";
 	 
 	 String  CALENDAR_TODAY = "calendar.today";
 	 String  CALENDAR_MONTH = "calendar.month";
