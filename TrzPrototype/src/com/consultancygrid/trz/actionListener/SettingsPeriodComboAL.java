@@ -27,7 +27,7 @@ import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.RevenueEmplPeriod;
 import com.consultancygrid.trz.ui.combo.DepartmentComboBoxModel;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
-import com.consultancygrid.trz.ui.combo.TrzComboBoxModel;
+import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.GroupCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
@@ -70,7 +70,7 @@ public class SettingsPeriodComboAL extends BaseActionListener {
 
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 
-			Query q = em.createQuery(" select distinct emplDeptP.department from EmplDeptPeriod as emplDeptP  where  emplDeptP.period.id = :periodId");
+			Query q = em.createQuery(" select distinct rDP.department from RevenueDeptPeriod as rDP  where  rDP.period.id = :periodId");
 			q.setParameter("periodId", period.getId());
 			List<Department> allDepartments = (List<Department>) q.getResultList();
 		

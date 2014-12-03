@@ -27,7 +27,7 @@ import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.RevenueEmplPeriod;
 import com.consultancygrid.trz.ui.combo.DepartmentComboBoxModel;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
-import com.consultancygrid.trz.ui.combo.TrzComboBoxModel;
+import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.GroupCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;

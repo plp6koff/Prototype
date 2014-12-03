@@ -23,6 +23,10 @@ public interface LabelsConstants {
 	 String GROUP_CONF_COL5_VALUE = "group_config_col5_value_label";
 	 String GROUP_CONF_COL8_VALUE = "group_config_col8_value_label";
 	 
+	 String GROUP_CONF_TABLE_TTP = "group_config_table_ttip";
+	 String GROUP_CONF_EDIT_TTP = "group_config_edit_ttip";
+	 String GROUP_CONF_CB_PERIOD_TTP = "group_config_cb_period_ttip";
+	 
 	 String SALARY_BY_MOF_TAB_LABEL = "sal_by_month_confi";
 	 
 	 
@@ -74,6 +78,10 @@ public interface LabelsConstants {
 	 String SET_TAB_CRT_PERIOD_REVENUE_DEPT = "settings_tab_create_period_revenue_department";
 	 String SET_TAB_CRT_PERIOD_SAVE = "settings_tab_create_period_save";
 	 
+	 String SET_TAB_CRT_PERIOD_CODE_TTIP = "period_cfg_code_ttip";
+	 String SET_TAB_CRT_PERIOD_REVENUE_TTIP = "period_cfg_revenue_ttip";
+	 String SET_TAB_CRT_PERIOD_ENDDATE_TTIP = "period_cfg_enddate_ttip";
+	 
 	 String SET_TAB_CRT_PERIOD_ERR_CODE = "settings_tab_create_period_error_code";
 	 String SET_TAB_CRT_PERIOD_ERR_REVENUE = "settings_tab_create_period_error_revenue";
 	 String SET_TAB_CRT_PERIOD_ERR="settings_tab_create_period_err";
@@ -96,7 +104,10 @@ public interface LabelsConstants {
 	 String SET_TAB_EMPL2PER_SUCCESS = "settings_tab_empl2period_ok";
 	 String SET_TAB_EMPL2PER_ERROR = "settings_tab_empl2period_ko";
 	 
-	 
+	 String SET_TAB_EMPL2PER_CB_DEP_TTIP = "settings_tab_empl2period_cb_dep_ttip";
+	 String SET_TAB_EMPL2PER_CB_EMPL_TTIP = "settings_tab_empl2period_cb_empl_ttip";
+	 String SET_TAB_EMPL2PER_CB_PERIOD_TTIP = "settings_tab_empl2period_cb_period_ttip";
+	 String SET_TAB_EMPL2PER_FORM_TTIP = "settings_tab_empl2period_cb_create_form_ttip";
 	 
 	 String COMBO_PERIOD = "combo.period.select";
 	 String COMBO_DEP_ = "combo.department.select";

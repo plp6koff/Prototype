@@ -38,13 +38,13 @@ import static com.consultancygrid.trz.base.Constants.*;
  *
  */
 
-public class PersonalTabPeriodComboAL extends BaseActionListener {
+public class GroupTabPeriodComboAL extends BaseActionListener {
 
 	
 	JComboBox comboBox;
 	JTable table;
 	
-	public PersonalTabPeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBox,JTable table) {
+	public GroupTabPeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBox,JTable table) {
 
 		super(mainFrame);
 		this.comboBox = comboBox;
@@ -320,7 +320,6 @@ public class PersonalTabPeriodComboAL extends BaseActionListener {
 	}
 	
 	private Double calculateTotalPersonal(int base, Double percentPersonal){
-		
 		return (base * percentPersonal)/100;
 	}
 
@@ -331,6 +330,7 @@ public class PersonalTabPeriodComboAL extends BaseActionListener {
 
 	private void add4thRow(Vector tableData, Employee employee,
 			Department department, double bonus) throws IOException {
+		
 		Vector<Object> oneRow = new Vector<Object>();
 		oneRow.add(department.getCode());
 		oneRow.add(EMPTY_STRING);
@@ -338,13 +338,11 @@ public class PersonalTabPeriodComboAL extends BaseActionListener {
 		oneRow.add(EMPTY_STRING);// To be provided as param
 		oneRow.add(EMPTY_STRING);
 		oneRow.add(EMPTY_STRING);
-
 		// FIXME how to extract the follow 3 digits
 		//oneRow.add(EMPTY_STRING);
 		oneRow.add(EMPTY_STRING);
 		oneRow.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE));
-
 		// TODO last 2 columns to be token from the Excel
 		oneRow.add(bonus);
 		oneRow.add(EMPTY_STRING);
@@ -353,6 +351,7 @@ public class PersonalTabPeriodComboAL extends BaseActionListener {
 
 	private void add5thRow(Vector tableData, Employee employee,
 			Department department) throws IOException {
+		
 		Vector<Object> oneRow = new Vector<Object>();
 		oneRow.add(department.getCode());
 		oneRow.add(EMPTY_STRING);
@@ -361,7 +360,6 @@ public class PersonalTabPeriodComboAL extends BaseActionListener {
 		oneRow.add(EMPTY_STRING);
 		oneRow.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_COL8_VALUE));
-
 		// FIXME how to extract the follow 3 digits
 		oneRow.add(EMPTY_STRING);// TO BE detected the formula;
 		// TODO comment until it is required

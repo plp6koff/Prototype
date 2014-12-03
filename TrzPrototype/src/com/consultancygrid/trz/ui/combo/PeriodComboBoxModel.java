@@ -11,17 +11,17 @@ import javax.swing.event.ListDataListener;
 
 import com.consultancygrid.trz.model.Period;
 
-public class TrzComboBoxModel implements ComboBoxModel<Period> {
+public class PeriodComboBoxModel implements ComboBoxModel<Period> {
 
 	Period selectedPeriod;
 	List<Period> comboBoxItemList;
 	
-	public TrzComboBoxModel(List<Period> comboBoxItemList) {
+	public PeriodComboBoxModel(List<Period> comboBoxItemList) {
 		
 		this.comboBoxItemList = comboBoxItemList;
 	}
 	
-	public TrzComboBoxModel() {
+	public PeriodComboBoxModel() {
 		comboBoxItemList = new ArrayList<Period>();
 	}
 	
@@ -67,5 +67,12 @@ public class TrzComboBoxModel implements ComboBoxModel<Period> {
 		
 		comboBoxItemList.add(perdiod);
 	}
+	
+	public void reinit(List<Period> comboBoxItemList) {
+		
+		comboBoxItemList.clear();
+		comboBoxItemList.addAll(comboBoxItemList);
+	}
+	
 	
 }

@@ -29,7 +29,7 @@ import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.RevenueEmplPeriod;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
-import com.consultancygrid.trz.ui.combo.TrzComboBoxModel;
+import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
@@ -133,7 +133,7 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 		this.comboBoxDepartment.setEnabled(false);
 		Query qPeriod = em.createQuery(" from Period");
 		List<Period> allPeriods = (List<Period>) qPeriod.getResultList();
-		this.comboBoxPeriod.setModel(new TrzComboBoxModel(allPeriods));
+		this.comboBoxPeriod.setModel(new PeriodComboBoxModel(allPeriods));
 		this.panLinkPeriod2Empl.validate();
 		this.panLinkPeriod2Empl.repaint();
 	}
