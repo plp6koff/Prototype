@@ -9,11 +9,14 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
+import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -28,6 +31,7 @@ import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.PeriodSetting;
 import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.TrzStatic;
+import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
@@ -38,11 +42,14 @@ public class SavePeriodAL extends BaseActionListener{
 	private JTextField fieldCode;
 	private JTextField fieldRevenue;
 	private JPanel createFormPanel;
-	
+	private JComboBox comboBoxPeriod;	
+	private JPanel panLinkPeriod2Empl;
 	private HashMap<TrzStatic, JTextField> map ;
 	private HashMap<Department, JTextField> mapDept;
 	
-	public SavePeriodAL(PrototypeMainFrame mainFrame, JDatePickerImpl datePickerFrom, JDatePickerImpl datePickerTo, JTextField fieldCode, JTextField fieldRevenue, 	HashMap<TrzStatic, JTextField> map,HashMap<Department, JTextField> mapDept ,JPanel createFormPanel) {
+	public SavePeriodAL(PrototypeMainFrame mainFrame, JDatePickerImpl datePickerFrom, JDatePickerImpl datePickerTo, JTextField fieldCode,
+			JTextField fieldRevenue, 	HashMap<TrzStatic, JTextField> map,HashMap<Department, JTextField> mapDept ,JPanel createFormPanel,
+			JComboBox comboBoxPeriod, JPanel panLinkPeriod2Empl) {
 		super(mainFrame);
 		this.datePickerTo = datePickerTo;
 		this.datePickerFrom = datePickerFrom;
@@ -51,6 +58,8 @@ public class SavePeriodAL extends BaseActionListener{
 		this.map = 	map; 
 		this.mapDept = mapDept;
 		this.createFormPanel = createFormPanel;
+		this.comboBoxPeriod  = comboBoxPeriod;
+		this.panLinkPeriod2Empl = panLinkPeriod2Empl;
 	}
 
 	@Override
@@ -129,6 +138,14 @@ public class SavePeriodAL extends BaseActionListener{
 			datePickerFrom.repaint();
 			datePickerTo.getModel().setSelected(false);
 			datePickerTo.repaint();
+			
+			
+			PeriodComboBoxModel modelToRefresh = ((PeriodComboBoxModel) comboBoxPeriod.getModel());
+			modelToRefresh.addItem(tempPeriod);
+			comboBoxPeriod.revalidate();
+			comboBoxPeriod.repaint();
+			this.panLinkPeriod2Empl.revalidate();
+			this.panLinkPeriod2Empl.repaint();
 			
 			try {
 				JOptionPane.showMessageDialog(mainFrame, 

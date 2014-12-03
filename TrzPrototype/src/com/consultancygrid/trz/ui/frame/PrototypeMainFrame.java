@@ -131,14 +131,16 @@ public class PrototypeMainFrame extends JFrame {
 		//Second Tab
 		drawSecondTab(tabbedPane,table, allPeriods);
 		
+		JPanel panLinkPeriod2Empl = new JPanel(null);
+		
 		JTabbedPane tabbedPaneSettings = new JTabbedPane(JTabbedPane.TOP);
 
 		JComboBox comboBoxPeriod = new JComboBox<>(new PeriodComboBoxModel(allPeriods));
 		
 		//Period Settings
-		drawCreatePeriod(tabbedPane, table, tabbedPaneSettings, comboBoxPeriod);
+		drawCreatePeriod(tabbedPane, table, tabbedPaneSettings, comboBoxPeriod, panLinkPeriod2Empl);
 		//Period to Employee
-		drawEmployee2Period(tabbedPaneSettings, comboBoxPeriod);
+		drawEmployee2Period(tabbedPaneSettings, comboBoxPeriod, panLinkPeriod2Empl);
 		
 		em.getTransaction().commit();
 		em.close();
@@ -250,9 +252,10 @@ public class PrototypeMainFrame extends JFrame {
 	 * @param allPeriods
 	 * @throws IOException 
 	 */
-	private void drawEmployee2Period(JTabbedPane tabbedPaneSettings, JComboBox comboBoxPeriod1) throws IOException {
+	private void drawEmployee2Period(JTabbedPane tabbedPaneSettings, 
+								JComboBox comboBoxPeriod1,
+								JPanel panLinkPeriod2Empl) throws IOException {
 		
-		JPanel panLinkPeriod2Empl = new JPanel(null);
 		JComboBox comboBoxEmployees1 = new JComboBox<>(new EmplComboBoxModel());
 		
 		JComboBox comboBoxDepartment1 = new JComboBox<>(new DepartmentComboBoxModel());
@@ -330,7 +333,8 @@ public class PrototypeMainFrame extends JFrame {
 	}
 	
 	
-	private void drawCreatePeriod(JTabbedPane tabbedPane, GroupCfgEmplsTable table, JTabbedPane tabbedPaneSettings, JComboBox comboBoxPeriod1) throws IOException {
+	private JComboBox drawCreatePeriod(JTabbedPane tabbedPane, GroupCfgEmplsTable table, JTabbedPane tabbedPaneSettings, 
+			JComboBox comboBoxPeriod1, JPanel panLinkPeriod2Empl) throws IOException {
 		
 		
 		tabbedPane.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SETTINGS), null, tabbedPaneSettings, null);
@@ -443,16 +447,21 @@ public class PrototypeMainFrame extends JFrame {
 		datePickerEnd.addActionListener(new SelectEndDatePeriodAL(this, map, mapDept, createFormPanel));
 		datePickerEnd.setToolTipText(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_ENDDATE_TTIP));
 		createFormPanel.setVisible(false);
-		SavePeriodAL sPAL = new SavePeriodAL(this, datePickerStart, datePickerEnd, textFieldCode, textFieldRevenue, map,mapDept, createFormPanel);
+		SavePeriodAL sPAL 
+		    = new SavePeriodAL(this, 
+		    		          datePickerStart, 
+		    		          datePickerEnd, 
+		    		          textFieldCode, 
+		    		          textFieldRevenue, 
+		    		          map,
+		    		          mapDept, 
+		    		          createFormPanel,
+		    		          comboBoxPeriod1,
+		    		          panLinkPeriod2Empl);
 		panSetCrtPeriod.add(createFormPanel);
 		btnSavePeriod.addActionListener(sPAL);
 		
-		Query qPeriod = em.createQuery(" from Period");
-		
-		PeriodComboBoxModel modelToRefresh = ((PeriodComboBoxModel) comboBoxPeriod1.getModel());
-		modelToRefresh.reinit((List<Period>) qPeriod.getResultList());
-		comboBoxPeriod1.revalidate();
-		comboBoxPeriod1.repaint();
+		return comboBoxPeriod1;
 		
 	}
 }
