@@ -29,7 +29,7 @@ public class Employee implements java.io.Serializable {
 	private String firstName;
 	private String lastName;
 	private String isActive;
-	private BigDecimal carloId;
+	private String matchCode;
 	private Set<RevenueEmplPeriod> revenueEmplPeriods = new HashSet<RevenueEmplPeriod>(
 			0);
 	private Set<EmplDeptPeriod> emplDeptPeriods = new HashSet<EmplDeptPeriod>(0);
@@ -49,7 +49,7 @@ public class Employee implements java.io.Serializable {
 	}
 
 	public Employee(UUID id, String firstName, String lastName,
-			String isActive, BigDecimal carloId,
+			String isActive, String matchCode,
 			Set<RevenueEmplPeriod> revenueEmplPeriods,
 			Set<EmplDeptPeriod> emplDeptPeriods,
 			Set<EmployeeSalary> employeeSalaries,
@@ -58,7 +58,7 @@ public class Employee implements java.io.Serializable {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.isActive = isActive;
-		this.carloId = carloId;
+		this.matchCode = matchCode;
 		this.revenueEmplPeriods = revenueEmplPeriods;
 		this.emplDeptPeriods = emplDeptPeriods;
 		this.employeeSalaries = employeeSalaries;
@@ -105,13 +105,13 @@ public class Employee implements java.io.Serializable {
 		this.isActive = isActive;
 	}
 
-	@Column(name = "CARLO_ID", precision = 22, scale = 0)
-	public BigDecimal getCarloId() {
-		return this.carloId;
+	@Column(name = "MATCHCODE", precision = 22, scale = 0)
+	public String getMatchCode() {
+		return this.matchCode;
 	}
 
-	public void setCarloId(BigDecimal carloId) {
-		this.carloId = carloId;
+	public void setMatchCode(String matchCode) {
+		this.matchCode = matchCode;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")

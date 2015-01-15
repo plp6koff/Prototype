@@ -14,6 +14,7 @@ import static com.consultancygrid.trz.base.Constants.col9MW;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Insets;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +28,14 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.table.JTableHeader;
@@ -46,6 +49,8 @@ import com.consultancygrid.trz.actionListener.CancelPersonalRowAL;
 import com.consultancygrid.trz.actionListener.EditGroupRowAL;
 import com.consultancygrid.trz.actionListener.EditPersonRowAL;
 import com.consultancygrid.trz.actionListener.EmplsComboAL;
+import com.consultancygrid.trz.actionListener.LoadFileAL;
+import com.consultancygrid.trz.actionListener.OpenFileAL;
 import com.consultancygrid.trz.actionListener.SavePeriodAL;
 import com.consultancygrid.trz.actionListener.SavePersonRowAL;
 import com.consultancygrid.trz.actionListener.SelectEndDatePeriodAL;
@@ -126,6 +131,8 @@ public class PrototypeMainFrame extends JFrame {
 		
 		GroupCfgEmplsTable table = new GroupCfgEmplsTable(); 
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+		drawInitialTab(tabbedPane);
 		//First Tab
 		drawFirstTab(tabbedPane);
 		//Second Tab
@@ -145,6 +152,37 @@ public class PrototypeMainFrame extends JFrame {
 		em.getTransaction().commit();
 		em.close();
 		factory.close();
+	}
+	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException 
+	 */
+	private void drawInitialTab(JTabbedPane tabbedPane) throws IOException {
+		
+		JPanel firstInnerPanel = new JPanel(null);         
+		
+		JButton openButton = new JButton("Open a File..."); 
+		JButton loadButton = new JButton("Load a File...");
+		
+	    JFileChooser  fc = new JFileChooser();
+	    JTextArea log = new JTextArea(5,20);
+        log.setBounds(20,20,400, 20);
+        log.setEditable(false);
+	    fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	    openButton.setBounds(450, 20, 200, 20);
+	    openButton.addActionListener(new OpenFileAL(this, fc, log));
+	    
+	    loadButton.setBounds(680, 20, 200, 20);
+	    loadButton.addActionListener(new LoadFileAL(this, fc, log));
+	    
+	    firstInnerPanel.add(log);
+	    firstInnerPanel.add(openButton);
+	    firstInnerPanel.add(loadButton);
+	    
+	    tabbedPane.addTab("Load File Tab", firstInnerPanel);
 	}
 	
 	/**
