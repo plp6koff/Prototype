@@ -15,6 +15,7 @@ import static com.consultancygrid.trz.base.Constants.col9MW;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Insets;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -132,7 +133,6 @@ public class PrototypeMainFrame extends JFrame {
 		GroupCfgEmplsTable table = new GroupCfgEmplsTable(); 
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-		drawInitialTab(tabbedPane);
 		//First Tab
 		drawFirstTab(tabbedPane);
 		//Second Tab
@@ -143,7 +143,7 @@ public class PrototypeMainFrame extends JFrame {
 		JTabbedPane tabbedPaneSettings = new JTabbedPane(JTabbedPane.TOP);
 
 		JComboBox comboBoxPeriod = new JComboBox<>(new PeriodComboBoxModel(allPeriods));
-		
+		drawLoadFileTab(tabbedPaneSettings);
 		//Period Settings
 		drawCreatePeriod(tabbedPane, table, tabbedPaneSettings, comboBoxPeriod, panLinkPeriod2Empl);
 		//Period to Employee
@@ -154,36 +154,6 @@ public class PrototypeMainFrame extends JFrame {
 		factory.close();
 	}
 	
-	/**
-	 * 
-	 * @param comboBox
-	 * @param tabbedPane
-	 * @throws IOException 
-	 */
-	private void drawInitialTab(JTabbedPane tabbedPane) throws IOException {
-		
-		JPanel firstInnerPanel = new JPanel(null);         
-		
-		JButton openButton = new JButton("Open a File..."); 
-		JButton loadButton = new JButton("Load a File...");
-		
-	    JFileChooser  fc = new JFileChooser();
-	    JTextArea log = new JTextArea(5,20);
-        log.setBounds(20,20,400, 20);
-        log.setEditable(false);
-	    fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-	    openButton.setBounds(450, 20, 200, 20);
-	    openButton.addActionListener(new OpenFileAL(this, fc, log));
-	    
-	    loadButton.setBounds(680, 20, 200, 20);
-	    loadButton.addActionListener(new LoadFileAL(this, fc, log));
-	    
-	    firstInnerPanel.add(log);
-	    firstInnerPanel.add(openButton);
-	    firstInnerPanel.add(loadButton);
-	    
-	    tabbedPane.addTab("Load File Tab", firstInnerPanel);
-	}
 	
 	/**
 	 * 
@@ -370,6 +340,43 @@ public class PrototypeMainFrame extends JFrame {
 		return text;
 	}
 	
+	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException 
+	 */
+	private void drawLoadFileTab(JTabbedPane tabbedPaneSettings) throws IOException {
+		
+		
+		JPanel firstInnerPanel = new JPanel(null);         
+		
+		JButton openButton = new JButton("Open a Files..."); 
+		JButton loadButton = new JButton("Load a Files...");
+		
+	    JFileChooser  fc = new JFileChooser();
+	    JTextArea log = new JTextArea(5,20);
+        log.setBounds(20,20,400, 20);
+        log.setEditable(false);
+        log.setEditable(false);
+	    fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	    openButton.setBounds(450, 20, 200, 20);
+	    OpenFileAL oFA = new OpenFileAL(this, fc, log);
+	    
+	    openButton.addActionListener(oFA);
+	    openButton.setEnabled(false);
+	    File file =  oFA.getFile();
+	    
+	    loadButton.setBounds(680, 20, 200, 20);
+	    loadButton.addActionListener(new LoadFileAL(this, fc, log, file));
+	    
+	    firstInnerPanel.add(log);
+	    firstInnerPanel.add(openButton);
+	    firstInnerPanel.add(loadButton);
+	    
+	    tabbedPaneSettings.addTab("Load File ...",firstInnerPanel);
+	}
 	
 	private JComboBox drawCreatePeriod(JTabbedPane tabbedPane, GroupCfgEmplsTable table, JTabbedPane tabbedPaneSettings, 
 			JComboBox comboBoxPeriod1, JPanel panLinkPeriod2Empl) throws IOException {

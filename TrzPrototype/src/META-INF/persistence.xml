@@ -10,7 +10,7 @@
     <properties>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
       <property name="javax.persistence.jdbc.url"
-        value="jdbc:oracle:thin:@192.168.2.169:1521/T2BNG" />
+        value="jdbc:oracle:thin:@localhost:1521/xe" />
       <property name="javax.persistence.jdbc.user" value="trz" />
       <property name="javax.persistence.jdbc.password" value="trz" />
 

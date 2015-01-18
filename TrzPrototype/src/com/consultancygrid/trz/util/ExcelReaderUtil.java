@@ -42,6 +42,27 @@ public class ExcelReaderUtil {
 		return null;
 	}
 	
+	
+	public static HSSFSheet loadExcelSheetFromFile(File fileRaw) {
+		
+		
+		FileInputStream file = null;
+		
+		try {
+			file = new FileInputStream(fileRaw);
+			HSSFWorkbook workbook = new HSSFWorkbook(file);
+			HSSFSheet sheet = workbook.getSheetAt(0);
+			
+			return sheet;
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * @param filePath
 	 * @param sheetName - name of the sheet, we`ve been looking for
