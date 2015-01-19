@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
 
 /**
@@ -18,7 +19,7 @@ import com.consultancygrid.trz.base.LabelsConstants;
  */
 public class ResourceLoaderUtil {
 
-//	private static Map<String, String> environmentConfig  = new HashMap<String, String>();
+	private static Map<String, String> config  = new HashMap<String, String>();
 	
 	private static Map<String, String> labels  = new HashMap<String, String>();
 	
@@ -31,9 +32,9 @@ public class ResourceLoaderUtil {
 		return getLabels().get(key);
 	}
 	
-//	public static String getEnvrironmentConfig(String key) throws IOException {
-//		return getEnvironmentConfig().get(key);
-//	}
+	public static String getConfig(String key) throws IOException {
+		return getConfig().get(key);
+	}
 	
 	public static Map<String, String> getLabels() throws IOException {
 
@@ -43,13 +44,13 @@ public class ResourceLoaderUtil {
 		return labels;
 	}
 	
-//	public static Map<String, String> getEnvironmentConfig() throws IOException {
-//
-//		if (environmentConfig.isEmpty()) {
-//			initEnvironmentConfig();
-//		}
-//		return environmentConfig;
-//	}
+	public static Map<String, String> getConfig() throws IOException {
+
+		if (config.isEmpty()) {
+			initConfig();
+		}
+		return config;
+	}
 	
 	
 	private static void initLabels() throws IOException {
@@ -59,11 +60,11 @@ public class ResourceLoaderUtil {
 		}
 	}
 	
-//	private static void initEnvironmentConfig() throws IOException {
-//		Properties environmentProps = PropertyTools.loadProperties(Constants.ENVIRONMENT);
-//		for (Map.Entry<Object, Object> entry : environmentProps.entrySet()) {
-//			environmentConfig.put((String) entry.getKey(), (String) entry.getValue());
-//		}
-//	}
+	private static void initConfig() throws IOException {
+		Properties environmentProps = PropertyTools.loadProperties(Constants.CUSTOM_CFG_PATH);
+		for (Map.Entry<Object, Object> entry : environmentProps.entrySet()) {
+			config.put((String) entry.getKey(), (String) entry.getValue());
+		}
+	}
 	
 }

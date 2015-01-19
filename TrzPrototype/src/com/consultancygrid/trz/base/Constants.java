@@ -31,5 +31,10 @@ public interface Constants {
 	
     String EMPTY_STRING = "";
 	
+    String DEFAULT_DATA_DIR= "data_dir";
+    
+    String CUSTOM_CFG_PATH = "resources/custom.cfg.properties";
+    
+    
 
 }

@@ -1,25 +1,13 @@
 package com.consultancygrid.trz.ui.frame;
 
 import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
-import static com.consultancygrid.trz.base.Constants.col0MW;
-import static com.consultancygrid.trz.base.Constants.col10MW;
-import static com.consultancygrid.trz.base.Constants.col1MW;
-import static com.consultancygrid.trz.base.Constants.col2MW;
-import static com.consultancygrid.trz.base.Constants.col3MW;
-import static com.consultancygrid.trz.base.Constants.col4MW;
-import static com.consultancygrid.trz.base.Constants.col5MW;
-import static com.consultancygrid.trz.base.Constants.col6MW;
-import static com.consultancygrid.trz.base.Constants.col7MW;
-import static com.consultancygrid.trz.base.Constants.col9MW;
 
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -50,6 +38,7 @@ import com.consultancygrid.trz.actionListener.CancelPersonalRowAL;
 import com.consultancygrid.trz.actionListener.EditGroupRowAL;
 import com.consultancygrid.trz.actionListener.EditPersonRowAL;
 import com.consultancygrid.trz.actionListener.EmplsComboAL;
+import com.consultancygrid.trz.actionListener.GroupTabPeriodComboAL;
 import com.consultancygrid.trz.actionListener.LoadFileAL;
 import com.consultancygrid.trz.actionListener.OpenFileAL;
 import com.consultancygrid.trz.actionListener.SavePeriodAL;
@@ -58,7 +47,6 @@ import com.consultancygrid.trz.actionListener.SelectEndDatePeriodAL;
 import com.consultancygrid.trz.actionListener.SettingsDepartmentComboAL;
 import com.consultancygrid.trz.actionListener.SettingsEmployeeComboAL;
 import com.consultancygrid.trz.actionListener.SettingsPeriodComboAL;
-import com.consultancygrid.trz.actionListener.GroupTabPeriodComboAL;
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
