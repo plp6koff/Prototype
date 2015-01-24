@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 
+import org.hibernate.dialect.FirebirdDialect;
+
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.Period;
 
@@ -74,4 +76,6 @@ public class EmplComboBoxModel implements ComboBoxModel<Employee> {
 	public void clear() {
 		comboBoxItemList.clear();
 	}	
+	
+	
 }

@@ -34,5 +34,4 @@ public class HeaderRenderer implements TableCellRenderer {
 		    return c;
 	}
 	
-
 }

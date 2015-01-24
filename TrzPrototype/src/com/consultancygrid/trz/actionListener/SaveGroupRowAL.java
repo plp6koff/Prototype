@@ -6,12 +6,14 @@ import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -29,21 +31,27 @@ import com.consultancygrid.trz.ui.table.GroupCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.GroupCfgEmplsTableModel;
 import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
+import com.consultancygrid.trz.util.GroupTablPeriodLoaderUtil;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class SaveGroupRowAL extends BaseActionListener{
 
 	private GroupCfgEmplsTable groupConfTable;
 	private JComboBox comboBoxPeriod;
+	private JFrame frame ; 
 	
-	private HashMap<TrzStatic, JTextField> map ;
-	private HashMap<Department, JTextField> mapDept;
+	private HashMap<String, JTextField> map;
 	
-	public SaveGroupRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable, JComboBox comboBoxPeriod) {
+	public SaveGroupRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable, 
+			JComboBox comboBoxPeriod,  
+			HashMap<String, JTextField> map,
+			JFrame frame) {
 		
 		super(mainFrame);
 		this.groupConfTable = groupConfTable;
 		this.comboBoxPeriod = comboBoxPeriod;
+		this.map = map;
+		this.frame = frame;
 	}
 
 	@Override
@@ -63,9 +71,6 @@ public class SaveGroupRowAL extends BaseActionListener{
 			GroupCfgEmplsTableModel model = (GroupCfgEmplsTableModel) groupConfTable.getModel();
 			int i = groupConfTable.getSelectedRow();
 			
-			groupConfTable.setRowEditable(-1);
-			groupConfTable.setEnableEdit(false);
-			
 			if (period != null) {
 				
 				String nameRaw = (String) model.getValueAt(i, 1);
@@ -84,17 +89,16 @@ public class SaveGroupRowAL extends BaseActionListener{
 					Query q1 = em.createQuery(" from EmployeeSettings as settings  where  settings.period.id = :periodId and settings.employee.id = :emplId ");
 					q1.setParameter("periodId", period.getId());
 					q1.setParameter("emplId", employee.getId());
-					List<EmployeeSettings> allSettings = (List<EmployeeSettings>) q.getResultList();
+					List<EmployeeSettings> allSettings = (List<EmployeeSettings>) q1.getResultList();
 					if (allSettings != null && !allSettings.isEmpty()) {
 						
 						EmployeeSettings settings = allSettings.get(0);
 						
-						String percentAll = (String) model.getValueAt(i, 6);
-						String percentGroup = (String) model.getValueAt(i+1, 6);
-						String percentPersonal = (String) model.getValueAt(i+2, 6);
-						
-						String onBoardAll = (String) model.getValueAt(i, 7);
-						String onBoardGroup = (String) model.getValueAt(i+1, 7);
+						String percentAll = map.get(LabelsConstants.GROUP_CONF_COL5_VALUE1).getText(); 
+						String percentGroup  = map.get(LabelsConstants.GROUP_CONF_COL5_VALUE2).getText(); 
+						String percentPersonal = map.get(LabelsConstants.GROUP_CONF_COL5_VALUE3).getText();  
+						String onBoardAll =  map.get(LabelsConstants.GROUP_CONF_COL5_VALUE1 + "-" + LabelsConstants.GROUP_CONF_HEADER_COL7).getText();
+						String onBoardGroup =  map.get(LabelsConstants.GROUP_CONF_COL5_VALUE2 + "-" + LabelsConstants.GROUP_CONF_HEADER_COL7).getText();
 						
 						settings.setPercentAll(parseValue(settings.getPercentAll(), percentAll));
 						settings.setPercentGroup(parseValue(settings.getPercentGroup(), percentGroup));
@@ -105,15 +109,19 @@ public class SaveGroupRowAL extends BaseActionListener{
 						
 						em.merge(settings);
 						
-						JOptionPane.showMessageDialog(mainFrame, 
-								ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_INFO1)  + employee.getFirstName() + " " + employee.getLastName() +" !", 
-								ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_INFO), JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 				
+				frame.setVisible(false);
 				groupConfTable.clearSelection();
-				groupConfTable.validate();
+				Vector tableData = new Vector();
+				GroupTablPeriodLoaderUtil grTabPeriodLoaderUtil 
+						= new GroupTablPeriodLoaderUtil();
+				grTabPeriodLoaderUtil.loadData(period, em, tableData);
+				model.setData(tableData);
+				groupConfTable.revalidate();
 				groupConfTable.repaint();
+				
 			} else {
 				JOptionPane.showMessageDialog(mainFrame, ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_WARN2) ,
 					 ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_WARN), JOptionPane.WARNING_MESSAGE);

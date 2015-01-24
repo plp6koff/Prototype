@@ -21,7 +21,6 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 5044877015250409328L;
 
-	//private boolean[][] editable_cells;
 	
 	private Vector<String> tableHeaders = new Vector<String>();
 
@@ -135,7 +134,14 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 		} else {
 			return "EMPTY";
 		}
-
+	}
+	
+	@Override
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		// TODO Auto-generated method stub
+		super.setValueAt(aValue, rowIndex, columnIndex);
+		fireTableRowsUpdated(rowIndex, columnIndex);
+		fireTableDataChanged(); 
 	}
 
 	public Vector<String> getTableHeaders() {
@@ -149,7 +155,7 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 								// If you change only one cell you need to call
 								// the appropriate fire event
 	}
-
+	
 	public List<EmployeeSalary> getEmplSals() {
 		return emplSals;
 	}
@@ -157,6 +163,4 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 	public void setEmplSals(List<EmployeeSalary> emplSals) {
 		this.emplSals = emplSals;
 	}
-
-	
 }

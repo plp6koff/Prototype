@@ -3,9 +3,6 @@ package com.consultancygrid.trz.ui.combo;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 
@@ -48,6 +45,11 @@ public class PeriodComboBoxModel implements ComboBoxModel<Period> {
 		// TODO Auto-generated method stub
 
 	}
+	
+	public void addAll(List<Period> period) {
+		comboBoxItemList.clear();
+		comboBoxItemList.addAll(period);
+	}	
 
 	@Override
 	public Period getSelectedItem() {
@@ -73,6 +75,21 @@ public class PeriodComboBoxModel implements ComboBoxModel<Period> {
 		comboBoxItemList.clear();
 		comboBoxItemList.addAll(comboBoxItemList);
 	}
+
+	/**
+	 * @return the comboBoxItemList
+	 */
+	public List<Period> getComboBoxItemList() {
+		return comboBoxItemList;
+	}
+
+	/**
+	 * @param comboBoxItemList the comboBoxItemList to set
+	 */
+	public void setComboBoxItemList(List<Period> comboBoxItemList) {
+		this.comboBoxItemList = comboBoxItemList;
+	}
+	
 	
 	
 }

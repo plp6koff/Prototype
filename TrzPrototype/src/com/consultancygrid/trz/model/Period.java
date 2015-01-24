@@ -177,4 +177,25 @@ public class Period implements java.io.Serializable {
 		this.periodSettings = periodSettings;
 	}
 
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		
+		Period other = (Period) obj;
+		if (other == null) {
+			return false;
+		}
+		if (code == null) {
+			if (other.code != null)
+				return false;
+		} else if (!code.equals(other.code))
+			return false;
+		return true;
+	}
+
+	
 }

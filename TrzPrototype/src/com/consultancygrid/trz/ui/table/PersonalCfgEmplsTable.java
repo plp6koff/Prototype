@@ -16,22 +16,15 @@ public class PersonalCfgEmplsTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private boolean enableEdit = false;
-	
-	private int rowEditable = 0;
 
 	public Component prepareRenderer(TableCellRenderer renderer, int Index_row, int Index_col) {
 		//TODO implement if  needed
 		Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 		
-		if (enableEdit && this.getSelectedRow() >= 0) {
-			if ((Index_row == rowEditable) && (Index_col == 1 || Index_col == 7 || Index_col == 17 || Index_col == 21 )) {
-			comp.setBackground(Color.yellow);
-			
-			}
-		} 
 		if (Index_col == 0) {
 			comp.setBackground(Color.green);
+		} else {
+			comp.setBackground(Color.LIGHT_GRAY);	
 		}
 		return comp;
 	}
@@ -69,34 +62,8 @@ public class PersonalCfgEmplsTable extends JTable {
 		getColumnModel().getColumn(25).setMinWidth(100);
 		
 		getColumnModel().getColumn(26).setMinWidth(250);
+		setRowHeight(30);
 	}
 
-	public boolean isEnableEdit() {
-		return enableEdit;
-	}
-
-	public void setEnableEdit(boolean enableEdit) {
-		this.enableEdit = enableEdit;
-	}
-
-	@Override
-	public boolean isCellEditable(int row, int column) {
-		
-		if (enableEdit) {
-			
-			return ((row == rowEditable) && (column == 1 || column == 7 || column == 17 || column == 21 ));
-		} else {
-			return enableEdit;
-		}
-	}
-
-	public int getRowEditable() {
-		return rowEditable;
-	}
-
-	public void setRowEditable(int rowEditable) {
-		this.rowEditable = rowEditable;
-	}
-	
 	
 }

@@ -104,10 +104,34 @@ public interface LabelsConstants {
 	 String SET_TAB_EMPL2PER_SUCCESS = "settings_tab_empl2period_ok";
 	 String SET_TAB_EMPL2PER_ERROR = "settings_tab_empl2period_ko";
 	 
+	 
+	 String SET_TAB_LOAD_FILE_SUCCESS = "settings_tab_loadFile_ok";
+	 String SET_TAB_LOAD_FILE_ERROR = "settings_tab_loadFile_ko";
+	 String EMPLOYEE = "employee";
+	 
 	 String SET_TAB_EMPL2PER_CB_DEP_TTIP = "settings_tab_empl2period_cb_dep_ttip";
 	 String SET_TAB_EMPL2PER_CB_EMPL_TTIP = "settings_tab_empl2period_cb_empl_ttip";
 	 String SET_TAB_EMPL2PER_CB_PERIOD_TTIP = "settings_tab_empl2period_cb_period_ttip";
 	 String SET_TAB_EMPL2PER_FORM_TTIP = "settings_tab_empl2period_cb_create_form_ttip";
+	 
+	 String SET_LOAD_FILE_TAB  = "settings_load_file_tab";
+	 String SET_LOAD_FILE_PAN  = "settings_load_file_pan";
+	 String SET_CRT_EMPL_FILE_TAB  = "settings_create_employee_tab";
+	 String SET_CRT_EMPL_LNAME  = "settings_create_employee_fname"; 
+	 String SET_CRT_EMPL_FNAME  = "settings_create_employee_lname";
+	 String SET_CRT_EMPL_MATCHODE  = "settings_create_employee_matchcode";
+	 String SET_CRT_EMPL_SAVE = "settings_create_employee_save";
+	 String SET_CRT_EMPL_SAVE_SUCCESS  = "settings_create_employee_save_success";
+	 String SET_CRT_EMPL_SAVE_ERR  = "settings_create_employee_save_error";
+	 String SET_CRT_EMPL_VALID1  = "settings_create_employee_save_validation1";
+	 String SET_CRT_EMPL_VALID2  = "settings_create_employee_save_validation2";
+	 
+	 String SET_DEACT_TAB = "settings_deact_tab";
+	 String SET_DEACT_HEAD1  = "settings_deact_head_name";
+	 String SET_DEACT_HEAD2  = "settings_deact_head_isActive";
+	 String SET_DEACT_SAVE_OK  = "settings_deact_save_ok";
+	 String SET_DEACT_SAVE_KO  = "settings_deact_save_err";
+	 
 	 
 	 String COMBO_PERIOD = "combo.period.select";
 	 String COMBO_DEP_ = "combo.department.select";

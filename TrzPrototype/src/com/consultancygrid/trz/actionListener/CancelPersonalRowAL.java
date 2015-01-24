@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import com.consultancygrid.trz.model.Department;
@@ -15,22 +16,21 @@ public class CancelPersonalRowAL extends BaseActionListener{
 
 	private PersonalCfgEmplsTable personalConfTable;
 	private JComboBox comboBoxEmployee;
+	private JFrame popUp;
 	
-	private HashMap<TrzStatic, JTextField> map ;
-	private HashMap<Department, JTextField> mapDept;
-	
-	public CancelPersonalRowAL(PrototypeMainFrame mainFrame, PersonalCfgEmplsTable personalConfTable, JComboBox comboBoxEmployee) {
+	public CancelPersonalRowAL(PrototypeMainFrame mainFrame, PersonalCfgEmplsTable personalConfTable, JComboBox comboBoxEmployee, JFrame popUp) {
 		super(mainFrame);
 		this.personalConfTable = personalConfTable;
 		this.comboBoxEmployee = comboBoxEmployee;
+		this.popUp = popUp;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			
+		this.popUp.setVisible(false);
 		this.personalConfTable.clearSelection();
 		this.personalConfTable.setEditingRow(-1);
-		this.personalConfTable.setEnableEdit(false);
 		this.personalConfTable.validate();
 		this.personalConfTable.repaint();
 	}

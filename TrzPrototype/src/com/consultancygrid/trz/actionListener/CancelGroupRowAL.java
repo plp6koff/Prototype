@@ -16,6 +16,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -42,23 +43,22 @@ public class CancelGroupRowAL extends BaseActionListener{
 
 	private GroupCfgEmplsTable groupConfTable;
 	private JComboBox comboBoxPeriod;
+	private JFrame frame;
 	
-	private HashMap<TrzStatic, JTextField> map ;
-	private HashMap<Department, JTextField> mapDept;
-	
-	public CancelGroupRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable, JComboBox comboBoxPeriod) {
+	public CancelGroupRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable, JComboBox comboBoxPeriod, JFrame frame) {
 		super(mainFrame);
 		this.groupConfTable = groupConfTable;
 		this.comboBoxPeriod = comboBoxPeriod;
+		this.frame = frame;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			
+		this.frame.setVisible(false);;
 		this.groupConfTable.setEditingRow(-1);
-		this.groupConfTable.setEnableEdit(false);
 		this.groupConfTable.clearSelection();
-		this.groupConfTable.validate();
+		this.groupConfTable.revalidate();
 		this.groupConfTable.repaint();
 	}
 	
