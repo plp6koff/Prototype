@@ -354,7 +354,7 @@ public class LoadFileAL extends BaseActionListener {
 				// Period
 				// Match code
 				Query emplQ = em
-						.createQuery("from Employee where matchcode = :mCode");
+						.createQuery("from Employee where matchcode = :mCode and isActive = 'Y'");
 				emplQ.setParameter("mCode", mCode);
 				Employee employee = ((List<Employee>) emplQ.getResultList()).get(0);
 				matchCodes.remove(employee.getMatchCode());
@@ -378,7 +378,7 @@ public class LoadFileAL extends BaseActionListener {
 		for (String matchCode : matchCodes) {
 			
 			Query emplQ = em
-					.createQuery("from Employee where matchcode = :mCode");
+					.createQuery("from Employee where matchcode = :mCode and isActive = 'Y'");
 			emplQ.setParameter("mCode", matchCode);
 			List<Employee> empls = (List<Employee>) emplQ.getResultList();
 			if (empls!= null && !empls.isEmpty()){

@@ -46,7 +46,13 @@ public class TestPersonRowCalculation {
 	@Test
 	public void testCalculation() {
 
-		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(), h.doubleValue(), r.doubleValue(), u.doubleValue(), emplSalary, dod, oR, oS);
+		EmployeeSallaryCalculateUtil.calcSettings(
+				b.doubleValue(), 
+				h.doubleValue(), 
+				r.doubleValue(), 
+				u.doubleValue(), 
+				0.0,
+				0.0, emplSalary, dod, oR, oS);
 		Assert.assertEquals(BigDecimal.valueOf(Double.valueOf("783.9")), emplSalary.getV02());
 		Assert.assertEquals(BigDecimal.valueOf(Double.valueOf("178.0")), emplSalary.getV03());
 		Assert.assertEquals(BigDecimal.valueOf(Double.valueOf("216.1")), emplSalary.getV04());

@@ -10,7 +10,6 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import static com.consultancygrid.trz.base.Constants.*;
 
 public class GroupCfgEmplsTable extends JTable {
 
@@ -104,18 +103,18 @@ public class GroupCfgEmplsTable extends JTable {
 		setAutoResizeMode(AUTO_RESIZE_ALL_COLUMNS);
 		setBorder(new EmptyBorder(1, 1, 1, 1));
 		setModel(new GroupCfgEmplsTableModel());
-		getColumnModel().getColumn(0).setMinWidth(col0MW);
-		getColumnModel().getColumn(1).setMinWidth(col1MW);
-		getColumnModel().getColumn(2).setMinWidth(col2MW);
-		getColumnModel().getColumn(3).setMinWidth(col3MW);
-		getColumnModel().getColumn(4).setMinWidth(col4MW);
-		getColumnModel().getColumn(5).setMinWidth(col5MW);
-		getColumnModel().getColumn(6).setMinWidth(col6MW);
+		getColumnModel().getColumn(0).setMaxWidth(100);
+		getColumnModel().getColumn(1).setMinWidth(130);
+		getColumnModel().getColumn(2).setMinWidth(100);
+		getColumnModel().getColumn(3).setMinWidth(100);
+		getColumnModel().getColumn(4).setMinWidth(100);
+		getColumnModel().getColumn(5).setMaxWidth(100);
+		getColumnModel().getColumn(6).setMaxWidth(70);
 		// TODO comment until it is required
-		getColumnModel().getColumn(7).setMinWidth(col9MW);
+		getColumnModel().getColumn(7).setMinWidth(70);
 		//getColumnModel().getColumn(8).setMinWidth(col8MW);
-		getColumnModel().getColumn(8).setMinWidth(col6MW);
-		getColumnModel().getColumn(9).setMinWidth(col10MW);
+		getColumnModel().getColumn(8).setMinWidth(70);
+		getColumnModel().getColumn(9).setMinWidth(100);
 		int y = 0;
 		setRowHeight(30);
 	}

@@ -88,6 +88,22 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL26));
 	}
+	
+	@Override
+	public String getColumnName(int column) {
+	
+//		switch(column) {
+//		
+//		 case 1 : return "<html>Test<br>Test1<br>Test2";
+//			
+//		}
+//		StringBuffer sb = new StringBuffer("<html>");
+		return  tableHeaders.get(column);
+//		raw = raw.replace(" ", "<br>");
+//		sb.append(b)
+
+	}
+	
 
 	/*
 	 * (non-Javadoc)
@@ -100,10 +116,6 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 		return tableHeaders.size();
 	}
 
-	@Override
-	public String getColumnName(int col) {
-		return tableHeaders.get(col);
-	}
 
 	/*
 	 * (non-Javadoc)

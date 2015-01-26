@@ -48,6 +48,7 @@ import com.consultancygrid.trz.actionListener.LoadFileAL;
 import com.consultancygrid.trz.actionListener.OpenFileAL;
 import com.consultancygrid.trz.actionListener.PeriodGroupTabComboAL;
 import com.consultancygrid.trz.actionListener.SaveEmployeeAL;
+import com.consultancygrid.trz.actionListener.SaveFileAL;
 import com.consultancygrid.trz.actionListener.SavePeriodAL;
 import com.consultancygrid.trz.actionListener.SelectEndDatePeriodAL;
 import com.consultancygrid.trz.actionListener.SettingsDepartmentComboAL;
@@ -201,16 +202,22 @@ public class PrototypeMainFrame extends JFrame {
 	private void drawFirstTab(JTabbedPane tabbedPane, JComboBox comboBoxEmployees) throws IOException {
 
 		JPanel firstInnerPanel = new JPanel(null);
-
+		JFileChooser fc = new JFileChooser();
 		PersonalCfgEmplsTable personalConfTable = new PersonalCfgEmplsTable();
 		personalConfTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		comboBoxEmployees.setBounds(20, 10, 300, 20);
+		comboBoxEmployees.setBounds(150, 40, 300, 25);
 		comboBoxEmployees.setRenderer(new EmployeeCustomRender());
-
+		JButton saveButt = new JButton("Export as PDF ...");
+		saveButt.setEnabled(false);
+		saveButt.setBounds(650, 40, 150, 25);
+		
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		saveButt.addActionListener(new SaveFileAL(this, fc, null,  comboBoxEmployees, personalConfTable));
+		firstInnerPanel.add(saveButt);
 		JButton editRow = new JButton(
 				ResourceLoaderUtil
 						.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
-		editRow.setBounds(340, 10, 150, 20);
+		editRow.setBounds(490, 40, 150, 25);
 		editRow.addActionListener(new EditPersonRowAL(this, personalConfTable,
 				comboBoxEmployees));
 		firstInnerPanel.add(editRow);
@@ -222,10 +229,13 @@ public class PrototypeMainFrame extends JFrame {
 		JScrollPane pesonPanel = new JScrollPane(personalConfTable);
 		pesonPanel.setLayout(new ScrollPaneLayout());
 		pesonPanel.setColumnHeader(new JViewport() {
+			
+			
+			
 			@Override
 			public Dimension getPreferredSize() {
 				Dimension d = super.getPreferredSize();
-				d.height = 50;
+				d.height = 110;
 				return d;
 			}
 		});
@@ -233,7 +243,7 @@ public class PrototypeMainFrame extends JFrame {
 		header.setDefaultRenderer(new HeaderRenderer(header
 				.getDefaultRenderer()));
 
-		pesonPanel.setBounds(20, 100, 1200, 600);
+		pesonPanel.setBounds(20, 150, 1200, 600);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
 		pesonPanel.setBorder(BorderFactory.createTitledBorder("Employees"));
@@ -263,20 +273,22 @@ public class PrototypeMainFrame extends JFrame {
 		JPanel secondInnerPanel = new JPanel(null);
 		JScrollPane depTablesPanel = new JScrollPane(table);
 		depTablesPanel.setLayout(new ScrollPaneLayout());
-		depTablesPanel.setBounds(20, 100, 1200, 600);
+		depTablesPanel.setBounds(150, 100, 910, 600);
 		depTablesPanel.setColumnHeader(new JViewport() {
 			@Override
 			public Dimension getPreferredSize() {
 				Dimension d = super.getPreferredSize();
-				d.height = 50;
+				d.height = 110;
 				return d;
 			}
+			
+			
 
 		});
 		secondInnerPanel.setLayout(null);
 		table.setToolTipText(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_TABLE_TTP));
-		comboBox.setBounds(20, 10, 300, 20);
+		comboBox.setBounds(150, 40, 300, 25);
 		comboBox.setRenderer(new PeriodCustomRender());
 		secondInnerPanel.add(comboBox);
 		comboBox.setToolTipText(ResourceLoaderUtil
@@ -285,7 +297,7 @@ public class PrototypeMainFrame extends JFrame {
 		JButton editRow = new JButton(
 				ResourceLoaderUtil
 						.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
-		editRow.setBounds(340, 10, 150, 20);
+		editRow.setBounds(490, 40, 150, 25);
 		editRow.addActionListener(new EditGroupRowAL(this, table, comboBox));
 		editRow.setToolTipText(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_EDIT_TTP));
