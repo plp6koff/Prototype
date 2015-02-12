@@ -55,6 +55,9 @@ public class PDFCreatorUtil {
 		TrzStatic dod = null;
 		TrzStatic oR = null;
 		TrzStatic oS = null;
+		
+		
+		
 		BigDecimal b = null;
 		BigDecimal h = null;
 		BigDecimal u = null;
@@ -90,9 +93,9 @@ public class PDFCreatorUtil {
 		emplSal.setPeriod(period);
 		emplSal.setV01(BigDecimal.valueOf(Double.valueOf("1000")));
 		emplSal.setV06(BigDecimal.valueOf(Double.valueOf("800")));
-		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
-				h.doubleValue(), r.doubleValue(), u.doubleValue(), 0.0, 0.0,
-				emplSal, dod, oR, oS);
+//		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
+//				h.doubleValue(), r.doubleValue(), u.doubleValue(), 0.0, 0.0,
+//				emplSal, dod, oR, oS);
 		StringBuffer sb = new StringBuffer(
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><v>");
 		sb.append("<v1>" + emplSal.getV01().toString() + "</v1>");
@@ -101,21 +104,6 @@ public class PDFCreatorUtil {
 		sb.append("<v4>" + emplSal.getV04().toString() + "</v4>");
 		sb.append("<v5>" + emplSal.getV05().toString() + "</v5>");
 		sb.append("<v6>" + emplSal.getV06().toString() + "</v6>");
-		// sb.append("<v7>" +emplSal.getV07().toString() + "</v7>");
-		// sb.append("<v8>" +emplSal.getV08().toString() + "</v8>");
-		// sb.append("<v9>" +emplSal.getV09().toString() + "</v9>");
-		// sb.append("<v10>" +emplSal.getV10().toString() + "</v10>");
-		// sb.append("<v11>" +emplSal.getV11().toString() + "</v11>");
-		// sb.append("<v12>" +emplSal.getV12().toString() + "</v12>");
-		// sb.append("<v13>" +emplSal.getV13().toString() + "</v13>");
-		// sb.append("<v14>" +emplSal.getV14().toString() + "</v14>");
-		// sb.append("<v16>" +emplSal.getV15().toString() + "</v15>");
-		// sb.append("<v17>" +emplSal.getV16().toString() + "</v16>");
-		// sb.append("<v18>" +emplSal.getV17().toString() + "</v17>");
-		// sb.append("<v19>" +emplSal.getV18().toString() + "</v18>");
-		// sb.append("<v20>" +emplSal.getV19().toString() + "</v19>");
-		// sb.append("<v21>" +emplSal.getV20().toString() + "</v20>");
-		// sb.append("<v22>" +emplSal.getV21().toString() + "</v21>");
 		sb.append("<v22>" + emplSal.getV22().toString() + "</v22></v>");
 
 	}
@@ -140,10 +128,6 @@ public class PDFCreatorUtil {
 		sb.append("<v16>" + emplSal.getV15().toString() + "</v16>");
 		sb.append("<v17>" + ((emplSal.getV17() !=  null) ? emplSal.getV17().toString(): "0.0") + "</v17>");
 		sb.append("<v18>" + ((emplSal.getV18() !=  null) ? emplSal.getV18().toString(): "0.0") + "</v18>");
-		sb.append("<v19>" + ((emplSal.getV19() !=  null) ? emplSal.getV19().toString(): "0.0") + "</v19>");
-		sb.append("<v20>" + ((emplSal.getV20() !=  null) ? emplSal.getV20().toString(): "0.0") + "</v20>");
-		sb.append("<v21>" + ((emplSal.getV21() !=  null) ? emplSal.getV21().toString(): "0.0") + "</v21>");
-		sb.append("<v22>" + ((emplSal.getV22() !=  null) ? emplSal.getV22().toString(): "0.0") + "</v22>");
 		sb.append("</v>");
 		return sb.toString();
 	}

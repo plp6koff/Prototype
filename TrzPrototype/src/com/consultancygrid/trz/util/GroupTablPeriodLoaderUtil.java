@@ -29,7 +29,7 @@ public class GroupTablPeriodLoaderUtil {
 	
 	public void loadData(Period period , EntityManager em, Vector tableData) throws IOException {
 		
-		Query q = em.createQuery(" from EmplDeptPeriod as emplDeptP  where  emplDeptP.period.id = :periodId order by emplDeptP.department.code");
+		Query q = em.createQuery(" select emplDeptP from EmplDeptPeriod as emplDeptP join emplDeptP.period as period join emplDeptP.department as department  join  emplDeptP.employee as empl where  period.id = :periodId order by department.code ,empl.firstName ");
 		q.setParameter("periodId", period.getId());
 		List<EmplDeptPeriod> emplsDepartments = (List<EmplDeptPeriod>) q.getResultList();
 		Query qAllEmployees = em.createQuery("select count(empl.id) from Employee empl  ");
@@ -58,8 +58,12 @@ public class GroupTablPeriodLoaderUtil {
 					double bonusAll = add1thRow(tableData, employee, department, allEmployeesCount.intValue(), period,emplBonus,  emplSettings);
 					double bonusGroup = add2thRow(tableData, employee, department,depBonus,emplBonus,  emplSettings);
 					double bonusPersonal = add3thRow(tableData, employee, department, emplBonus, percentPersonal);
-					add4thRow(tableData, employee, department, bonusAll + bonusGroup + bonusPersonal);
-					add5thRow(tableData, employee, department);
+					double totalBonus = bonusAll + bonusGroup + bonusPersonal;
+					
+					double totalPercent = (totalBonus * 100)/emplBonus.intValue();
+					
+					add4thRow(tableData, employee, department, totalBonus);
+					add5thRow(tableData, employee, department, totalPercent);
 					addEmptyDelimeterRow(tableData, employee);
 					addEmptyDelimeterRow(tableData, employee);
 					
@@ -89,8 +93,12 @@ public class GroupTablPeriodLoaderUtil {
 				double bonusAll = add1thRow(tableData, employee, period, emplBonus,  emplSettings);
 				double bonusGroup = add2thRow(tableData, employee, emplBonus,  emplSettings);
 				double bonusPersonal = add3thRow(tableData, employee, emplBonus, percentPersonal);
-				add4thRow(tableData, employee, null, bonusAll + bonusGroup + bonusPersonal);
-				add5thRow(tableData, employee, null);
+				double totalBonus = bonusAll + bonusGroup + bonusPersonal;
+				
+				double totalPercent = (totalBonus * 100)/emplBonus.intValue();
+				
+				add4thRow(tableData, employee, null, totalBonus);
+				add5thRow(tableData, employee, null, totalPercent);
 				addEmptyDelimeterRow(tableData, employee);
 				addEmptyDelimeterRow(tableData, employee);
 				
@@ -431,7 +439,7 @@ public class GroupTablPeriodLoaderUtil {
 	
 
 	private void add5thRow(Vector tableData, Employee employee,
-			Department department) throws IOException {
+			Department department, double totalPercent) throws IOException {
 		
 		Vector<Object> oneRow = new Vector<Object>();
 		oneRow.add(department!=null ? department.getCode() : "N/A");
@@ -439,8 +447,9 @@ public class GroupTablPeriodLoaderUtil {
 		oneRow.add(EMPTY_STRING);// To be extracted from db
 		oneRow.add(EMPTY_STRING);// To be provided as param
 		oneRow.add(EMPTY_STRING);
-		oneRow.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.GROUP_CONF_COL8_VALUE));
+		if (!Double.isNaN(totalPercent)) {
+			oneRow.add(BigDecimal.valueOf(totalPercent).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		}
 		// FIXME how to extract the follow 3 digits
 		oneRow.add(EMPTY_STRING);// TO BE detected the formula;
 		// TODO comment until it is required

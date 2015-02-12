@@ -13,6 +13,10 @@
 		indent="yes" />
 	<xsl:param name="paramPeriod" select="'1.0'" />
 	<xsl:param name="paramEmployee" select="'1.0'" />
+	<xsl:param name="paramDepartment" select="'1.0'" />
+	<xsl:param name="paramOthers" select="'1.0'" />
+	<xsl:param name="paramVauch1" select="'1.0'" />
+	<xsl:param name="paramVauch2" select="'1.0'" />
 
 	<!-- ========================= -->
 	<!-- root element: projectteam -->
@@ -29,292 +33,308 @@
 			</fo:layout-master-set>
 			<fo:page-sequence master-reference="simpleA4">
 				<fo:flow flow-name="xsl-region-body">
-					<fo:block font-weight="bold">
-						Фиш за работна заплата , за период :
-						<xsl:value-of select="$paramPeriod" />
-					</fo:block>
-					<fo:block font-size="12pt" space-after="5mm">
-						Име на работника :
-						<xsl:value-of select="$paramEmployee" />
-					</fo:block>
-					<fo:block font-size="5pt ">
-						<fo:table table-layout="fixed" width="100%"
-							border-collapse="separate">
-							<fo:table-column column-width="4cm"
-								number-columns-spanned="4" padding-top="0.2cm" />
-							<fo:table-column column-width="4cm"
-								number-columns-spanned="4" padding-top="0.2cm" />
-							<fo:table-column column-width="5cm"
-								number-columns-spanned="4" padding-top="0.2cm" />
-							<fo:table-column column-width="5cm"
-								number-columns-spanned="4" padding-top="0.2cm" />
-							<fo:table-column column-width="5cm"
-								number-columns-spanned="4" padding-top="0.2cm" />
-							<fo:table-column column-width="5cm"
-								number-columns-spanned="4" padding-top="0.2cm" />
+				    <xsl:variable name="v1"  select="v1" />
+				    <xsl:variable name="v1"  select="v2" />
+				    <xsl:variable name="v8"  select="v8" />
+				    <xsl:variable name="v10"  select="v10" />
+				    <xsl:variable name="v11"  select="v11" />
+					<fo:block >
+						<fo:table table-layout="fixed" width="80%"
+							 border="1pt solid black" font-size="8pt" line-height="10pt">
+        					<fo:table-column column-width="40%"
+								number-columns-spanned="4"  />
+							<fo:table-column column-width="40%"
+								number-columns-spanned="4"  />
+							<fo:table-column column-width="20%"
+								number-columns-spanned="4"  />
 							<fo:table-body>
-								<fo:table-row>
-									<fo:table-cell>
-										<fo:block>
-											бруто стандарт
+								<fo:table-row  row-height = "40mm" border="0.5pt solid black">
+									<fo:table-cell font-weight="bold" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block >
+											Заплата за месец
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											Сума за получаване
+										     <xsl:value-of select="$paramPeriod" />
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											Осигуровки за сметка на работодател 17.8% 
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Осигуровки и данъци за сметка на работоник (12.9
-											+10
-											%)
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Изравнител спрямо базовото осигуряване
-										</fo:block>
-									</fo:table-cell>
-
-									<fo:table-cell>
-										<fo:block>
-
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
-								<fo:table-row>
-									<fo:table-cell>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell font-weight="bold" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
 										<fo:block>
-											<xsl:value-of select="v1" />
+											Име фамилия
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											<xsl:value-of select="v2" />
+										    	<xsl:value-of select="$paramEmployee" />
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											<xsl:value-of select="v3" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v4" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v5" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
-								<fo:table-row>
-									<fo:table-cell>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell font-weight="bold" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
 										<fo:block>
-											Бруто заплата по щат
+											Отдел
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											Сума за получаване
+										    	<xsl:value-of select="$paramDepartment" />
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											Разходи за работник
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Осигуровки за сметка на работодател 17.8% </fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Осигуровки и данъци за сметка на работоник (12.9 +10
-											%)
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Базова заплата
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
-								<fo:table-row>
-
-									<fo:table-cell>
+								
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
 										<fo:block>
-											<xsl:value-of select="v6" />
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											<xsl:value-of select="v7" />
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											<xsl:value-of select="v8" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v9" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v10" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v11" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
-								<fo:table-row>
-									<fo:table-cell>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
 										<fo:block>
-											Обща Премия
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="bold" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										    Бруто заплата
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											Групова Премия
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Индивидуална Премия
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Специална Премия
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Общо за получаване
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-
+										  <xsl:value-of select="v1" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
-								<fo:table-row>
-
-									<fo:table-cell>
+								
+									<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
 										<fo:block>
-											<xsl:value-of select="v12" />
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										   Премия тип за месец (изписва се месеца за който е начислена премията, тоест в януарскатазаплата на това място ще пише декември)
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											<xsl:value-of select="v13" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v14" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v15" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v16" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-
+										    <xsl:value-of select="v8" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
-								<fo:table-row>
-									<fo:table-cell>
+								
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
 										<fo:block>
-											Ваучери
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										  Доплащане до гарантирана минимална сума
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											Застраховки
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Общо нетно възнаграждение за месеца
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											Обща цена за работника
+										     <xsl:value-of select="v10" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
-								<fo:table-row>
-
-									<fo:table-cell>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
 										<fo:block>
-											<xsl:value-of select="v17" />
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										Специална премия + текст за специална премия
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-											<xsl:value-of select="v18" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v19" />
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell>
-										<fo:block>
-											<xsl:value-of select="v20" />
-
+										     <xsl:value-of select="v11" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								
+									<fo:table-row border="0.5pt solid black">
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										   за получаване по
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										карта
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										   <xsl:value-of select="v2" />
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										   за получаване
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										други
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										    <xsl:value-of select="$paramOthers" />
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell>
+										<fo:block>
+										  
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										 Общо нето за получаване
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										   1429
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell>
+										<fo:block>
+										  
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										 Ваучер 1
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										   <xsl:value-of select="$paramVauch1" />
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								
+								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell>
+										<fo:block>
+										  
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="italic" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										 Ваучер 2
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										   <xsl:value-of select="$paramVauch2" />
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								
 							</fo:table-body>
 						</fo:table>
 					</fo:block>

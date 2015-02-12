@@ -28,6 +28,7 @@ import org.dom4j.DocumentException;
 import org.xml.sax.SAXException;
 
 import com.consultancygrid.trz.base.LabelsConstants;
+import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.Period;
@@ -52,7 +53,8 @@ public class ExampleXML2PDF {
 
 			// Setup directories
 			File baseDir = new File("src/resources");
-			File outDir = new File(baseDir, "out");
+			File desktop = new File ("C:/Users/misho/Desktop/out");
+			File outDir = new File(desktop, "out");
 			outDir.mkdirs();
 
 			TrzStatic dod = null;
@@ -89,13 +91,16 @@ public class ExampleXML2PDF {
 			empl.setLastName("Georgiev");
 			Period period = new Period();
 			period.setCode("2015-12");
+			Department department  = new Department();
+			department.setCode("DepartCode");
+			
 			emplSal.setEmployee(empl);
 			emplSal.setPeriod(period);
 			emplSal.setV01(BigDecimal.valueOf(Double.valueOf("1000")));
 			emplSal.setV06(BigDecimal.valueOf(Double.valueOf("800")));
 			EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
-					h.doubleValue(), r.doubleValue(), u.doubleValue(), 0.0,
-					0.0, emplSal, dod, oR, oS);
+					h.doubleValue(), r.doubleValue(), u.doubleValue(),
+					"Test", emplSal, dod, oR, oS);
 			StringBuffer sb = new StringBuffer(
 					"<?xml version=\"1.0\" encoding=\"UTF-8\"?><v>");
 			sb.append("<v1>" + emplSal.getV01().toString() + "</v1>");
@@ -104,11 +109,12 @@ public class ExampleXML2PDF {
 			sb.append("<v4>" + emplSal.getV04().toString() + "</v4>");
 			sb.append("<v5>" + emplSal.getV05().toString() + "</v5>");
 			sb.append("<v6>" + emplSal.getV06().toString() + "</v6>");
-			// sb.append("<v7>" +emplSal.getV07().toString() + "</v7>");
+			sb.append("<v7>" + emplSal.getV07().toString() + "</v7>");
+			sb.append("<v8>" + emplSal.getV08().toString() + "</v8>");
 			// sb.append("<v8>" +emplSal.getV08().toString() + "</v8>");
 			// sb.append("<v9>" +emplSal.getV09().toString() + "</v9>");
-			// sb.append("<v10>" +emplSal.getV10().toString() + "</v10>");
-			// sb.append("<v11>" +emplSal.getV11().toString() + "</v11>");
+			 sb.append("<v10>" +emplSal.getV10().toString() + "</v10>");
+			 sb.append("<v11>" +emplSal.getV11().toString() + "</v11>");
 			// sb.append("<v12>" +emplSal.getV12().toString() + "</v12>");
 			// sb.append("<v13>" +emplSal.getV13().toString() + "</v13>");
 			// sb.append("<v14>" +emplSal.getV14().toString() + "</v14>");
@@ -119,7 +125,7 @@ public class ExampleXML2PDF {
 			// sb.append("<v20>" +emplSal.getV19().toString() + "</v19>");
 			// sb.append("<v21>" +emplSal.getV20().toString() + "</v20>");
 			// sb.append("<v22>" +emplSal.getV21().toString() + "</v21>");
-			sb.append("<v22>" + emplSal.getV22().toString() + "</v22></v>");
+			sb.append("</v>");
 
 			// Setup input and output files
 			File xsltfile = new File(baseDir, "xsltTest.xsl");
@@ -170,6 +176,8 @@ public class ExampleXML2PDF {
 						.getCode());
 				transformer.setParameter("paramEmployee", emplSal.getEmployee().getFirstName() 
 						+ " "	+ emplSal.getEmployee().getLastName());
+				transformer.setParameter("paramDepartment", department.getCode());
+				transformer.setParameter("paramOthers", emplSal.getV10().add(emplSal.getV11()).add(emplSal.getV08()));
 				transformer.setParameter("h1", ResourceLoaderUtil.getLabels(LabelsConstants.GROUP_CONF_HEADER_COL1));
 				transformer.setParameter("h2",ResourceLoaderUtil.getLabels(LabelsConstants.GROUP_CONF_HEADER_COL1));
 				

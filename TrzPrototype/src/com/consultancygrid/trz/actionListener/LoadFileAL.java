@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,7 +20,6 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -34,8 +34,6 @@ import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.DepartmentRevenue;
 import com.consultancygrid.trz.model.EmplDeptPeriod;
 import com.consultancygrid.trz.model.Employee;
-import com.consultancygrid.trz.model.EmployeeSalary;
-import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.InputData;
 import com.consultancygrid.trz.model.InputFileType;
 import com.consultancygrid.trz.model.MatchcodeList;
@@ -62,50 +60,71 @@ public class LoadFileAL extends BaseActionListener {
 	private JFileChooser fc;
 	private JTextArea log;
 	private File file;
-	private JLabel labelProcessing;
 	private JPanel firstInnerPanel;
 	private JComboBox comboBoxPeriod;
 	
-	public LoadFileAL(PrototypeMainFrame mainFrame, JFileChooser fc,
-			JTextArea log, File file, JLabel labelProcessing, JPanel firstInnerPanel, JComboBox comboBoxPeriod) {
+	
+	private JTextField fieldCode;
+	private JPanel createFormPanel;
+	private HashMap<TrzStatic, JTextField> map ;
+	
+	public LoadFileAL(PrototypeMainFrame mainFrame, 
+			          JFileChooser fc,
+			          JTextArea log, 
+			          File file, 
+			          JPanel firstInnerPanel, 
+			          JComboBox comboBoxPeriod,
+			          JTextField fieldCode,
+			          HashMap<TrzStatic, JTextField> map) {
 
 		super(mainFrame);
 		this.fc = fc;
 		this.log = log;
 		this.file = file;
-		this.labelProcessing = labelProcessing;
 		this.firstInnerPanel = firstInnerPanel;
 		this.comboBoxPeriod = comboBoxPeriod;
+		this.fieldCode = fieldCode;
+		this.map = map;
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
 
-		firstInnerPanel.add(labelProcessing);
-		labelProcessing.setHorizontalTextPosition(JLabel.LEADING);
-		AnimatedIcon icon2 = new AnimatedIcon(labelProcessing);
-		icon2.setAlignmentX(AnimatedIcon.LEFT);
-		icon2.addIcon(new TextIcon(labelProcessing, "."));
-		icon2.addIcon(new TextIcon(labelProcessing, ".."));
-		icon2.addIcon(new TextIcon(labelProcessing, "..."));
-		icon2.addIcon(new TextIcon(labelProcessing, "...."));
-		icon2.addIcon(new TextIcon(labelProcessing, "....."));
-		icon2.addIcon(new TextIcon(labelProcessing, "......."));
-		labelProcessing.setIcon(icon2);
-		icon2.start();
+	
 		firstInnerPanel.revalidate();
 		firstInnerPanel.repaint();
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
-		Period period = null;
-		
+		Period period = new Period();
+		period.setCode(fieldCode.getText());
+		String code  = this.fieldCode.getText();
 		Set<String> matchCodes = null;
-		try {
 
+		try {
+		
 			factory = Persistence
 					.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-
+			
 			em = factory.createEntityManager();
 			em.getTransaction().begin();
+			
+			if (code == null || "".equals(code) || code.length() > 7) {
+				JOptionPane.showMessageDialog(mainFrame,  
+						ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_ERR_CODE),
+						ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR) , JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			em.persist(period);
+			for (Entry<TrzStatic, JTextField> entry : map.entrySet()) {
+				
+				PeriodSetting ps = new PeriodSetting();
+				ps.setPeriod(period);
+				ps.setTrzStatic(entry.getKey());
+				ps.setValue(entry.getValue().getText());
+				em.persist(ps);
+				entry.getValue().setText("0.0");
+			}
+			
 
 			CSVReaderUtil util = new CSVReaderUtil();
 			if (file != null) {
@@ -122,61 +141,24 @@ public class LoadFileAL extends BaseActionListener {
 				for (final File fileEntry : folder.listFiles()) {
 
 					System.out.println(fileEntry.getName());
-					InputData result = new InputData();
-
 					String name = fileEntry.getName();
 
-					String periodCode = "";
-
-					Query q = em
-							.createQuery("from InputFileType  where prefix = :prefix");
+					Query q = em.createQuery("from InputFileType  where prefix = :prefix");
 					if (name.startsWith(f1)) {
 
 						q.setParameter("prefix", f1);
-						periodCode = name.substring(f1.length() + 1,
-								name.indexOf(".Csv"));
 					} else if (name.startsWith(f2)) {
 						q.setParameter("prefix", f2);
-						periodCode = name.substring(f2.length() + 1,
-								name.indexOf(".Csv"));
 					} else if (name.startsWith(f3)) {
 						q.setParameter("prefix", f3);
-						periodCode = name.substring(f3.length() + 1,
-								name.indexOf(".Csv"));
 					} else if (name.startsWith(f4)) {
 						q.setParameter("prefix", f4);
-						periodCode = name.substring(f4.length() + 1,
-								name.indexOf(".Csv"));
 					} else {
 						System.err.println("Error Format!");
-						// TODO trow exception
 					}
 
-					if (period == null) {
-
-						period = new Period();
-						period.setCode(periodCode.trim());
-						em.persist(period);
-
-						Query qPeriodTrzStatic = em
-								.createQuery(" from TrzStatic");
-						List<TrzStatic> trzResult = (List<TrzStatic>) qPeriodTrzStatic
-								.getResultList();
-
-						HashMap<TrzStatic, JTextField> map = new HashMap<TrzStatic, JTextField>();
-						for (TrzStatic singleStatic : trzResult) {
-
-							PeriodSetting ps = new PeriodSetting();
-							ps.setPeriod(period);
-							ps.setTrzStatic(singleStatic);
-							ps.setValue(singleStatic.getValue());
-							em.persist(ps);
-						}
-					}
-					List<InputFileType> selectedFile = (List<InputFileType>) q
-							.getResultList();
-					matchCodes  = processSingleFile(fileEntry, em, selectedFile.get(0),
-							period);
+					List<InputFileType> selectedFile = (List<InputFileType>) q.getResultList();
+					matchCodes  = processSingleFile(fileEntry, em, selectedFile.get(0),period);
 
 				}
 			}
@@ -207,9 +189,7 @@ public class LoadFileAL extends BaseActionListener {
 		List<Period> allPeriods = periodComboModel.getComboBoxItemList();
 		try {
 
-			factory = Persistence
-					.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-
+			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 			em = factory.createEntityManager();
 			em.getTransaction().begin();
 
@@ -240,8 +220,7 @@ public class LoadFileAL extends BaseActionListener {
 			}
 		}
 		periodComboModel.addAll(allPeriods);
-		icon2.stop();
-		labelProcessing.setVisible(false);
+		this.fieldCode.setText("");
 		firstInnerPanel.revalidate();
 		firstInnerPanel.repaint();
 		comboBoxPeriod.revalidate();

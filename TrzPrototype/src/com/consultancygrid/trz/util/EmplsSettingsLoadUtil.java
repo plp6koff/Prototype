@@ -8,7 +8,6 @@ import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
@@ -47,50 +46,33 @@ public class EmplsSettingsLoadUtil {
 			//5
 			oneRow.add(emplSal.getV05());
 			//6
-			oneRow.add(Constants.EMPTY_STRING);
-			//7
 			oneRow.add(emplSal.getV06());
-			//8
+			//7
 			oneRow.add(emplSal.getV07());
-			//9
+			//8
 			oneRow.add(emplSal.getV08());
-			//10
+			//9
 			oneRow.add(emplSal.getV09());
-			//11
+			//10
 			oneRow.add(emplSal.getV10());
-			//12
+			//11
 			oneRow.add(emplSal.getV11());
-			//13
-			oneRow.add(Constants.EMPTY_STRING);
-			//14
+			//12
 			oneRow.add(emplSal.getV12());
-			//15
+			//13
+			oneRow.add(emplSal.getS01());
+			//14
 			oneRow.add(emplSal.getV13());
-			//16
+			//15
 			oneRow.add(emplSal.getV14());
-			//17
+			//16
 			oneRow.add(emplSal.getV15());
-			//18
+			//17
 			oneRow.add(emplSal.getV16());
-			//19
-			oneRow.add(Constants.EMPTY_STRING);
-			//20
+			//18
 			oneRow.add(emplSal.getV17());
-			//21
+			//19
 			oneRow.add(emplSal.getV18());
-			//22
-			oneRow.add(emplSal.getV19());
-			//23
-			oneRow.add(Constants.EMPTY_STRING);
-			//24
-			oneRow.add(emplSal.getV20());
-			//25
-			oneRow.add(emplSal.getV21());
-			//26
-			oneRow.add(emplSal.getV22());
-			//27
-			oneRow.add(emplSal.getV23());
-			//28
 			tableData.add(oneRow);
 			
 		}

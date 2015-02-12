@@ -68,16 +68,11 @@ public class SavePersonRowAL extends BaseActionListener{
 			if (employee != null) {
 				EmployeeSalary emplSallary = model.getEmplSals().get(i);
 				String v01Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL1).getText();
-				String v06Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL7).getText();
-				String v15Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL17).getText();
-				String v18Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL21).getText();
-				String v20Str    = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL24).getText();
-				String v21Str    = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL25).getText();
+				String v09Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL9).getText();
+				String v12Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL12).getText();
+				String v13Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL13).getText();
+				String v14Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL14).getText();
 				
-				BigDecimal v20 = parseValue(emplSallary.getV20(),v20Str); 
-				Double z = v20.doubleValue();
-				BigDecimal v21 = parseValue(emplSallary.getV21(),v21Str); 
-				Double aa = v21.doubleValue();
 				
 				Query q1 = em.createQuery(" from EmployeeSettings as settings  where  settings.period.id = :periodId and settings.employee.id = :emplId ");
 				q1.setParameter("periodId", emplSallary.getPeriod().getId());
@@ -89,18 +84,22 @@ public class SavePersonRowAL extends BaseActionListener{
 				Double b = v1.doubleValue();
 				emplSallary.setV01(v1);
 				settings.setBrutoStandart(v1);
-				BigDecimal v6 = parseValue(emplSallary.getV06(),v06Str); 
-				Double h = v6.doubleValue();
-				emplSallary.setV06(v6);
-				settings.setBrutoPoShtat(v6);
-				BigDecimal v15 = parseValue(emplSallary.getV15(),v15Str); 
-				Double r = v15.doubleValue();
-				emplSallary.setV15(v15);
-				//settings.setBrutoStandart(v1);
-				BigDecimal v18 = parseValue(emplSallary.getV21(),v18Str); 
-				Double v = v18.doubleValue();
-				emplSallary.setV18(v18);
-				settings.setAvans(v18);
+				
+				BigDecimal v9 = parseValue(emplSallary.getV09(),v09Str); 
+				Double j = v9.doubleValue();
+				emplSallary.setV09(v9);
+				
+				BigDecimal v12 = parseValue(emplSallary.getV12(),v12Str); 
+				Double m = v12.doubleValue();
+				emplSallary.setV12(v12);
+				
+				String name = v13Str;
+				emplSallary.setS01(v13Str);
+				
+				BigDecimal v14 = parseValue(emplSallary.getV13(),v14Str); 
+				Double o = v14.doubleValue();
+				emplSallary.setV13(v14);
+				
 				Query qPeriodTrzStatic = em
 						.createQuery(" from TrzStatic");
 				List<TrzStatic> trzResult = (List<TrzStatic>) qPeriodTrzStatic
@@ -117,7 +116,7 @@ public class SavePersonRowAL extends BaseActionListener{
 						OSIGUROVKI_SLUJITEL = singleTrz;
 					}
 				}
-				EmployeeSallaryCalculateUtil.calcSettings(b, h, r, v , z, aa , emplSallary, DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL);
+				EmployeeSallaryCalculateUtil.calcSettings(b, j, m, o , name, emplSallary, DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL);
 				
 				em.merge(emplSallary);
 				em.merge(settings);

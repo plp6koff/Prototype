@@ -38,29 +38,21 @@ public class PersonalCfgEmplsTable extends JTable {
 		getColumnModel().getColumn(1).setMinWidth(70);
 		getColumnModel().getColumn(2).setMinWidth(70);
 		getColumnModel().getColumn(3).setMinWidth(100);
-		getColumnModel().getColumn(4).setMinWidth(100);
-		getColumnModel().getColumn(5).setMinWidth(100);
-		getColumnModel().getColumn(6).setMaxWidth(20);
-		getColumnModel().getColumn(7).setMinWidth(70);
-		getColumnModel().getColumn(8).setMinWidth(70);
+		getColumnModel().getColumn(4).setMinWidth(105);
+		getColumnModel().getColumn(5).setMinWidth(90);
+		getColumnModel().getColumn(6).setMaxWidth(80);
+		getColumnModel().getColumn(7).setMinWidth(80);
+		getColumnModel().getColumn(8).setMinWidth(150);
 		getColumnModel().getColumn(9).setMinWidth(70);
 		getColumnModel().getColumn(10).setMinWidth(100);
 		getColumnModel().getColumn(11).setMinWidth(100);
 		getColumnModel().getColumn(12).setMinWidth(70);
-		getColumnModel().getColumn(13).setMaxWidth(20);
+		getColumnModel().getColumn(13).setMaxWidth(200);
 		getColumnModel().getColumn(14).setMinWidth(70);
 		getColumnModel().getColumn(15).setMinWidth(70);
-		getColumnModel().getColumn(16).setMinWidth(70);
-		getColumnModel().getColumn(17).setMinWidth(70);
-		getColumnModel().getColumn(18).setMinWidth(70);
-		getColumnModel().getColumn(19).setMaxWidth(20);
-		getColumnModel().getColumn(20).setMinWidth(70);
-		getColumnModel().getColumn(21).setMinWidth(70);
-		getColumnModel().getColumn(22).setMinWidth(70);
-		getColumnModel().getColumn(23).setMaxWidth(20);
-		getColumnModel().getColumn(24).setMinWidth(70);
-		getColumnModel().getColumn(25).setMinWidth(70);
-		getColumnModel().getColumn(26).setMinWidth(100);
+		getColumnModel().getColumn(16).setMinWidth(80);
+		getColumnModel().getColumn(17).setMinWidth(80);
+		getColumnModel().getColumn(18).setMinWidth(80);
 		setRowHeight(50);
 	}
 

@@ -71,22 +71,6 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL17));
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL18));
-		tableHeaders.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL19));
-		tableHeaders.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL20));
-		tableHeaders.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL21));
-		tableHeaders.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL22));
-		tableHeaders.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL23));
-		tableHeaders.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL24));
-		tableHeaders.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL25));
-		tableHeaders.add(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL26));
 	}
 	
 	@Override
