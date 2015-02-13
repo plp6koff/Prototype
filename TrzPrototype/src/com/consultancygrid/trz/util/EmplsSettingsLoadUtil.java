@@ -15,7 +15,7 @@ import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.RevenueEmplPeriod;
-import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
+import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTableModel;
 
 public class EmplsSettingsLoadUtil {
 

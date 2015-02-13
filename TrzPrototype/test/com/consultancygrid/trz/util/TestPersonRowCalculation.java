@@ -51,8 +51,7 @@ public class TestPersonRowCalculation {
 				h.doubleValue(), 
 				r.doubleValue(), 
 				u.doubleValue(), 
-				0.0,
-				0.0, emplSalary, dod, oR, oS);
+				"Test", emplSalary, dod, oR, oS);
 		Assert.assertEquals(BigDecimal.valueOf(Double.valueOf("783.9")), emplSalary.getV02());
 		Assert.assertEquals(BigDecimal.valueOf(Double.valueOf("178.0")), emplSalary.getV03());
 		Assert.assertEquals(BigDecimal.valueOf(Double.valueOf("216.1")), emplSalary.getV04());

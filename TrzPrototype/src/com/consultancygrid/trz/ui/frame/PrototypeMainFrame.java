@@ -41,23 +41,22 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import com.consultancygrid.trz.actionListener.EditGroupRowAL;
-import com.consultancygrid.trz.actionListener.EditPersonRowAL;
-import com.consultancygrid.trz.actionListener.EmployeeDeactivationTabComboAL;
-import com.consultancygrid.trz.actionListener.EmployeePersonTabComboAL;
-import com.consultancygrid.trz.actionListener.LoadFileAL;
-import com.consultancygrid.trz.actionListener.OpenFileAL;
-import com.consultancygrid.trz.actionListener.PeriodGroupTabComboAL;
-import com.consultancygrid.trz.actionListener.SaveEmployeeAL;
-import com.consultancygrid.trz.actionListener.SaveFileAL;
-import com.consultancygrid.trz.actionListener.SavePeriodAL;
-import com.consultancygrid.trz.actionListener.SaveTargetAL;
-import com.consultancygrid.trz.actionListener.SelectEndDatePeriodAL;
 import com.consultancygrid.trz.actionListener.SettingsDepartmentComboAL;
-import com.consultancygrid.trz.actionListener.SettingsEmployeeComboAL;
-import com.consultancygrid.trz.actionListener.SettingsPeriodComboAL;
-import com.consultancygrid.trz.actionListener.SettingsTrgPeriodComboAL;
-import com.consultancygrid.trz.actionListener.TrgPeriodLevelsConfigComboAL;
+import com.consultancygrid.trz.actionListener.employee.EmployeeDeactivationTabComboAL;
+import com.consultancygrid.trz.actionListener.employee.SaveEmployeeAL;
+import com.consultancygrid.trz.actionListener.employee.SettingsEmployeeComboAL;
+import com.consultancygrid.trz.actionListener.group.GroupEditRowAL;
+import com.consultancygrid.trz.actionListener.group.GroupTabPeriodComboAL;
+import com.consultancygrid.trz.actionListener.loadFile.LoadFileAL;
+import com.consultancygrid.trz.actionListener.loadFile.OpenFileAL;
+import com.consultancygrid.trz.actionListener.loadFile.SaveFileAL;
+import com.consultancygrid.trz.actionListener.period.SavePeriodAL;
+import com.consultancygrid.trz.actionListener.period.SettingsPeriodComboAL;
+import com.consultancygrid.trz.actionListener.personal.PersonRowEditAL;
+import com.consultancygrid.trz.actionListener.personal.EmployeePersonTabComboAL;
+import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdSaveAL;
+import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdSettingsComboAL;
+import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdLvlsCfgComboAL;
 import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
@@ -74,10 +73,10 @@ import com.consultancygrid.trz.ui.combo.DepartmentComboBoxModel;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.combo.TargetComboBoxModel;
-import com.consultancygrid.trz.ui.table.EmployeeActiveTable;
-import com.consultancygrid.trz.ui.table.GroupCfgEmplsTable;
-import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTable;
-import com.consultancygrid.trz.ui.table.PersonalCfgEmplsTableModel;
+import com.consultancygrid.trz.ui.table.employee.EmployeeActiveTable;
+import com.consultancygrid.trz.ui.table.group.GroupCfgEmplsTable;
+import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTable;
+import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class PrototypeMainFrame extends JFrame {
@@ -137,8 +136,7 @@ public class PrototypeMainFrame extends JFrame {
 		List<Employee> employees = (List<Employee>)qE.getResultList();
 		
 		
-		EmplComboBoxModel emplComboBoxModel = new EmplComboBoxModel(
-				(List<Employee>) qE.getResultList());
+		EmplComboBoxModel emplComboBoxModel = new EmplComboBoxModel(employees);
 		JComboBox comboBoxEmployees = new JComboBox<>(emplComboBoxModel);
 		//Draw
 		drawFirstTab(tabbedPane, comboBoxEmployees);
@@ -221,7 +219,7 @@ public class PrototypeMainFrame extends JFrame {
 		comboBoxEmployees.setBounds(150, 40, 300, 25);
 		comboBoxEmployees.setRenderer(new EmployeeCustomRender());
 		JButton saveButt = new JButton("Export as PDF ...");
-		saveButt.setEnabled(false);
+		saveButt.setEnabled(true);
 		saveButt.setBounds(650, 40, 150, 25);
 		
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -231,7 +229,7 @@ public class PrototypeMainFrame extends JFrame {
 				ResourceLoaderUtil
 						.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
 		editRow.setBounds(490, 40, 150, 25);
-		editRow.addActionListener(new EditPersonRowAL(this, personalConfTable,
+		editRow.addActionListener(new PersonRowEditAL(this, personalConfTable,
 				comboBoxEmployees));
 		firstInnerPanel.add(editRow);
 
@@ -311,12 +309,12 @@ public class PrototypeMainFrame extends JFrame {
 				ResourceLoaderUtil
 						.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
 		editRow.setBounds(490, 40, 150, 25);
-		editRow.addActionListener(new EditGroupRowAL(this, table, comboBox));
+		editRow.addActionListener(new GroupEditRowAL(this, table, comboBox));
 		editRow.setToolTipText(ResourceLoaderUtil
 				.getLabels(LabelsConstants.GROUP_CONF_EDIT_TTP));
 		secondInnerPanel.add(editRow);
 
-		PeriodGroupTabComboAL tPCAL = new PeriodGroupTabComboAL(this, comboBox,
+		GroupTabPeriodComboAL tPCAL = new GroupTabPeriodComboAL(this, comboBox,
 				table);
 		depTablesPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		depTablesPanel.setAutoscrolls(true);
@@ -567,7 +565,7 @@ public class PrototypeMainFrame extends JFrame {
 		
 		JButton btnSavePeriod = new JButton("Save target");
 		btnSavePeriod.setBounds(30, 200, 200, 25);
-		btnSavePeriod.addActionListener(new SaveTargetAL(this, tf1, tf2, datePickerStart, datePickerEnd));
+		btnSavePeriod.addActionListener(new TrgPrdSaveAL(this, tf1, tf2, datePickerStart, datePickerEnd));
 		panSetCrtTrg.add(btnSavePeriod);
 		tabbedPaneSettings.addTab("Create Target", panSetCrtTrg);
 	}
@@ -839,13 +837,13 @@ public class PrototypeMainFrame extends JFrame {
 		
 		JPanel createFormPanel = new JPanel();
 		createFormPanel.setLayout(null);
-		createFormPanel.setBounds(10, 60, 1000, 500);
+		createFormPanel.setBounds(10, 10, 1000, 500);
 		JComboBox comboTargetBox = new JComboBox(new TargetComboBoxModel(allTargets));
-		comboTargetBox.setBounds(400, 50, 200, 25);
+		comboTargetBox.setBounds(40, 40, 200, 25);
 		comboTargetBox.setRenderer(new TargetPeriodCustomRender());
 		comboTargetBox.setToolTipText("Select target period!");
 		createFormPanel.add(comboTargetBox);
-		comboTargetBox.addActionListener(new TrgPeriodLevelsConfigComboAL(this, createFormPanel, comboTargetBox));
+		comboTargetBox.addActionListener(new TrgPrdLvlsCfgComboAL(this, createFormPanel, comboTargetBox));
 
 		tabbedPaneSettings.addTab("Link Employee to Target", createFormPanel);
 	
@@ -880,7 +878,7 @@ public class PrototypeMainFrame extends JFrame {
 		comboTargetBox.setRenderer(new TargetPeriodCustomRender());
 		comboTargetBox.setToolTipText("Select target!");
 		createFormPanel.add(comboTargetBox);
-		comboTargetBox.addActionListener(new SettingsTrgPeriodComboAL(this, createFormPanel, comboTargetBox, comboBoxEmployees));
+		comboTargetBox.addActionListener(new TrgPrdSettingsComboAL(this, createFormPanel, comboTargetBox, comboBoxEmployees));
 
 		tabbedPaneSettings.addTab("Link Employee to Target", createFormPanel);
 	

@@ -28,9 +28,11 @@ import org.dom4j.DocumentException;
 import org.xml.sax.SAXException;
 
 import com.consultancygrid.trz.base.LabelsConstants;
+import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.Period;
+import com.consultancygrid.trz.model.PeriodSetting;
 import com.consultancygrid.trz.model.TrzStatic;
 
 /**
@@ -93,9 +95,9 @@ public class PDFCreatorUtil {
 		emplSal.setPeriod(period);
 		emplSal.setV01(BigDecimal.valueOf(Double.valueOf("1000")));
 		emplSal.setV06(BigDecimal.valueOf(Double.valueOf("800")));
-//		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
-//				h.doubleValue(), r.doubleValue(), u.doubleValue(), 0.0, 0.0,
-//				emplSal, dod, oR, oS);
+		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
+				h.doubleValue(), r.doubleValue(), u.doubleValue(), "Test",
+				emplSal, dod, oR, oS);
 		StringBuffer sb = new StringBuffer(
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><v>");
 		sb.append("<v1>" + emplSal.getV01().toString() + "</v1>");
@@ -132,7 +134,7 @@ public class PDFCreatorUtil {
 		return sb.toString();
 	}
 
-	public static File createPDF(EmployeeSalary emplSal, String outDirPath) {
+	public static File createPDF(EmployeeSalary emplSal, Department department, String outDirPath) {
 		
 		File outDir = null;
 		File pdffile = null;
@@ -193,10 +195,19 @@ public class PDFCreatorUtil {
 						.getFirstName()
 						+ " "
 						+ emplSal.getEmployee().getLastName());
-				transformer.setParameter("h1", ResourceLoaderUtil
-						.getLabels(LabelsConstants.GROUP_CONF_HEADER_COL1));
-				transformer.setParameter("h2", ResourceLoaderUtil
-						.getLabels(LabelsConstants.GROUP_CONF_HEADER_COL1));
+				
+				transformer.setParameter("paramDepartment", department.getCode());
+				transformer.setParameter("paramOthers", emplSal.getV10().add(emplSal.getV11()).add(emplSal.getV08()));
+				
+				for(PeriodSetting pS :emplSal.getPeriod().getPeriodSettings()) {
+					
+					if ("VAUCHER1".equals(pS.getTrzStatic())) {
+						transformer.setParameter("paramVauch1", pS.getValue());
+					} else if ("VAUCHER2".equals(pS.getTrzStatic())) {
+						transformer.setParameter("paramVauch2", pS.getValue());
+					}
+				}
+				
 
 				File tmpFile = new File(outDir, "xmlTmp.xml");
 				FileUtils.writeStringToFile(tmpFile, tempFile, "UTF-8");

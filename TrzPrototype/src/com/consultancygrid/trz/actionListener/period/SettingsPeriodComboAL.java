@@ -1,4 +1,4 @@
-package com.consultancygrid.trz.actionListener;
+package com.consultancygrid.trz.actionListener.period;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import javax.swing.JTable;
 
 import org.pmw.tinylog.Logger;
 
+import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.EmplDeptPeriod;
@@ -40,22 +41,23 @@ import static com.consultancygrid.trz.base.Constants.*;
  *
  */
 
-public class SettingsDepartmentComboAL extends BaseActionListener {
+public class SettingsPeriodComboAL extends BaseActionListener {
 
 	
-	JComboBox comboBoxPeriod;
-	JComboBox comboBoxDepartment;
-	JComboBox comboBoxEmployee;
+	private JComboBox comboBoxPeriod;
+	private JComboBox comboBoxEmployee;
+	private JComboBox comboBoxDepartment;
 	
-	public SettingsDepartmentComboAL(PrototypeMainFrame mainFrame,JComboBox comboBoxPeriod,JComboBox comboBoxDepartment,JComboBox comboBoxEmpl) {
+	public SettingsPeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBoxPeriod,JComboBox comboBoxDepartment, JComboBox comboBoxEmployee) {
 
 		super(mainFrame);
 		this.comboBoxPeriod = comboBoxPeriod;
+		this.comboBoxEmployee = comboBoxEmployee;
 		this.comboBoxDepartment = comboBoxDepartment;
-		this.comboBoxEmployee = comboBoxEmpl;
 	}
 
 	public void actionPerformed(ActionEvent e) {
+
 		
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
@@ -68,29 +70,18 @@ public class SettingsDepartmentComboAL extends BaseActionListener {
 			em.getTransaction().begin();
 
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
-			Department department = ((Department) comboBoxDepartment.getModel().getSelectedItem());
 
-			Query q = em.createQuery(" select emplDeptP.employee from EmplDeptPeriod as emplDeptP  where  emplDeptP.period.id = :periodId and emplDeptP.department.id = :deptId");
+			Query q = em.createQuery(" select distinct rDP.department from RevenueDeptPeriod as rDP  where  rDP.period.id = :periodId");
 			q.setParameter("periodId", period.getId());
-			q.setParameter("deptId", department.getId());
-			List<Employee> allRelatedEmpl = (List<Employee>) q.getResultList();
+			List<Department> allDepartments = (List<Department>) q.getResultList();
 		
-		    Query q1 = em.createQuery("from Employee");
-		    List<Employee> allEmpls = (List<Employee>) q1.getResultList();
-		    
-			List<Employee> allEmplsToUse = new ArrayList<Employee>(allEmpls);
-			//TODO optimize
-			for (Employee  empl : allEmpls) {
-				for (Employee relatedEmpl : allRelatedEmpl) {
-					if (relatedEmpl.getId().equals(empl.getId())){
-						allEmplsToUse.remove(relatedEmpl);
-					}
-				}
-			}
+			((EmplComboBoxModel)this.comboBoxEmployee.getModel()).clear();
+			this.comboBoxDepartment.setEnabled(false);
+			this.comboBoxDepartment.repaint();
 			
-			((EmplComboBoxModel)this.comboBoxEmployee.getModel()).addAll(allEmplsToUse);
-			this.comboBoxEmployee.setEnabled(true);
-			this.comboBoxEmployee.validate();
+			((DepartmentComboBoxModel)this.comboBoxDepartment.getModel()).addAll(allDepartments);
+			this.comboBoxDepartment.setEnabled(true);
+			this.comboBoxDepartment.validate();
 			mainFrame.validate();
 			
 		} catch (Exception e1) {
