@@ -81,7 +81,7 @@ public class PersonRowEditAL extends BaseActionListener{
 			
 			
 			JFrame popUp = new JFrame();
-			popUp.setBounds(100, 100, 400, 500);
+			popUp.setBounds(100, 100, 400, 550);
 			popUp.setAlwaysOnTop(true);
 			popUp.setResizable(true);
 			//popUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -108,56 +108,68 @@ public class PersonRowEditAL extends BaseActionListener{
 			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL1, tf1);
 			
 			
+			JLabel l6 = new JLabel(ResourceLoaderUtil
+					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL3));
+			l6.setBounds(30, 100, 150, 60);
+			panel.add(l6);
+			JTextField tf6 = new JTextField();
+			tf6.setBounds(200, 120, 100, 25);
+			tf6.setText(model.getValueAt(i, 3) != null ?((BigDecimal)model.getValueAt(i,3)).toString() : BigDecimal.ZERO.toString());
+			panel.add(tf6);
+			
+			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL3, tf6);
+			
+			
 			JLabel l2 = new JLabel(ResourceLoaderUtil
-					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL9));
-			l2.setBounds(30 , 100,  150, 60);
+					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL10));
+			l2.setBounds(30 , 170,  150, 60);
 			panel.add(l2);
 			JTextField tf2 = new JTextField();
-			tf2.setBounds(200, 120, 100, 25);
-			tf2.setText(model.getValueAt(i, 9) != null ?((BigDecimal)model.getValueAt(i, 9)).toString() : BigDecimal.ZERO.toString());
+			tf2.setBounds(200, 190, 100, 25);
+			tf2.setText(model.getValueAt(i, 10) != null ?((BigDecimal)model.getValueAt(i, 10)).toString() : BigDecimal.ZERO.toString());
 			panel.add(tf2);
 			
-			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL9, tf2);
+			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL10, tf2);
 			
 			JLabel l3 = new JLabel(ResourceLoaderUtil
-					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL12));
-			l3.setBounds(30, 170, 150, 60);
+					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL13));
+			l3.setBounds(30, 240, 150, 60);
 			panel.add(l3);
 			JTextField tf3 = new JTextField();
-			tf3.setBounds(200, 190, 100, 25);
-			tf3.setText(model.getValueAt(i, 12) != null ?((BigDecimal)model.getValueAt(i, 12)).toString() : BigDecimal.ZERO.toString());
+			tf3.setBounds(200, 260, 100, 25);
+			tf3.setText(model.getValueAt(i, 13) != null ?((BigDecimal)model.getValueAt(i, 13)).toString() : BigDecimal.ZERO.toString());
 			panel.add(tf3);
-			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL12, tf3);
+			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL13, tf3);
 			
 			
 			JLabel l4 = new JLabel(ResourceLoaderUtil
-					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL13));
-			l4.setBounds(30, 240, 150, 60);
+					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL14));
+			l4.setBounds(30, 310, 150, 60);
 			panel.add(l4);
 			JTextField tf4 = new JTextField();
-			tf4.setBounds(200, 260, 100, 25);
-			tf4.setText(model.getValueAt(i, 13) != null ? model.getValueAt(i, 13).toString() : "");
+			tf4.setBounds(200, 330, 100, 25);
+			tf4.setText(model.getValueAt(i, 14) != null ? model.getValueAt(i, 14).toString() : "");
 			panel.add(tf4);
-			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL13, tf4);
+			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL14, tf4);
 			
 			JLabel l5 = new JLabel(ResourceLoaderUtil
-					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL14));
-			l5.setBounds(30, 310, 150, 60);
+					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL15));
+			l5.setBounds(30, 380, 150, 60);
 			panel.add(l5);
 			JTextField tf5 = new JTextField();
-			tf5.setBounds(200, 330, 100, 25);
-			tf5.setText(model.getValueAt(i, 14) != null ?((BigDecimal)model.getValueAt(i, 14)).toString() : BigDecimal.ZERO.toString());
+			tf5.setBounds(200, 400, 100, 25);
+			tf5.setText(model.getValueAt(i, 15) != null ?((BigDecimal)model.getValueAt(i, 15)).toString() : BigDecimal.ZERO.toString());
 			panel.add(tf5);
-			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL14, tf3);
+			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL15, tf3);
 			
 			
 			JButton saveBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
-			saveBtn.setBounds(50, 400, 100, 25);
+			saveBtn.setBounds(50, 450, 100, 25);
 			saveBtn.addActionListener(new PersonRowSaveAL(mainFrame, personalConfTable, comboBoxEmployee, map, popUp));
 			panel.add(saveBtn);
 			JButton cnclBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.BUTT_CANCEL));
 			cnclBtn.addActionListener(new PersonalRowCancelAL(mainFrame, personalConfTable, comboBoxEmployee, popUp));
-			cnclBtn.setBounds(170, 400, 100, 25); 
+			cnclBtn.setBounds(170, 450, 100, 25); 
 			panel.add(cnclBtn);
 			
 			//EmplsSettingsLoadUtil emplsComboUtil = new EmplsSettingsLoadUtil();

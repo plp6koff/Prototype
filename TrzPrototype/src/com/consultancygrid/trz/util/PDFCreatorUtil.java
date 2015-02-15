@@ -61,6 +61,7 @@ public class PDFCreatorUtil {
 		
 		
 		BigDecimal b = null;
+		BigDecimal d = null;
 		BigDecimal h = null;
 		BigDecimal u = null;
 		BigDecimal r = null;
@@ -81,6 +82,7 @@ public class PDFCreatorUtil {
 		emplSal = new EmployeeSalary();
 
 		b = BigDecimal.valueOf(Double.valueOf(1000.0));
+		d = BigDecimal.valueOf(Double.valueOf(1000.0));
 		h = BigDecimal.valueOf(Double.valueOf(800.0));
 		u = BigDecimal.valueOf(Double.valueOf(100.0));
 		r = BigDecimal.valueOf(Double.valueOf(500.0));
@@ -96,8 +98,12 @@ public class PDFCreatorUtil {
 		emplSal.setV01(BigDecimal.valueOf(Double.valueOf("1000")));
 		emplSal.setV06(BigDecimal.valueOf(Double.valueOf("800")));
 		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
-				h.doubleValue(), r.doubleValue(), u.doubleValue(), "Test",
-				emplSal, dod, oR, oS);
+												  d.doubleValue(),
+												  h.doubleValue(),
+												  r.doubleValue(),
+												  u.doubleValue(),
+												  "Test",
+												  emplSal, dod, oR, oS);
 		StringBuffer sb = new StringBuffer(
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><v>");
 		sb.append("<v1>" + emplSal.getV01().toString() + "</v1>");

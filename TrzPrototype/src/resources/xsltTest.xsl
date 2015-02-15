@@ -17,6 +17,7 @@
 	<xsl:param name="paramOthers" select="'1.0'" />
 	<xsl:param name="paramVauch1" select="'1.0'" />
 	<xsl:param name="paramVauch2" select="'1.0'" />
+	
 
 	<!-- ========================= -->
 	<!-- root element: projectteam -->
@@ -41,11 +42,11 @@
 					<fo:block >
 						<fo:table table-layout="fixed" width="80%"
 							 border="1pt solid black" font-size="8pt" line-height="10pt">
-        					<fo:table-column column-width="40%"
+        					<fo:table-column column-width="60%"
 								number-columns-spanned="4"  />
-							<fo:table-column column-width="40%"
+							<fo:table-column column-width="30%"
 								number-columns-spanned="4"  />
-							<fo:table-column column-width="20%"
+							<fo:table-column column-width="10%"
 								number-columns-spanned="4"  />
 							<fo:table-body>
 								<fo:table-row  row-height = "40mm" border="0.5pt solid black">
@@ -126,7 +127,7 @@
 									<fo:table-cell font-weight="bold" text-align="center" border="0.5pt solid black"
                             padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
 										<fo:block>
-										    Бруто заплата
+										   Нетна заплата
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell>
@@ -135,7 +136,23 @@
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
-								
+								<fo:table-row border="0.5pt solid black">
+									<fo:table-cell >
+										<fo:block>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell font-weight="bold" text-align="center" border="0.5pt solid black"
+                            padding-left="3pt" padding-right="3pt" padding-top="1pt" padding-bottom="1pt">
+										<fo:block>
+										    Бруто заплата
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block>
+										  <xsl:value-of select="v3" />
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
 									<fo:table-row border="0.5pt solid black">
 									<fo:table-cell >
 										<fo:block>

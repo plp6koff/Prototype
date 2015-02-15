@@ -21,7 +21,6 @@ import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
-import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.EmployeeSettings;
@@ -69,10 +68,11 @@ public class PersonRowSaveAL extends BaseActionListener{
 			if (employee != null) {
 				EmployeeSalary emplSallary = model.getEmplSals().get(i);
 				String v01Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL1).getText();
-				String v09Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL9).getText();
-				String v12Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL12).getText();
+				String v03Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL3).getText();
+				String v10Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL10).getText();
 				String v13Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL13).getText();
 				String v14Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL14).getText();
+				String v15Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL15).getText();
 				
 				
 				Query q1 = em.createQuery(" from EmployeeSettings as settings  where  settings.period.id = :periodId and settings.employee.id = :emplId ");
@@ -86,20 +86,25 @@ public class PersonRowSaveAL extends BaseActionListener{
 				emplSallary.setV01(v1);
 				settings.setBrutoStandart(v1);
 				
-				BigDecimal v9 = parseValue(emplSallary.getV09(),v09Str); 
-				Double j = v9.doubleValue();
-				emplSallary.setV09(v9);
+				BigDecimal v3 = parseValue(emplSallary.getV03(),v03Str); 
+				Double d = v3.doubleValue();
+				emplSallary.setV03(v3);
+				settings.setNetSalary(v3);
 				
-				BigDecimal v12 = parseValue(emplSallary.getV12(),v12Str); 
-				Double m = v12.doubleValue();
-				emplSallary.setV12(v12);
+				BigDecimal v10 = parseValue(emplSallary.getV10(),v10Str); 
+				Double kMarker = v10.doubleValue();
+				emplSallary.setV10(v10);
 				
-				String name = v13Str;
-				emplSallary.setS01(v13Str);
+				BigDecimal v13 = parseValue(emplSallary.getV13(),v13Str); 
+				Double nBonus = v13.doubleValue();
+				emplSallary.setV13(v13);
 				
-				BigDecimal v14 = parseValue(emplSallary.getV13(),v14Str); 
-				Double o = v14.doubleValue();
-				emplSallary.setV13(v14);
+				String oBonusName = v14Str;
+				emplSallary.setS01(v14Str);
+				
+				BigDecimal v15 = parseValue(emplSallary.getV14(),v15Str); 
+				Double pVaucher = v15.doubleValue();
+				emplSallary.setV14(v15);
 				
 				Query qPeriodTrzStatic = em
 						.createQuery(" from TrzStatic");
@@ -117,7 +122,8 @@ public class PersonRowSaveAL extends BaseActionListener{
 						OSIGUROVKI_SLUJITEL = singleTrz;
 					}
 				}
-				EmployeeSallaryCalculateUtil.calcSettings(b, j, m, o , name, emplSallary, DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL);
+				EmployeeSallaryCalculateUtil.calcSettings(b, d, kMarker,
+						pVaucher, nBonus , oBonusName, emplSallary, DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL);
 				
 				em.merge(emplSallary);
 				em.merge(settings);

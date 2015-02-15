@@ -43,35 +43,35 @@ public class EmplsSettingsLoadUtil {
 			oneRow.add(emplSal.getV03());
 			//4
 			oneRow.add(emplSal.getV04());
-			//5
+			//4
 			oneRow.add(emplSal.getV05());
-			//6
+			//5
 			oneRow.add(emplSal.getV06());
-			//7
+			//6
 			oneRow.add(emplSal.getV07());
-			//8
+			//7
 			oneRow.add(emplSal.getV08());
-			//9
+			//8
 			oneRow.add(emplSal.getV09());
-			//10
+			//9
 			oneRow.add(emplSal.getV10());
-			//11
+			//10
 			oneRow.add(emplSal.getV11());
-			//12
+			//11
 			oneRow.add(emplSal.getV12());
+			//12
+			oneRow.add(emplSal.getV13());
 			//13
 			oneRow.add(emplSal.getS01());
 			//14
-			oneRow.add(emplSal.getV13());
-			//15
 			oneRow.add(emplSal.getV14());
-			//16
+			//15
 			oneRow.add(emplSal.getV15());
-			//17
+			//16
 			oneRow.add(emplSal.getV16());
-			//18
+			//17
 			oneRow.add(emplSal.getV17());
-			//19
+			//18
 			oneRow.add(emplSal.getV18());
 			tableData.add(oneRow);
 			

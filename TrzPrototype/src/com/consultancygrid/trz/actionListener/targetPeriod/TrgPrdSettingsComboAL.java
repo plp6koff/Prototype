@@ -1,6 +1,5 @@
 package com.consultancygrid.trz.actionListener.targetPeriod;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.List;
 

@@ -71,6 +71,8 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL17));
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL18));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL19));
 	}
 	
 	@Override

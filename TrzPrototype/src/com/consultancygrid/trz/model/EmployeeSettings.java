@@ -29,6 +29,7 @@ public class EmployeeSettings implements java.io.Serializable {
 	private UUID id;
 	private Employee employee;
 	private Period period;
+	private BigDecimal netSalary;
 	private BigDecimal brutoPoShtat;
 	private BigDecimal brutoStandart;
 	private BigDecimal avans;
@@ -52,13 +53,14 @@ public class EmployeeSettings implements java.io.Serializable {
 	}
 
 	public EmployeeSettings(UUID id, Employee employee, Period period,
-			BigDecimal brutoPoShtat, BigDecimal brutoStandart,
+			BigDecimal netSalary, BigDecimal brutoPoShtat, BigDecimal brutoStandart,
 			BigDecimal avans, BigDecimal percentAll, BigDecimal percentGroup,
 			BigDecimal percentPersonal, BigDecimal personAllOnboardingPercent,
 			BigDecimal personGroupOnboardingPercent) {
 		this.id = id;
 		this.employee = employee;
 		this.period = period;
+		this.netSalary =netSalary;
 		this.brutoPoShtat = brutoPoShtat;
 		this.brutoStandart = brutoStandart;
 		this.avans = avans;
@@ -102,6 +104,15 @@ public class EmployeeSettings implements java.io.Serializable {
 		this.period = period;
 	}
 
+	@Column(name = "NET_SALARY", precision = 22, scale = 0)
+	public BigDecimal getNetSalary() {
+		return this.netSalary;
+	}
+
+	public void setNetSalary(BigDecimal netSalary) {
+		this.netSalary = netSalary;
+	}
+	
 	@Column(name = "BRUTO_PO_SHTAT", precision = 22, scale = 0)
 	public BigDecimal getBrutoPoShtat() {
 		return this.brutoPoShtat;

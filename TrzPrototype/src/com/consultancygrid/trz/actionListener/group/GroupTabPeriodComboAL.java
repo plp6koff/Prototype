@@ -75,7 +75,6 @@ public class GroupTabPeriodComboAL extends BaseActionListener {
 				table2.setModel(currentModel2);
 				mainFrame.validate();
 				
-				mainFrame.validate();
 				
 				
 			}
