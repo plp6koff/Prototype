@@ -21,11 +21,15 @@ public class TargetLevelCfgTable extends JTable {
 
 	public TargetLevelCfgTable() throws IOException {
 		
-		setAutoResizeMode(AUTO_RESIZE_ALL_COLUMNS);
+		setAutoResizeMode(AUTO_RESIZE_OFF);
 		setBorder(new EmptyBorder(1, 1, 1, 1));
 		setModel(new TargetLevelCfgTableModel());
-		getColumnModel().getColumn(0).setMaxWidth(70);
-		getColumnModel().getColumn(1).setMinWidth(90);
+		getColumnModel().getColumn(0).setMaxWidth(0);
+		getColumnModel().getColumn(0).setWidth(0);
+		getColumnModel().getColumn(1).setMinWidth(100);
+		getColumnModel().getColumn(1).setPreferredWidth(100);
+		getColumnModel().getColumn(2).setMinWidth(100);
+		getColumnModel().getColumn(2).setPreferredWidth(100);
 		setRowHeight(30);
 	}
 

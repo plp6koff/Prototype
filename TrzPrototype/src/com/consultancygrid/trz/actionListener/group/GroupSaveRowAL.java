@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.persistence.EntityManager;
@@ -15,44 +17,45 @@ import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
-import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
-import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.group.GroupCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.group.GroupCfgEmplsTableModel;
-import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTable;
-import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.util.GroupTablPeriodLoaderUtil;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class GroupSaveRowAL extends BaseActionListener{
 
-	private GroupCfgEmplsTable groupConfTable;
+	private GroupCfgEmplsTable groupConfTable1;
+	private GroupCfgEmplsTable groupConfTable2;
 	private JComboBox comboBoxPeriod;
 	private JFrame frame ; 
+	private JTabbedPane tabbedPaneDep;
 	
 	private HashMap<String, JTextField> map;
 	
-	public GroupSaveRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable, 
+	public GroupSaveRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable1, GroupCfgEmplsTable groupConfTable2, 
 			JComboBox comboBoxPeriod,  
 			HashMap<String, JTextField> map,
-			JFrame frame) {
+			JFrame frame,
+			JTabbedPane tabbedPaneDep) {
 		
 		super(mainFrame);
-		this.groupConfTable = groupConfTable;
+		this.groupConfTable1 = groupConfTable1;
+		this.groupConfTable2 = groupConfTable2;
 		this.comboBoxPeriod = comboBoxPeriod;
 		this.map = map;
 		this.frame = frame;
+		this.tabbedPaneDep = tabbedPaneDep;
 	}
 
 	@Override
@@ -69,8 +72,17 @@ public class GroupSaveRowAL extends BaseActionListener{
 			
 			Period period =  (Period)comboBoxPeriod.getSelectedItem();
 			
-			GroupCfgEmplsTableModel model = (GroupCfgEmplsTableModel) groupConfTable.getModel();
-			int i = groupConfTable.getSelectedRow();
+			GroupCfgEmplsTableModel model = null;
+			GroupCfgEmplsTable groupConfTable = null;
+			int i = -1;
+			if (tabbedPaneDep.getSelectedIndex() == 0) {
+				
+				groupConfTable = groupConfTable1;
+			} else if (tabbedPaneDep.getSelectedIndex() == 1) {
+				groupConfTable = groupConfTable2;
+			}
+			i = groupConfTable.getSelectedRow();
+			model = (GroupCfgEmplsTableModel) groupConfTable.getModel();
 			
 			if (period != null) {
 				
@@ -114,14 +126,32 @@ public class GroupSaveRowAL extends BaseActionListener{
 				}
 				
 				frame.setVisible(false);
-				groupConfTable.clearSelection();
+				
+				
 				Vector tableData = new Vector();
-				GroupTablPeriodLoaderUtil grTabPeriodLoaderUtil 
-						= new GroupTablPeriodLoaderUtil();
-				grTabPeriodLoaderUtil.loadData(period, em, tableData);
-				model.setData(tableData);
-				groupConfTable.revalidate();
-				groupConfTable.repaint();
+				Vector tableData2 = new Vector();
+				GroupTablPeriodLoaderUtil grTabPeriodLoaderUtil = new GroupTablPeriodLoaderUtil();
+				Set<UUID> employeeSetingsIds = grTabPeriodLoaderUtil.loadData(period, em, tableData);
+				grTabPeriodLoaderUtil.loadData2(period, em, tableData2, employeeSetingsIds);
+
+				if (comboBoxPeriod.getModel().getSelectedItem() != null) {
+					
+					GroupCfgEmplsTableModel currentModel = (GroupCfgEmplsTableModel) groupConfTable1.getModel();  
+					currentModel.setData(tableData);
+					groupConfTable1.setModel(currentModel);
+					
+					GroupCfgEmplsTableModel currentModel2 = (GroupCfgEmplsTableModel) groupConfTable2.getModel();  
+					currentModel2.setData(tableData2);
+					groupConfTable2.setModel(currentModel2);
+					mainFrame.validate();
+					
+					
+				}
+				
+				groupConfTable2.revalidate();
+				groupConfTable2.repaint();
+				groupConfTable1.revalidate();
+				groupConfTable1.repaint();
 				
 			} else {
 				JOptionPane.showMessageDialog(mainFrame, ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_WARN2) ,

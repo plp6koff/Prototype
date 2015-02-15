@@ -1,6 +1,7 @@
 package com.consultancygrid.trz.actionListener.targetPeriod;
 
-import java.awt.Dimension;
+import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
+
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Vector;
@@ -11,31 +12,18 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JViewport;
-import javax.swing.ScrollPaneLayout;
 
 import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
-import com.consultancygrid.trz.model.Department;
-import com.consultancygrid.trz.model.Employee;
-import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.TargetEmplPeriod;
 import com.consultancygrid.trz.model.TargetLevels;
 import com.consultancygrid.trz.model.TargetPeriod;
-import com.consultancygrid.trz.ui.combo.DepartmentComboBoxModel;
-import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.targetLevel.TargetLevelCfgTable;
 import com.consultancygrid.trz.ui.table.targetLevel.TargetLevelCfgTableModel;
-
-import static com.consultancygrid.trz.base.Constants.*;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 /**
  * ACtion Listener for code list
  * 
@@ -47,13 +35,15 @@ public class TrgPrdLvlsCfgComboAL extends BaseActionListener {
 
 	
 	private JComboBox comboBoxTarget;
+	private TargetLevelCfgTable table;
 	private JPanel createFormPanel; 
 	
-	public TrgPrdLvlsCfgComboAL(PrototypeMainFrame mainFrame,JPanel createFormPanel,JComboBox comboBoxTarget) {
+	public TrgPrdLvlsCfgComboAL(PrototypeMainFrame mainFrame,JPanel createFormPanel,TargetLevelCfgTable table,JComboBox comboBoxTarget) {
 
 		super(mainFrame);
 		this.comboBoxTarget = comboBoxTarget;
 		this.createFormPanel = createFormPanel;
+		this.table = table;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -81,36 +71,35 @@ public class TrgPrdLvlsCfgComboAL extends BaseActionListener {
 			for (TargetLevels tL : allTargets) {
 				
 				Vector<Object> tempRow = new Vector<>();
-				tempRow.add(tL.getTargetPercent());
-				tempRow.add(tL.getTargetBonus());
+				tempRow.add(tL.getId().toString());
+				tempRow.add(tL.getTargetPercent().toString());
+				tempRow.add(tL.getTargetBonus().toString());
 				data.add(tempRow);
 			}
 			tlModel.setData(data);
-			TargetLevelCfgTable table = new TargetLevelCfgTable();
-			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			
 			table.setModel(tlModel);
-			table.setBounds(40, 100, 160, 200);
-			JScrollPane trzLevelPanel = new JScrollPane(table);
-			trzLevelPanel.setBounds(40, 100, 150, 200);
-			
-			trzLevelPanel.setLayout(new ScrollPaneLayout());
-			
-			createFormPanel.add(trzLevelPanel);
+			table.removeColumn(table.getColumnModel().getColumn(0));
+			table.revalidate();
 			createFormPanel.revalidate();
 			createFormPanel.repaint();
 			
 			
-			JButton btnSavePeriod = new JButton("Save");
+			JButton btnSavePeriod = new JButton(ResourceLoaderUtil
+					.getLabels(LabelsConstants.TRG_SETT_TAB_LVLS_ADD));
 			btnSavePeriod.setBounds(300, 100, 100, 25);
+			btnSavePeriod.addActionListener(new TrgPrdLvlAddRowAL(mainFrame, comboBoxTarget, table));
 			createFormPanel.add(btnSavePeriod);
-			JButton btnDelPeriod = new JButton("Delete");
+			JButton btnDelPeriod = new JButton(ResourceLoaderUtil
+					.getLabels(LabelsConstants.TRG_SETT_TAB_LVLS_DEL));
 			btnDelPeriod.setBounds(300, 140, 100, 25);
+			btnDelPeriod.addActionListener(new TrgPrdLvlDelRowAL(mainFrame, comboBoxTarget, table));
 			createFormPanel.add(btnDelPeriod);
-			JButton btnEditPeriod = new JButton("Edit");
+			JButton btnEditPeriod = new JButton(ResourceLoaderUtil
+					.getLabels(LabelsConstants.TRG_SETT_TAB_LVLS_EDIT));
 			btnEditPeriod.setBounds(300, 180, 100, 25);
+			btnEditPeriod.addActionListener(new TrgPrdLvlEditRowAL(mainFrame, comboBoxTarget, table));
 			createFormPanel.add(btnEditPeriod);
-			//SaveTargetEmployeeAL saveTAL  = new SaveTargetEmployeeAL(mainFrame, textFieldValue, comboBoxTarget, comboBoxEmployee, createFormPanel, tep, update, btnSavePeriod);
-			//btnSavePeriod.addActionListener(saveTAL);
 			createFormPanel.revalidate();
 			createFormPanel.repaint();
 			mainFrame.validate();

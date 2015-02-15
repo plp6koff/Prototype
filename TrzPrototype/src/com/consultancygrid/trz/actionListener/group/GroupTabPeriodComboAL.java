@@ -3,12 +3,15 @@ package com.consultancygrid.trz.actionListener.group;
 import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
 
 import java.awt.event.ActionEvent;
+import java.util.Set;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import org.pmw.tinylog.Logger;
@@ -28,14 +31,16 @@ import com.consultancygrid.trz.util.GroupTablPeriodLoaderUtil;
 public class GroupTabPeriodComboAL extends BaseActionListener {
 
 	
-	JComboBox comboBox;
-	JTable table;
+	private JComboBox comboBox;
+	private JTable table;
+	private JTable table2;
 	
-	public GroupTabPeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBox,JTable table) {
+	public GroupTabPeriodComboAL(PrototypeMainFrame mainFrame,JComboBox comboBox,JTable table, JTable table2) {
 
 		super(mainFrame);
 		this.comboBox = comboBox;
 		this.table = table;
+		this.table2 = table2;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -54,16 +59,25 @@ public class GroupTabPeriodComboAL extends BaseActionListener {
 			Period period = ((Period) comboBox.getModel().getSelectedItem());
 			
 			Vector tableData = new Vector();
-			GroupTablPeriodLoaderUtil grTabPeriodLoaderUtil 
-					= new GroupTablPeriodLoaderUtil();
-			grTabPeriodLoaderUtil.loadData(period, em, tableData);
+			Vector tableData2 = new Vector();
+			GroupTablPeriodLoaderUtil grTabPeriodLoaderUtil = new GroupTablPeriodLoaderUtil();
+			Set<UUID> employeeSetingsIds = grTabPeriodLoaderUtil.loadData(period, em, tableData);
+			grTabPeriodLoaderUtil.loadData2(period, em, tableData2, employeeSetingsIds);
 
 			if (comboBox.getModel().getSelectedItem() != null) {
 				
 				GroupCfgEmplsTableModel currentModel = (GroupCfgEmplsTableModel) table.getModel();  
 				currentModel.setData(tableData);
 				table.setModel(currentModel);
+				
+				GroupCfgEmplsTableModel currentModel2 = (GroupCfgEmplsTableModel) table2.getModel();  
+				currentModel2.setData(tableData2);
+				table2.setModel(currentModel2);
 				mainFrame.validate();
+				
+				mainFrame.validate();
+				
+				
 			}
 		} catch (Exception e1) {
 			Logger.error(e1);

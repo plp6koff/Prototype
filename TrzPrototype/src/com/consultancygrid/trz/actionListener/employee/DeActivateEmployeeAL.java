@@ -31,8 +31,8 @@ public class DeActivateEmployeeAL extends BaseActionListener {
 	private JButton button;
 	private JComboBox<Employee> employeBox;
 
-	
-	public DeActivateEmployeeAL(PrototypeMainFrame mainFrame, Employee employee, JButton button, JComboBox<Employee> employeBox) {
+	public DeActivateEmployeeAL(PrototypeMainFrame mainFrame,
+			Employee employee, JButton button, JComboBox<Employee> employeBox) {
 
 		super(mainFrame);
 		this.employee = employee;
@@ -41,41 +41,18 @@ public class DeActivateEmployeeAL extends BaseActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	protected void eventCore() {
 
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
-		Set<String> matchCodes = null;
-		try {
+		employee.setIsActive("N");
+		em.merge(employee);
 
-			factory = Persistence
-					.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+		Query qE = em.createQuery(" from Employee");
+		((EmplComboBoxModel) employeBox.getModel()).addAll((List<Employee>) qE
+				.getResultList());
 
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
-
-			employee.setIsActive("N");
-			em.merge(employee);
-			
-			Query qE = em.createQuery(" from Employee");
-			((EmplComboBoxModel)employeBox.getModel()).addAll((List<Employee>) qE.getResultList());
-			
-			button.setVisible(false);
-			button.getParent().revalidate();
-			button.getParent().repaint();
-		} catch (Exception e1) {
-			Logger.error(e1);
-			if (em != null && em.isOpen()) {
-				em.getTransaction().rollback();
-				em.close();
-			}
-
-		} finally {
-			if (em != null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
-			}
-		}
+		button.setVisible(false);
+		button.getParent().revalidate();
+		button.getParent().repaint();
 	}
 
 }

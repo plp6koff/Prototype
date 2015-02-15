@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,6 +34,7 @@ import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.TargetPeriod;
 import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
+import com.consultancygrid.trz.ui.combo.TargetComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
@@ -45,14 +46,23 @@ public class TrgPrdSaveAL extends BaseActionListener{
 	private JTextField fieldLenght;
 	private JPanel createFormPanel;
 	private JPanel panLinkPeriod2Empl;
+	private JComboBox comboTargetsCPL;
+	private JComboBox comboTargetsP2E;
 	
-	public TrgPrdSaveAL(PrototypeMainFrame mainFrame, JTextField tf1, JTextField tf3, JDatePickerImpl datePickerTo, JDatePickerImpl datePickerFrom) {
+	public TrgPrdSaveAL(PrototypeMainFrame mainFrame, JTextField tf1, 
+			JTextField tf3, 
+			JDatePickerImpl datePickerTo, 
+			JDatePickerImpl datePickerFrom,
+			JComboBox comboTargetsCRP,	
+			JComboBox comboTargetsP2E) {
 		
 		super(mainFrame);
 		this.datePickerEnd = datePickerTo;
 		this.datePickerStart = datePickerFrom;
 		this.fieldCode = tf1;
 		this.fieldLenght = tf3;
+		this.comboTargetsCPL =  comboTargetsCRP;
+		this.comboTargetsP2E =  comboTargetsP2E;
 	} 
 
 	@Override
@@ -87,18 +97,29 @@ public class TrgPrdSaveAL extends BaseActionListener{
 			
 			this.fieldCode.setText("");
 			this.fieldLenght.setText("0.0");
+			
+			Query qAllPeriods = em.createQuery("from TargetPeriod  order by code");
+			
+			List<TargetPeriod> allTargets = (List<TargetPeriod>) qAllPeriods.getResultList();
+			
+			comboTargetsP2E.removeAll();
+			comboTargetsCPL.removeAll();
+			
+			comboTargetsP2E.setModel(new TargetComboBoxModel(allTargets));
+			comboTargetsP2E.getParent().revalidate();
+			comboTargetsP2E.getParent().repaint();
+			
+			comboTargetsCPL.setModel(new TargetComboBoxModel(allTargets));
+			comboTargetsCPL.getParent().revalidate();
+			comboTargetsCPL.getParent().repaint();
+			
+			
 			datePickerStart.getModel().setSelected(false);
 			datePickerStart.repaint();
 			datePickerEnd.getModel().setSelected(false);
 			datePickerEnd.repaint();
 			
 			
-//			PeriodComboBoxModel modelToRefresh = ((PeriodComboBoxModel) comboBoxPeriod.getModel());
-//			modelToRefresh.addItem(tempPeriod);
-			//comboBoxPeriod.revalidate();
-			//comboBoxPeriod.repaint();
-			//this.panLinkPeriod2Empl.revalidate();
-			//this.panLinkPeriod2Empl.repaint();
 			
 			try {
 				JOptionPane.showMessageDialog(mainFrame, 

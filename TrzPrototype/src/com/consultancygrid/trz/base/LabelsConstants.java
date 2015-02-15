@@ -150,6 +150,19 @@ public interface LabelsConstants {
 	 String  PERIOD_START_DATE = "period_cfg.start_date";
 	 String  PERIOD_END_DATE = "period_cfg.end_date";
 	 
+	 String TRG_SETT_TAB_CREATE = "target_sett_tab_create";
+	 String TRG_SETT_TAB_CREATE_SAVE = "target_sett_tab_create_save";
+	 String TRG_SETT_TAB_CREATE_CODE = "target_sett_tab_create_code";
+	 String TRG_SETT_TAB_CREATE_LENGHT = "target_sett_tab_create_lenght";
+	 String TRG_SETT_TAB_CREATE_UPD = "target_sett_tab_create_update";
+	 String TRG_SETT_TAB_LVLS = "target_sett_tab_levels";
+	 String TRG_SETT_TAB_LVLS_ADD = "target_sett_tab_levels_add";
+     String TRG_SETT_TAB_LVLS_EDIT = "target_sett_tab_levels_edit";
+     String TRG_SETT_TAB_LVLS_DEL = "target_sett_tab_levels_delete";
+	 String TRG_SETT_TAB_LVLS_PERCENT = "target_sett_tab_levels_percent";
+     String TRG_SETT_TAB_LVLS_BONUS = "target_sett_tab_levels_bonus";
+     String TRG_SETT_TAB_EMPL2TRG = "target_sett_tab_empl2trg";
+     String TRG_SETT_TAB_EMPL2TRG_VAL = "target_sett_tab_empl2trg_val";
 	 
 	 String SETTINGS = "settings";
 	 String BUTT_CANCEL = "button_cancel";

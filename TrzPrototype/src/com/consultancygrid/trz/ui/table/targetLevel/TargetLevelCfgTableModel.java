@@ -9,7 +9,9 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.TargetLevels;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 /**
  * @author user
@@ -30,9 +32,11 @@ public class TargetLevelCfgTableModel extends AbstractTableModel {
 
 		
 		tableHeaders = new Vector<String>();
-		// Init headers
-		tableHeaders.add("Target percent");
-		tableHeaders.add("Target bonus");
+		tableHeaders.add("");
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.TRG_SETT_TAB_LVLS_PERCENT));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.TRG_SETT_TAB_LVLS_BONUS));
 	}
 	
 	@Override
@@ -51,7 +55,7 @@ public class TargetLevelCfgTableModel extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		// TODO Auto-generated method stub
-		return tableHeaders.size();
+		return tableHeaders.size() ;
 	}
 
 
@@ -113,4 +117,6 @@ public class TargetLevelCfgTableModel extends AbstractTableModel {
 	public void setTargetLevels(List<TargetLevels> targetLevels) {
 		this.targetLevels = targetLevels;
 	}
+	
+
 }

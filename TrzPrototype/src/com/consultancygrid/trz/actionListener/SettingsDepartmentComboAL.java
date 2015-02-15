@@ -54,18 +54,12 @@ public class SettingsDepartmentComboAL extends BaseActionListener {
 		this.comboBoxDepartment = comboBoxDepartment;
 		this.comboBoxEmployee = comboBoxEmpl;
 	}
+	
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
-		try {
-			
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			
-			em = factory.createEntityManager();
-
-			em.getTransaction().begin();
+		
 
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 			Department department = ((Department) comboBoxDepartment.getModel().getSelectedItem());
@@ -93,13 +87,6 @@ public class SettingsDepartmentComboAL extends BaseActionListener {
 			this.comboBoxEmployee.validate();
 			mainFrame.validate();
 			
-		} catch (Exception e1) {
-			Logger.error(e1);
-
-		} finally {
-			if (em!= null && em.isOpen()) {
-				em.close();
-			}
-		}
+		
 	}
 }

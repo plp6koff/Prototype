@@ -57,17 +57,9 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 		this.createFormPanel = createFormPanel;
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
-		try {
-			
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			
-			em = factory.createEntityManager();
 
-			em.getTransaction().begin();
+	@Override
+	protected void eventCore() {
 
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 			Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
@@ -141,16 +133,6 @@ public class SettingsEmployeeComboAL extends BaseActionListener {
 			this.panLinkPeriod2Empl.add(createFormPanel);
 			
 			this.createFormPanel.repaint();
-			
-		} catch (Exception e1) {
-			Logger.error(e1);
-
-		} finally {
-			if (em!= null && em.isOpen()) {
-				em.close();
-			}
-		}
 	}
-	
 	
 }

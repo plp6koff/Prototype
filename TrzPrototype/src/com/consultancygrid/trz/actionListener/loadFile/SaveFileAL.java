@@ -2,7 +2,9 @@ package com.consultancygrid.trz.actionListener.loadFile;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.List;
 
+import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -41,13 +43,25 @@ public class SaveFileAL extends BaseActionListener {
 		this.personalConfTable = personalConfTable;
 	}
 
-	public void actionPerformed(ActionEvent e) {
+	
+	protected void eventCore() {
 
-		EmplComboBoxModel emplMod = ((EmplComboBoxModel) comboBoxEmployee
-				.getModel());
+		EmplComboBoxModel emplMod = ((EmplComboBoxModel) comboBoxEmployee.getModel());
+		
 		Employee employee = emplMod.getSelectedItem();
-		PersonalCfgEmplsTableModel model = (PersonalCfgEmplsTableModel) personalConfTable
-				.getModel();
+		
+		Department department = null;
+
+		Query q = em.createQuery("select emplDeptP.department from EmplDeptPeriod as emplDeptP  where  emplDeptP.employee.id = :emplId ");
+		q.setParameter("emplId", employee.getId());
+		List<Department> allDepartments = (List<Department>) q.getResultList();
+		
+		if (allDepartments != null && !allDepartments.isEmpty()) {
+			department = allDepartments.get(0);
+		}
+		
+		
+		PersonalCfgEmplsTableModel model = (PersonalCfgEmplsTableModel) personalConfTable.getModel();
 		int i = personalConfTable.getSelectedRow();
 		if (i < 0) {
 			i = 0;
@@ -55,11 +69,6 @@ public class SaveFileAL extends BaseActionListener {
 		EmployeeSalary emplSallary = model.getEmplSals().get(i);
 		fc.showSaveDialog(mainFrame);
 		File selectedPath = fc.getSelectedFile();
-		Department department = null;
-		if (emplSallary.getEmployee().getEmplDeptPeriods().iterator().hasNext()) {
-			EmplDeptPeriod edp = emplSallary.getEmployee().getEmplDeptPeriods().iterator().next();
-			department = edp.getDepartment();
-		}
 		File resultPdf = PDFCreatorUtil.createPDF(emplSallary, department, 	selectedPath.getAbsolutePath());
 	}
 

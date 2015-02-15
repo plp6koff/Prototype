@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -45,16 +46,23 @@ import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class GroupEditRowAL extends BaseActionListener{
 
-	private GroupCfgEmplsTable groupConfTable;
+	private GroupCfgEmplsTable groupConfTable1;
+	private GroupCfgEmplsTable groupConfTable2;
 	private JComboBox comboBoxPeriod;
 	
 	private HashMap<TrzStatic, JTextField> map ;
 	private HashMap<Department, JTextField> mapDept;
+	private JTabbedPane tabbedPaneDep;
 	
-	public GroupEditRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable, JComboBox comboBoxPeriod) {
+	public GroupEditRowAL(PrototypeMainFrame mainFrame, 
+						 GroupCfgEmplsTable groupConfTable1,
+						 GroupCfgEmplsTable groupConfTable2,
+						 JComboBox comboBoxPeriod, JTabbedPane tabbedPaneDep) {
 		super(mainFrame);
-		this.groupConfTable = groupConfTable;
+		this.groupConfTable1 = groupConfTable1;
+		this.groupConfTable2 = groupConfTable2;
 		this.comboBoxPeriod = comboBoxPeriod;
+		this.tabbedPaneDep = tabbedPaneDep;
 	}
 
 	@Override
@@ -71,8 +79,18 @@ public class GroupEditRowAL extends BaseActionListener{
 			
 			Period period =  (Period)comboBoxPeriod.getSelectedItem();
 			
-			GroupCfgEmplsTableModel model = (GroupCfgEmplsTableModel) groupConfTable.getModel();
-			int i = groupConfTable.getSelectedRow();
+			GroupCfgEmplsTableModel model = null;
+			GroupCfgEmplsTable groupConfTable = null;
+			int i = -1;
+			if (tabbedPaneDep.getSelectedIndex() == 0) {
+				
+				groupConfTable = groupConfTable1;
+			} else if (tabbedPaneDep.getSelectedIndex() == 1) {
+				groupConfTable = groupConfTable2;
+			}
+			i = groupConfTable.getSelectedRow();
+			model = (GroupCfgEmplsTableModel) groupConfTable.getModel();
+					
 
 			
 			HashMap<String, JTextField> map = new HashMap<String, JTextField>();
@@ -154,7 +172,7 @@ public class GroupEditRowAL extends BaseActionListener{
 			
 			JButton saveBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
 			saveBtn.setBounds(230, 200, 100, 25);
-			saveBtn.addActionListener(new GroupSaveRowAL(mainFrame, groupConfTable, comboBoxPeriod , map, popUp));
+			saveBtn.addActionListener(new GroupSaveRowAL(mainFrame, groupConfTable1, groupConfTable2, comboBoxPeriod , map, popUp, tabbedPaneDep));
 			panel.add(saveBtn);
 			JButton cnclBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.BUTT_CANCEL));
 			cnclBtn.setBounds(380, 200, 100, 25);
@@ -162,8 +180,10 @@ public class GroupEditRowAL extends BaseActionListener{
 			panel.add(cnclBtn);
 			
 			
-			groupConfTable.revalidate();
-			groupConfTable.repaint();
+			groupConfTable2.revalidate();
+			groupConfTable2.repaint();
+			groupConfTable1.revalidate();
+			groupConfTable1.repaint();
 			
 		} catch (Exception e1) {
 			Logger.error(e1);

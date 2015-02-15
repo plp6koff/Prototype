@@ -14,6 +14,8 @@ import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.EmplDeptPeriod;
@@ -27,7 +29,9 @@ import com.consultancygrid.trz.model.RevenueEmplPeriod;
 public class GroupTablPeriodLoaderUtil {
 
 	
-	public void loadData(Period period , EntityManager em, Vector tableData) throws IOException {
+	private static Logger log = Logger.getLogger(GroupTablPeriodLoaderUtil.class);
+	
+	public Set<UUID>  loadData(Period period , EntityManager em, Vector tableData) throws IOException {
 		
 		Query q = em.createQuery(" select emplDeptP from EmplDeptPeriod as emplDeptP join emplDeptP.period as period join emplDeptP.department as department  join  emplDeptP.employee as empl where  period.id = :periodId order by department.code ,empl.firstName ");
 		q.setParameter("periodId", period.getId());
@@ -77,7 +81,11 @@ public class GroupTablPeriodLoaderUtil {
 					em.merge(salary);
 			}	
 		}
-			
+			return employeeSetingsIds;
+	}	
+	
+	
+	public void loadData2(Period period , EntityManager em, Vector tableData, Set<UUID> employeeSetingsIds) throws IOException {
 		Query emplSettingsQ = em.createQuery(" from EmployeeSettings as emplS  where  emplS.period.id = :periodId");
 		emplSettingsQ.setParameter("periodId", period.getId());
 		for (EmployeeSettings emplSettings : (List<EmployeeSettings>)emplSettingsQ.getResultList()){
@@ -91,13 +99,17 @@ public class GroupTablPeriodLoaderUtil {
 				BigInteger emplBonus = getEmployeeRevenue(em, period, employee);
 				
 				double bonusAll = add1thRow(tableData, employee, period, emplBonus,  emplSettings);
+				log.info(bonusAll);
 				double bonusGroup = add2thRow(tableData, employee, emplBonus,  emplSettings);
+				log.info(bonusGroup);
 				double bonusPersonal = add3thRow(tableData, employee, emplBonus, percentPersonal);
+				log.info(bonusPersonal);
 				double totalBonus = bonusAll + bonusGroup + bonusPersonal;
 				
-				double totalPercent = (totalBonus * 100)/emplBonus.intValue();
-				
+				double totalPercent = (totalBonus * 100)/(emplBonus.intValue() == 0 ? 1 : emplBonus.intValue());
+				log.info(totalBonus);
 				add4thRow(tableData, employee, null, totalBonus);
+				log.info(totalPercent);
 				add5thRow(tableData, employee, null, totalPercent);
 				addEmptyDelimeterRow(tableData, employee);
 				addEmptyDelimeterRow(tableData, employee);
@@ -449,6 +461,8 @@ public class GroupTablPeriodLoaderUtil {
 		oneRow.add(EMPTY_STRING);
 		if (!Double.isNaN(totalPercent)) {
 			oneRow.add(BigDecimal.valueOf(totalPercent).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		} else {
+			oneRow.add("NAN");
 		}
 		// FIXME how to extract the follow 3 digits
 		oneRow.add(EMPTY_STRING);// TO BE detected the formula;

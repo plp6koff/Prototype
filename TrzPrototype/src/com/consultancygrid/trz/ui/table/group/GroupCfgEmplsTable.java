@@ -56,7 +56,7 @@ public class GroupCfgEmplsTable extends JTable {
 		totalProfitXValues.add(totalProfitX += 2);
 		totalProfitXValues.add(totalProfitX += 1);
 		//totalProfitXValues.add(totalProfitX += 1);
-		while (x < 100) {
+		while (x < 300) {
 			xValue.add(x);
 			yValue.add(y);
 			totalXValues.add(totalX);
@@ -110,12 +110,9 @@ public class GroupCfgEmplsTable extends JTable {
 		getColumnModel().getColumn(4).setMinWidth(100);
 		getColumnModel().getColumn(5).setMaxWidth(100);
 		getColumnModel().getColumn(6).setMaxWidth(70);
-		// TODO comment until it is required
 		getColumnModel().getColumn(7).setMinWidth(70);
-		//getColumnModel().getColumn(8).setMinWidth(col8MW);
 		getColumnModel().getColumn(8).setMinWidth(70);
 		getColumnModel().getColumn(9).setMinWidth(100);
-		int y = 0;
 		setRowHeight(30);
 	}
 	
