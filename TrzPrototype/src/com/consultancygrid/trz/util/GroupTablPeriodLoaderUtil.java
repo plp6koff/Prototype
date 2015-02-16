@@ -75,9 +75,9 @@ public class GroupTablPeriodLoaderUtil {
 					sq.setParameter("periodId", period.getId());
 					sq.setParameter("emplId", employee.getId());
 					EmployeeSalary salary = ((List<EmployeeSalary>) sq.getResultList()).get(0);
-					salary.setV12(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
-					salary.setV13(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
-					salary.setV14(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV07(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV08(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV09(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
 					em.merge(salary);
 			}	
 		}
@@ -118,9 +118,9 @@ public class GroupTablPeriodLoaderUtil {
 				sq.setParameter("periodId", period.getId());
 				sq.setParameter("emplId", employee.getId());
 				EmployeeSalary salary = ((List<EmployeeSalary>) sq.getResultList()).get(0);
-				salary.setV12(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
-				salary.setV13(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
-				salary.setV14(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+				salary.setV07(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
+				salary.setV08(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
+				salary.setV09(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
 				em.merge(salary);
 			}
 		}
