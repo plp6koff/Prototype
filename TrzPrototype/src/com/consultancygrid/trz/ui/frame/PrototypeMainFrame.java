@@ -47,6 +47,7 @@ import com.consultancygrid.trz.actionListener.employee.SaveEmployeeAL;
 import com.consultancygrid.trz.actionListener.employee.SettingsEmployeeComboAL;
 import com.consultancygrid.trz.actionListener.group.GroupEditRowAL;
 import com.consultancygrid.trz.actionListener.group.GroupTabPeriodComboAL;
+import com.consultancygrid.trz.actionListener.loadFile.LoadCreatePeriodPanelAL;
 import com.consultancygrid.trz.actionListener.loadFile.LoadFileAL;
 import com.consultancygrid.trz.actionListener.loadFile.OpenFileAL;
 import com.consultancygrid.trz.actionListener.loadFile.SaveFileAL;
@@ -625,240 +626,183 @@ public class PrototypeMainFrame extends JFrame {
 	 */
 	private void drawLoadFileSettingsTab(
 				JTabbedPane tabbedPaneSettings,
-				JComboBox comboBoxPeriod) 
+				JComboBox<Period> comboBoxPeriod) 
 						throws IOException {
 
 		
-		HashMap<TrzStatic, JTextField> map = new HashMap<TrzStatic, JTextField>();
-		JPanel firstInnerPanel = new JPanel(null);
-		firstInnerPanel.setBounds(5, 5, 1000, 150);
+		JPanel createPeriodPanel = new JPanel(null);
+		createPeriodPanel.setBounds(5, 5, 1000, 150);
 		
 		JLabel lblCode = new JLabel(
 				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_CODE));
-		lblCode.setBounds(40, 50, 350, 25);
+		lblCode.setBounds(40, 50, 100, 25);
 		lblCode.setToolTipText(ResourceLoaderUtil
 				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_CODE_TTIP));
-		firstInnerPanel.add(lblCode);
+		createPeriodPanel.add(lblCode,0);
 		JTextField textFieldCode = new JTextField();
 		textFieldCode.setColumns(10);
-		firstInnerPanel.add(textFieldCode);
-		textFieldCode.setBounds(400, 50, 150, 25);
-		textFieldCode.setText("0.0");
+		createPeriodPanel.add(textFieldCode,1);
+		textFieldCode.setBounds(220, 50, 150, 25);
+		textFieldCode.setText("");
 		textFieldCode.setToolTipText(ResourceLoaderUtil
 				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_CODE_TTIP));
-		
-		JSeparator sep = new JSeparator();
-		sep.setBounds(40, 85, 700, 5);
-		firstInnerPanel.add(sep);
-		int y = 100;
-		int delta = 30;
-
-		Query qPeriodTrzStatic = em.createQuery(" from TrzStatic");
-		List<TrzStatic> trzResult 
-				= (List<TrzStatic>) qPeriodTrzStatic.getResultList();
-		
-		for (TrzStatic singleStatic : trzResult) {
-
-			JLabel lblPeriodSetting = new JLabel(
-					singleStatic.getKeyDescription());
-			lblPeriodSetting.setBounds(40, y, 350, 25);
-			firstInnerPanel.add(lblPeriodSetting);
-			JTextField textFieldValue = new JTextField();
-			textFieldValue.setBounds(400, y, 150, 25);
-			textFieldValue.setColumns(10);
-			textFieldValue.setText("0.0");
-			firstInnerPanel.add(textFieldValue);
-			map.put(singleStatic, textFieldValue);
-			y = y + delta;
-		}
-
-		JSeparator sep1 = new JSeparator();
-		sep1.setBounds(40, y + 20, 700, 5);
-		firstInnerPanel.add(sep1);
-		
-		y = y + 40;
-		
-		JButton openButton = new JButton("Open a Files...");
-		JButton loadButton = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.SET_LOAD_FILE_TAB) + "...");
-
-		JFileChooser fc = new JFileChooser();
-		JTextArea log = new JTextArea(5, 20);
-		log.setBounds(40, y, 250, 20);
-		log.setEditable(false);
-		log.append(ResourceLoaderUtil.getConfig(Constants.DEFAULT_DATA_DIR)
-				+ System.getProperties().getProperty("file.separator")
-				+ "*.Csv");
-		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		openButton.setBounds(450, y, 200, 20);
-		OpenFileAL oFA = new OpenFileAL(this, fc, log);
-
-		openButton.addActionListener(oFA);
-		openButton.setEnabled(false);
-		File file = oFA.getFile();
-
-
-		LoadFileAL loadAl = new LoadFileAL(this, fc, log, file, firstInnerPanel, comboBoxPeriod, textFieldCode, map);
-		loadButton.addActionListener(loadAl);
-		loadButton.setBounds(680, y, 200, 20);
-		
-	
-		
-		firstInnerPanel.add(log);
-		firstInnerPanel.add(openButton);
-		firstInnerPanel.add(loadButton);
-		
-		firstInnerPanel.setBorder(BorderFactory
+		JButton loadPanel = new JButton("Start creation .. ");
+		LoadCreatePeriodPanelAL loadAl = new LoadCreatePeriodPanelAL(this, textFieldCode, createPeriodPanel, comboBoxPeriod);
+		loadPanel.addActionListener(loadAl);
+		loadPanel.setBounds(430, 50, 200, 20);
+		createPeriodPanel.add(loadPanel,2);
+		createPeriodPanel.setBorder(BorderFactory
 				.createTitledBorder(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_HEADER)));
-		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_LOAD_FILE_TAB), firstInnerPanel);
+		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_LOAD_FILE_TAB), createPeriodPanel);
 
 	}
 
-	private JComboBox drawCreatePeriod(JTabbedPane tabbedPane,
-			GroupCfgEmplsTable table, JTabbedPane tabbedPaneSettings,
-			JComboBox comboBoxPeriod1, JPanel panLinkPeriod2Empl)
-			throws IOException {
-
-
-		JPanel panSetCrtPeriod = new JPanel(null);
-
-		tabbedPaneSettings.addTab(ResourceLoaderUtil
-				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_HEADER),
-				panSetCrtPeriod);
-
-		JLabel lblCode = new JLabel(
-				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_CODE));
-		lblCode.setBounds(40, 30, 150, 25);
-		lblCode.setToolTipText(ResourceLoaderUtil
-				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_CODE_TTIP));
-		panSetCrtPeriod.add(lblCode);
-		JTextField textFieldCode = new JTextField();
-		textFieldCode.setColumns(10);
-		panSetCrtPeriod.add(textFieldCode);
-		textFieldCode.setBounds(250, 30, 150, 25);
-		textFieldCode.setToolTipText(ResourceLoaderUtil
-				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_CODE_TTIP));
-
-		JLabel lblRevenue = new JLabel(
-				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_REVENUE));
-		lblRevenue.setBounds(450, 30, 150, 25);
-		panSetCrtPeriod.add(lblRevenue);
-		lblRevenue.setToolTipText(ResourceLoaderUtil
-				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE_TTIP));
-		JTextField textFieldRevenue = new JTextField();
-		textFieldRevenue.setColumns(10);
-		textFieldRevenue.setBounds(600, 30, 150, 25);
-		panSetCrtPeriod.add(textFieldRevenue);
-		textFieldRevenue.setToolTipText(ResourceLoaderUtil
-				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE_TTIP));
-
-		// Model Properties
-		Properties p = new Properties();
-		p.put("text.today",
-				ResourceLoaderUtil.getLabels(LabelsConstants.CALENDAR_TODAY));
-		p.put("text.month",
-				ResourceLoaderUtil.getLabels(LabelsConstants.CALENDAR_MONTH));
-		p.put("text.year",
-				ResourceLoaderUtil.getLabels(LabelsConstants.CALENDAR_YEAR));
-		// Start
-		UtilDateModel modelStart = new UtilDateModel();
-		modelStart.setDate(2014, 01, 01);
-		JDatePanelImpl datePanelStart = new JDatePanelImpl(modelStart, p);
-		JDatePickerImpl datePickerStart = new JDatePickerImpl(datePanelStart,
-				new DateLabelFormatter());
-		datePickerStart.setToolTipText(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERIOD_START_DATE));
-		JLabel lblStartDate = new JLabel(
-				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_START_DATE));
-		lblStartDate.setBounds(40, 80, 150, 25);
-		panSetCrtPeriod.add(lblStartDate);
-		datePickerStart.setBounds(250, 80, 150, 30);
-		panSetCrtPeriod.add(datePickerStart);
-		// End
-		UtilDateModel modelEnd = new UtilDateModel();
-		modelEnd.setDate(2014, 01, 02);
-		JDatePanelImpl datePanelEnd = new JDatePanelImpl(modelEnd, p);
-		JDatePickerImpl datePickerEnd = new JDatePickerImpl(datePanelEnd,
-				new DateLabelFormatter());
-		datePanelEnd.setToolTipText(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERIOD_END_DATE));
-		datePickerEnd.setToolTipText(ResourceLoaderUtil
-				.getLabels(LabelsConstants.PERIOD_END_DATE));
-		JLabel lblEndDate = new JLabel(
-				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_END_DATE));
-		lblEndDate.setBounds(450, 80, 150, 25);
-		panSetCrtPeriod.add(lblEndDate);
-		datePickerEnd.setBounds(600, 80, 150, 30);
-		panSetCrtPeriod.add(datePickerEnd);
-
-		// GroupTabPeriodComboAL tPCAL = new GroupTabPeriodComboAL(this,
-		// comboBox, table);
-
-		JPanel createFormPanel = new JPanel();
-		createFormPanel.setLayout(null);
-		createFormPanel.setBounds(10, 85, 600, 400);
-
-		int y = 100;
-		int delta = 30;
-
-		Query qPeriodTrzStatic = em.createQuery(" from TrzStatic");
-		List<TrzStatic> trzResult = (List<TrzStatic>) qPeriodTrzStatic
-				.getResultList();
-
-		HashMap<TrzStatic, JTextField> map = new HashMap<TrzStatic, JTextField>();
-		for (TrzStatic singleStatic : trzResult) {
-
-			JLabel lblPeriodSetting = new JLabel(
-					singleStatic.getKeyDescription());
-			lblPeriodSetting.setBounds(40, y, 250, 25);
-			createFormPanel.add(lblPeriodSetting);
-			JTextField textFieldValue = new JTextField();
-			textFieldValue.setBounds(300, y, 150, 25);
-			textFieldValue.setColumns(10);
-			createFormPanel.add(textFieldValue);
-			map.put(singleStatic, textFieldValue);
-			y = y + delta;
-		}
-
-		y = y + 40;
-
-		Query qPeriodDepartment = em.createQuery(" from Department");
-		List<Department> deptResult = (List<Department>) qPeriodDepartment
-				.getResultList();
-
-		HashMap<Department, JTextField> mapDept = new HashMap<Department, JTextField>();
-		for (Department singleDept : deptResult) {
-
-			JLabel lblDept = new JLabel(
-					ResourceLoaderUtil
-							.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE_DEPT)
-							+ singleDept.getCode());
-			lblDept.setBounds(40, y, 250, 25);
-			createFormPanel.add(lblDept);
-
-			JTextField textFieldValue = new JTextField();
-			textFieldValue.setBounds(300, y, 150, 25);
-			textFieldValue.setColumns(10);
-			textFieldValue.setText("0.0");
-			createFormPanel.add(textFieldValue);
-			mapDept.put(singleDept, textFieldValue);
-			y = y + delta;
-		}
-
-		JButton btnSavePeriod = new JButton(
-				ResourceLoaderUtil
-						.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_SAVE));
-		btnSavePeriod.setBounds(20, y + 40, 200, 25);
-		createFormPanel.add(btnSavePeriod);
-		createFormPanel.setVisible(false);
-		SavePeriodAL sPAL = new SavePeriodAL(this, datePickerStart,
-				datePickerEnd, textFieldCode, textFieldRevenue, map, mapDept,
-				createFormPanel, comboBoxPeriod1, panLinkPeriod2Empl);
-		panSetCrtPeriod.add(createFormPanel);
-		btnSavePeriod.addActionListener(sPAL);
-
-		return comboBoxPeriod1;
-
-	}
+//	private JComboBox drawCreatePeriod(JTabbedPane tabbedPane,
+//			GroupCfgEmplsTable table, JTabbedPane tabbedPaneSettings,
+//			JComboBox comboBoxPeriod1, JPanel panLinkPeriod2Empl)
+//			throws IOException {
+//
+//
+//		JPanel panSetCrtPeriod = new JPanel(null);
+//
+//		tabbedPaneSettings.addTab(ResourceLoaderUtil
+//				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_HEADER),
+//				panSetCrtPeriod);
+//
+//		JLabel lblCode = new JLabel(
+//				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_CODE));
+//		lblCode.setBounds(40, 30, 150, 25);
+//		lblCode.setToolTipText(ResourceLoaderUtil
+//				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_CODE_TTIP));
+//		panSetCrtPeriod.add(lblCode);
+//		JTextField textFieldCode = new JTextField();
+//		textFieldCode.setColumns(10);
+//		panSetCrtPeriod.add(textFieldCode);
+//		textFieldCode.setBounds(250, 30, 150, 25);
+//		textFieldCode.setToolTipText(ResourceLoaderUtil
+//				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_CODE_TTIP));
+//
+//		JLabel lblRevenue = new JLabel(
+//				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_REVENUE));
+//		lblRevenue.setBounds(450, 30, 150, 25);
+//		panSetCrtPeriod.add(lblRevenue);
+//		lblRevenue.setToolTipText(ResourceLoaderUtil
+//				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE_TTIP));
+//		JTextField textFieldRevenue = new JTextField();
+//		textFieldRevenue.setColumns(10);
+//		textFieldRevenue.setBounds(600, 30, 150, 25);
+//		panSetCrtPeriod.add(textFieldRevenue);
+//		textFieldRevenue.setToolTipText(ResourceLoaderUtil
+//				.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE_TTIP));
+//
+//		// Model Properties
+//		Properties p = new Properties();
+//		p.put("text.today",
+//				ResourceLoaderUtil.getLabels(LabelsConstants.CALENDAR_TODAY));
+//		p.put("text.month",
+//				ResourceLoaderUtil.getLabels(LabelsConstants.CALENDAR_MONTH));
+//		p.put("text.year",
+//				ResourceLoaderUtil.getLabels(LabelsConstants.CALENDAR_YEAR));
+//		// Start
+//		UtilDateModel modelStart = new UtilDateModel();
+//		modelStart.setDate(2014, 01, 01);
+//		JDatePanelImpl datePanelStart = new JDatePanelImpl(modelStart, p);
+//		JDatePickerImpl datePickerStart = new JDatePickerImpl(datePanelStart,
+//				new DateLabelFormatter());
+//		datePickerStart.setToolTipText(ResourceLoaderUtil
+//				.getLabels(LabelsConstants.PERIOD_START_DATE));
+//		JLabel lblStartDate = new JLabel(
+//				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_START_DATE));
+//		lblStartDate.setBounds(40, 80, 150, 25);
+//		panSetCrtPeriod.add(lblStartDate);
+//		datePickerStart.setBounds(250, 80, 150, 30);
+//		panSetCrtPeriod.add(datePickerStart);
+//		// End
+//		UtilDateModel modelEnd = new UtilDateModel();
+//		modelEnd.setDate(2014, 01, 02);
+//		JDatePanelImpl datePanelEnd = new JDatePanelImpl(modelEnd, p);
+//		JDatePickerImpl datePickerEnd = new JDatePickerImpl(datePanelEnd,
+//				new DateLabelFormatter());
+//		datePanelEnd.setToolTipText(ResourceLoaderUtil
+//				.getLabels(LabelsConstants.PERIOD_END_DATE));
+//		datePickerEnd.setToolTipText(ResourceLoaderUtil
+//				.getLabels(LabelsConstants.PERIOD_END_DATE));
+//		JLabel lblEndDate = new JLabel(
+//				ResourceLoaderUtil.getLabels(LabelsConstants.PERIOD_END_DATE));
+//		lblEndDate.setBounds(450, 80, 150, 25);
+//		panSetCrtPeriod.add(lblEndDate);
+//		datePickerEnd.setBounds(600, 80, 150, 30);
+//		panSetCrtPeriod.add(datePickerEnd);
+//
+//		// GroupTabPeriodComboAL tPCAL = new GroupTabPeriodComboAL(this,
+//		// comboBox, table);
+//
+//		JPanel createFormPanel = new JPanel();
+//		createFormPanel.setLayout(null);
+//		createFormPanel.setBounds(10, 85, 600, 400);
+//
+//		int y = 100;
+//		int delta = 30;
+//
+//		Query qPeriodTrzStatic = em.createQuery(" from TrzStatic");
+//		List<TrzStatic> trzResult = (List<TrzStatic>) qPeriodTrzStatic
+//				.getResultList();
+//
+//		HashMap<TrzStatic, JTextField> map = new HashMap<TrzStatic, JTextField>();
+//		for (TrzStatic singleStatic : trzResult) {
+//
+//			JLabel lblPeriodSetting = new JLabel(
+//					singleStatic.getKeyDescription());
+//			lblPeriodSetting.setBounds(40, y, 250, 25);
+//			createFormPanel.add(lblPeriodSetting);
+//			JTextField textFieldValue = new JTextField();
+//			textFieldValue.setBounds(300, y, 150, 25);
+//			textFieldValue.setColumns(10);
+//			createFormPanel.add(textFieldValue);
+//			map.put(singleStatic, textFieldValue);
+//			y = y + delta;
+//		}
+//
+//		y = y + 40;
+//
+//		Query qPeriodDepartment = em.createQuery(" from Department");
+//		List<Department> deptResult = (List<Department>) qPeriodDepartment
+//				.getResultList();
+//
+//		HashMap<Department, JTextField> mapDept = new HashMap<Department, JTextField>();
+//		for (Department singleDept : deptResult) {
+//
+//			JLabel lblDept = new JLabel(
+//					ResourceLoaderUtil
+//							.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_REVENUE_DEPT)
+//							+ singleDept.getCode());
+//			lblDept.setBounds(40, y, 250, 25);
+//			createFormPanel.add(lblDept);
+//
+//			JTextField textFieldValue = new JTextField();
+//			textFieldValue.setBounds(300, y, 150, 25);
+//			textFieldValue.setColumns(10);
+//			textFieldValue.setText("0.0");
+//			createFormPanel.add(textFieldValue);
+//			mapDept.put(singleDept, textFieldValue);
+//			y = y + delta;
+//		}
+//
+//		JButton btnSavePeriod = new JButton(
+//				ResourceLoaderUtil
+//						.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_SAVE));
+//		btnSavePeriod.setBounds(20, y + 40, 200, 25);
+//		createFormPanel.add(btnSavePeriod);
+//		createFormPanel.setVisible(false);
+//		SavePeriodAL sPAL = new SavePeriodAL(this, datePickerStart,
+//				datePickerEnd, textFieldCode, textFieldRevenue, map, mapDept,
+//				createFormPanel, comboBoxPeriod1, panLinkPeriod2Empl);
+//		panSetCrtPeriod.add(createFormPanel);
+//		btnSavePeriod.addActionListener(sPAL);
+//
+//		return comboBoxPeriod1;
+//
+//	}
 	
 	
 	private void drawCreateTargetLevels(JTabbedPane tabbedPaneSettings,JComboBox comboTargetsCTL)

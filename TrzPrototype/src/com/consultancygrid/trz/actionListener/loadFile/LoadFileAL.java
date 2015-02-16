@@ -61,8 +61,9 @@ public class LoadFileAL extends BaseActionListener {
 	private JFileChooser fc;
 	private JTextArea log;
 	private File file;
-	private JPanel firstInnerPanel;
-	private JComboBox comboBoxPeriod;
+	private JComboBox<Period> comboBoxPeriod;
+	private JPanel createPanelMain;
+    private JPanel createPanelInner;
 	
 	
 	private JTextField fieldCode;
@@ -73,17 +74,19 @@ public class LoadFileAL extends BaseActionListener {
 			          JFileChooser fc,
 			          JTextArea log, 
 			          File file, 
-			          JPanel firstInnerPanel, 
-			          JComboBox comboBoxPeriod,
+			          JComboBox<Period> comboBoxPeriod,
 			          JTextField fieldCode,
-			          HashMap<TrzStatic, JTextField> map) {
+			          HashMap<TrzStatic, JTextField> map, 
+			          JPanel createPanelMain,
+			          JPanel createPanelInner) {
 
 		super(mainFrame);
 		this.fc = fc;
 		this.log = log;
 		this.file = file;
-		this.firstInnerPanel = firstInnerPanel;
-		this.comboBoxPeriod = comboBoxPeriod;
+		this.createPanelMain = createPanelMain;
+		this.createPanelInner = createPanelInner;
+		this.comboBoxPeriod  = comboBoxPeriod;
 		this.fieldCode = fieldCode;
 		this.map = map;
 		
@@ -92,8 +95,8 @@ public class LoadFileAL extends BaseActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 	
-		firstInnerPanel.revalidate();
-		firstInnerPanel.repaint();
+		createPanelMain.revalidate();
+		createPanelMain.repaint();
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
 		Period period = new Period();
@@ -163,6 +166,8 @@ public class LoadFileAL extends BaseActionListener {
 
 				}
 			}
+			
+			createPanelMain.remove(createPanelInner);
 		} catch (Exception e1) {
 			Logger.error(e1);
 			try {
@@ -222,8 +227,8 @@ public class LoadFileAL extends BaseActionListener {
 		}
 		periodComboModel.addAll(allPeriods);
 		this.fieldCode.setText("");
-		firstInnerPanel.revalidate();
-		firstInnerPanel.repaint();
+		createPanelMain.revalidate();
+		createPanelMain.repaint();
 		comboBoxPeriod.revalidate();
 		comboBoxPeriod.repaint();
 		try {
