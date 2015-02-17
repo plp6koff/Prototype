@@ -287,7 +287,9 @@ public class PrototypeMainFrame extends JFrame {
 	 * @throws IOException
 	 */
 	private void drawSecondTab(JTabbedPane tabbedPane,
-								GroupCfgEmplsTable table, GroupCfgEmplsTable table2, JComboBox comboBox) throws IOException {
+								GroupCfgEmplsTable table, 
+								GroupCfgEmplsTable table2, 
+								JComboBox comboBox) throws IOException {
 		//Main panel
 		JPanel secondInnerPanel = new JPanel(null);
 		//Tabbed panel
@@ -332,8 +334,7 @@ public class PrototypeMainFrame extends JFrame {
 		editRow.addActionListener(new GroupEditRowAL(this, table, table2, comboBox, tabbedPaneDept));
 		secondInnerPanel.add(editRow);
 		//Action listener
-		GroupTabPeriodComboAL tPCAL 
-				= new GroupTabPeriodComboAL(this, comboBox, table, table2);
+		GroupTabPeriodComboAL tPCAL = new GroupTabPeriodComboAL(this, comboBox, table, table2);
 		
 		
 		depTablesPanel1.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));

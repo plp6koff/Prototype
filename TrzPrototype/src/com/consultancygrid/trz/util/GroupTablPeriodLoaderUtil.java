@@ -75,9 +75,9 @@ public class GroupTablPeriodLoaderUtil {
 					sq.setParameter("periodId", period.getId());
 					sq.setParameter("emplId", employee.getId());
 					EmployeeSalary salary = ((List<EmployeeSalary>) sq.getResultList()).get(0);
-					salary.setV07(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
-					salary.setV08(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
-					salary.setV09(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV06(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV07(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV08(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
 					em.merge(salary);
 			}	
 		}
@@ -185,7 +185,7 @@ public class GroupTablPeriodLoaderUtil {
 	}
 	
 	
-	private Double getEmployeePercentAllOnboard(EmployeeSettings emplSettings) {
+	public Double getEmployeePercentAllOnboard(EmployeeSettings emplSettings) {
 		if (emplSettings != null) {
 			BigDecimal temp 
 			  = emplSettings.getPersonAllOnboardingPercent() != null ? emplSettings.getPersonAllOnboardingPercent() : BigDecimal.valueOf(1);
@@ -253,6 +253,42 @@ public class GroupTablPeriodLoaderUtil {
 
 	}
 	
+	private Vector add1thRow(Employee employee,
+			Department department, int allEmployeesCount, Period period, BigInteger emplDept, EmployeeSettings employeeSettings) throws IOException {
+
+		Vector<Object> oneRow = new Vector<Object>();
+		//a0
+		String departmetnCode = department != null ? department.getCode() : "N/A";  
+		oneRow.add(departmetnCode);
+		//b1
+		oneRow.add(employee.getFirstName() + " " + employee.getLastName());
+		//c2
+		oneRow.add(period.getRevenue().toString());// To be extracted from db
+		//d3
+		oneRow.add(allEmployeesCount);// To be provided as param
+		int profitAll = period.getRevenue().intValue() - emplDept.intValue();
+		//e4
+		oneRow.add(profitAll);
+		//f5
+		oneRow.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE1));
+		//g6
+		Double percentAll = getEmployeePercentAll(employeeSettings);
+		oneRow.add(percentAll);
+		// TODO comment until it is required
+		double personalFactor =  getEmployeePercentAllOnboard(employeeSettings);
+		double jobDonePercent = 1.0;
+		oneRow.add(personalFactor);
+		//oneRow.add("1");
+
+		// TODO last 2 columns to be token from the Excel
+		double result = calculateBonusAll(profitAll, percentAll, personalFactor, jobDonePercent, allEmployeesCount);
+		oneRow.add(result);
+		oneRow.add(calculateTotalAll(period.getRevenue(),percentAll));
+		return oneRow;
+
+	}
+	
 	private double add1thRow(Vector tableData, Employee employee, Period period, BigInteger emplDept, EmployeeSettings employeeSettings) throws IOException {
 
 		Vector<Object> oneRow = new Vector<Object>();
@@ -276,7 +312,7 @@ public class GroupTablPeriodLoaderUtil {
 		oneRow.add(percentAll);
 		// TODO comment until it is required
 		double personalFactor =  getEmployeePercentAllOnboard(employeeSettings);
-		double jobDonePercent = 1.0;
+		double jobDonePercent = 1.0d;
 		oneRow.add(personalFactor);
 		//oneRow.add("1");
 
@@ -294,7 +330,7 @@ public class GroupTablPeriodLoaderUtil {
 		return BigDecimal.valueOf((revenuPeriond.doubleValue() * percentAll)/100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 	
-	private Double calculateBonusAll(int profitAll, double percentAll, double personalFactor, double jobDonePercent, int allEployees ){
+	public Double calculateBonusAll(int profitAll, double percentAll, double personalFactor, double jobDonePercent, int allEployees ){
 		
 		return  BigDecimal.valueOf(profitAll * (((percentAll * personalFactor) / allEployees)/(100 * jobDonePercent)))
 				.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -319,7 +355,7 @@ public class GroupTablPeriodLoaderUtil {
 		double personalFactor = getEmployeePercentGroupOnboard(employeeSettings);
 		oneRow.add(personalFactor);
 		//oneRow.add("1");
-		double jobDonePercent = 1.0;
+		double jobDonePercent = 1.0d;
 		// TODO last 2 columns to be token from the Excel
 		double result = calculateBonusGroup(profitGroup, percentGroup, personalFactor, jobDonePercent, allEmployeesDept); 
 		oneRow.add(result);
@@ -362,9 +398,9 @@ public class GroupTablPeriodLoaderUtil {
 		return (base * percentGroup)/100;
 	}
 	
-	private Double calculateBonusGroup(int profitGroup, double percentGroup, double personalFactor, double jobDonePercent, int allEployeesDept){
+	public Double calculateBonusGroup(int profitGroup, double percentGroup, double personalFactor, double jobDonePercent, int allEployeesDept){
 		
-		return  BigDecimal.valueOf(profitGroup * (((personalFactor * personalFactor) / allEployeesDept)/(100 * jobDonePercent))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		return  BigDecimal.valueOf(profitGroup * ((percentGroup * personalFactor) / 100 )).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
 	private double add3thRow(Vector tableData, Employee employee,
@@ -422,7 +458,7 @@ public class GroupTablPeriodLoaderUtil {
 		return BigDecimal.valueOf((base * percentPersonal)/100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
-	private Double calculateBonusPersonal(double profitPersonal, double percentPersonal, double personalFactor, double jobDonePercent){
+	public Double calculateBonusPersonal(double profitPersonal, double percentPersonal, double personalFactor, double jobDonePercent){
 		
 		return BigDecimal.valueOf(profitPersonal * (( percentPersonal * personalFactor )/(100 * jobDonePercent))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}

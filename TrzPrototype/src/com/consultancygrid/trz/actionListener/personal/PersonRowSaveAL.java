@@ -36,11 +36,15 @@ public class PersonRowSaveAL extends BaseActionListener{
 
 	private PersonalCfgEmplsTable personalConfTable;
 	private JFrame popup;
-	private JComboBox comboBoxEmployee;
+	private JComboBox<Employee> comboBoxEmployee;
 	
 	private HashMap<String, JTextField> map ;
 	
-	public PersonRowSaveAL(PrototypeMainFrame mainFrame, PersonalCfgEmplsTable personalConfTable, JComboBox comboBoxEmployee,  HashMap<String, JTextField> map, JFrame popup) {
+	public PersonRowSaveAL(PrototypeMainFrame mainFrame,
+			PersonalCfgEmplsTable personalConfTable, 
+			JComboBox<Employee> comboBoxEmployee,  
+			HashMap<String, JTextField> map,
+			JFrame popup) {
 		super(mainFrame);
 		this.personalConfTable = personalConfTable;
 		this.comboBoxEmployee = comboBoxEmployee;
@@ -72,7 +76,6 @@ public class PersonRowSaveAL extends BaseActionListener{
 				String v10Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL10).getText();
 				String v13Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL13).getText();
 				String v14Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL14).getText();
-				String v15Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL15).getText();
 				
 				
 				Query q1 = em.createQuery(" from EmployeeSettings as settings  where  settings.period.id = :periodId and settings.employee.id = :emplId ");
@@ -102,9 +105,9 @@ public class PersonRowSaveAL extends BaseActionListener{
 				String oBonusName = v14Str;
 				emplSallary.setS01(v14Str);
 				
-				BigDecimal v15 = parseValue(emplSallary.getV14(),v15Str); 
-				Double pVaucher = v15.doubleValue();
-				emplSallary.setV14(v15);
+//				BigDecimal v15 = parseValue(emplSallary.getV14(),v15Str); 
+//				Double pVaucher = v15.doubleValue();
+//				emplSallary.setV14(v15);
 				
 				Query qPeriodTrzStatic = em
 						.createQuery(" from TrzStatic");
@@ -123,7 +126,7 @@ public class PersonRowSaveAL extends BaseActionListener{
 					}
 				}
 				EmployeeSallaryCalculateUtil.calcSettings(b, d, kMarker,
-						pVaucher, nBonus , oBonusName, emplSallary, DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL);
+						 nBonus , oBonusName, emplSallary, DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL);
 				
 				em.merge(emplSallary);
 				em.merge(settings);

@@ -152,15 +152,6 @@ public class PersonRowEditAL extends BaseActionListener{
 			panel.add(tf4);
 			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL14, tf4);
 			
-			JLabel l5 = new JLabel(ResourceLoaderUtil
-					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL15));
-			l5.setBounds(30, 380, 150, 60);
-			panel.add(l5);
-			JTextField tf5 = new JTextField();
-			tf5.setBounds(200, 400, 100, 25);
-			tf5.setText(model.getValueAt(i, 15) != null ?((BigDecimal)model.getValueAt(i, 15)).toString() : BigDecimal.ZERO.toString());
-			panel.add(tf5);
-			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL15, tf3);
 			
 			
 			JButton saveBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));

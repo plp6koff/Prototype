@@ -103,7 +103,8 @@ public class LoadFileAL extends BaseActionListener {
 		period.setCode(fieldCode.getText());
 		String code  = this.fieldCode.getText();
 		Set<String> matchCodes = null;
-
+		double vauchers = 0.0d;
+		
 		try {
 		
 			factory = Persistence
@@ -119,14 +120,19 @@ public class LoadFileAL extends BaseActionListener {
 				return;
 			}
 			em.persist(period);
+			
 			for (Entry<TrzStatic, JTextField> entry : map.entrySet()) {
 				
 				PeriodSetting ps = new PeriodSetting();
 				ps.setPeriod(period);
 				ps.setTrzStatic(entry.getKey());
 				ps.setValue(entry.getValue().getText());
+				if  (("VAUCHER1".equals(entry.getKey().getKey()))
+						|| ("VAUCHER2".equals(entry.getKey().getKey()))) {
+							
+					vauchers = vauchers + Double.valueOf(entry.getKey().getValue());
+				}
 				em.persist(ps);
-				entry.getValue().setText("0.0");
 			}
 			
 
@@ -199,7 +205,7 @@ public class LoadFileAL extends BaseActionListener {
 			em = factory.createEntityManager();
 			em.getTransaction().begin();
 
-			empl2Period2Depart(em, period, matchCodes);
+			empl2Period2Depart(em, period, matchCodes, vauchers);
 			
 			Query qPeriod = em.createQuery(" from Period");
 			 allPeriods = (List<Period>) qPeriod.getResultList();
@@ -290,7 +296,7 @@ public class LoadFileAL extends BaseActionListener {
 		return matchCodes;
 	}
 
-	public void empl2Period2Depart(EntityManager em, Period period, Set<String> matchCodes) {
+	public void empl2Period2Depart(EntityManager em, Period period, Set<String> matchCodes, Double vauchers) {
 
 		Map<String, Department> codeDeptPair = new HashMap<String, Department>();
 
@@ -349,8 +355,8 @@ public class LoadFileAL extends BaseActionListener {
 
 				createEmplDeptPeriod(em, period, employee, department,
 						singleAvg.getId().getRevenue());
-				EmployeeSettingsUtil.createSettings(em, period, employee);
-				EmployeeSalaryUtil.createSalary(em, period, employee);
+				EmployeeSettingsUtil.createSettings(em, period, employee,  vauchers);
+				EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
 
 				EmplDeptPeriod emplDeptPeriod = new EmplDeptPeriod();
 				emplDeptPeriod.setDepartment(department);
@@ -369,8 +375,8 @@ public class LoadFileAL extends BaseActionListener {
 			if (empls!= null && !empls.isEmpty()){
 				
 				Employee employee = empls.get(0);
-				EmployeeSettingsUtil.createSettings(em, period, employee);
-				EmployeeSalaryUtil.createSalary(em, period, employee);
+				EmployeeSettingsUtil.createSettings(em, period, employee, vauchers);
+				EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
 			}
 		}
 		

@@ -13,14 +13,14 @@ import com.consultancygrid.trz.model.Period;
 public class EmployeeSettingsUtil {
 
 	public static void createSettings(EntityManager em, Period period,
-			Employee empl) {
+			Employee empl,  Double vauchers) {
 
 		EmployeeSettings settings = new EmployeeSettings();
 		settings.setPeriod(period);
 		settings.setEmployee(empl);
 
 		Query q = em
-				.createQuery(" from EmployeeSettings as settings  where  settings.employee.id = :employeeId and settings.period.id =:periodId order by settings.period.dateEnd desc");
+				.createQuery(" from EmployeeSettings as settings  where  settings.employee.id = :employeeId and settings.period.id =:periodId order by settings.period.code desc");
 		q.setParameter("employeeId", empl.getId());
 		q.setParameter("periodId", period.getId());
 		List<EmployeeSettings> emplSettingsList = (List<EmployeeSettings>) q

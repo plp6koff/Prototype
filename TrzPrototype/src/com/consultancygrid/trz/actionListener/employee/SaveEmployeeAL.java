@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,6 +26,8 @@ import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.Period;
+import com.consultancygrid.trz.model.PeriodSetting;
+import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.employee.EmployeeActiveTableModel;
@@ -81,6 +84,18 @@ public class SaveEmployeeAL extends BaseActionListener {
 				
 				Period period = periods.get(0);
 				
+				double vauchers = 0.0d;
+				for (PeriodSetting es : period.getPeriodSettings()) {
+					
+					
+					if  (("VAUCHER1".equals(es.getTrzStatic().getKey()))
+							|| ("VAUCHER2".equals(es.getTrzStatic().getKey()))) {
+						
+						vauchers = vauchers + Double.valueOf(es.getValue());
+					}
+				}
+				
+				
 				if (firstName!= null && !"".equals(firstName)
 					&&	lastName!= null && !"".equals(lastName)
 					&&  matchCode!= null && !"".equals(matchCode)) {
@@ -91,10 +106,8 @@ public class SaveEmployeeAL extends BaseActionListener {
 					employee.setLastName(lastName);
 					employee.setMatchCode(matchCode);
 					em.persist(employee);
-					EmployeeSalaryUtil.createSalary(em, period, employee);
-					EmployeeSettingsUtil.createSettings(em, period, employee);
-					
-					
+					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
+					EmployeeSettingsUtil.createSettings(em, period, employee, vauchers);
 					EmplComboBoxModel model = (EmplComboBoxModel) employeesCombo.getModel();
 					model.addItem(employee);
 					employeesCombo.getParent().revalidate();

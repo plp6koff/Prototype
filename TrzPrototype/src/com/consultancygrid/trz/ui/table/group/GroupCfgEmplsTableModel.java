@@ -82,6 +82,17 @@ public class GroupCfgEmplsTableModel extends AbstractTableModel {
 		return data.size();
 	}
 
+	
+	public Vector<Object> getRowData(int rowIndex) {
+	
+		if (data.size() == 0) {
+			return null;
+		}
+		Vector<Object> o = (Vector<Object>) data.get(rowIndex);
+		return o;
+	}
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -119,7 +130,7 @@ public class GroupCfgEmplsTableModel extends AbstractTableModel {
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
 		super.setValueAt(aValue, rowIndex, columnIndex);
-		fireTableRowsUpdated(rowIndex, columnIndex);
+		fireTableCellUpdated(rowIndex, rowIndex);
 		fireTableDataChanged(); 
 	}
 

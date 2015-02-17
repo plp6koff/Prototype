@@ -84,7 +84,6 @@ public class PDFCreatorUtil {
 		b = BigDecimal.valueOf(Double.valueOf(1000.0));
 		d = BigDecimal.valueOf(Double.valueOf(1000.0));
 		h = BigDecimal.valueOf(Double.valueOf(800.0));
-		u = BigDecimal.valueOf(Double.valueOf(100.0));
 		r = BigDecimal.valueOf(Double.valueOf(500.0));
 
 		emplSal = new EmployeeSalary();
@@ -100,7 +99,6 @@ public class PDFCreatorUtil {
 		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
 												  d.doubleValue(),
 												  h.doubleValue(),
-												  r.doubleValue(),
 												  u.doubleValue(),
 												  "Test",
 												  emplSal, dod, oR, oS);

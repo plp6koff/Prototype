@@ -1,5 +1,6 @@
 package com.consultancygrid.trz.util;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,7 +12,7 @@ import com.consultancygrid.trz.model.Period;
 
 public class EmployeeSalaryUtil {
 
-	public static  void createSalary(EntityManager em, Period period, Employee empl) {
+	public static  void createSalary(EntityManager em, Period period, Employee empl,  Double vauchers) {
 
 		Query q = em
 				.createQuery(" from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.dateEnd desc");
@@ -42,10 +43,7 @@ public class EmployeeSalaryUtil {
 			salary.setV17(lastSalary.getV17());
 			salary.setV18(lastSalary.getV18());
 			salary.setV19(lastSalary.getV19());
-			salary.setV20(lastSalary.getV20());
-			salary.setV21(lastSalary.getV21());
-			salary.setV22(lastSalary.getV22());
-			salary.setV23(lastSalary.getV23());
+			salary.setV14(BigDecimal.valueOf(vauchers));
 		}
 		salary.setEmployee(empl);
 		salary.setPeriod(period);

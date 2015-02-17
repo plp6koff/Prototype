@@ -7,10 +7,12 @@ import com.consultancygrid.trz.model.TrzStatic;
 
 public class EmployeeSallaryCalculateUtil {
 
-	public static void calcSettings(Double b, Double d , Double kMarker , Double pVaucher, Double nBonus, String oBonusName , 
+	public static void calcSettings(Double b, Double d , Double kMarker ,  Double nBonus, String oBonusName , 
 			EmployeeSalary emplSallary, TrzStatic DOD,
 			TrzStatic OSIGUROVKI_RABOTODATEL, TrzStatic OSIGUROVKI_SLUJITEL) {
 
+		Double pVaucher = emplSallary.getV14() != null  ? emplSallary.getV14().doubleValue() : null;
+		
 		Double oRabotodatelValue = Double.valueOf(OSIGUROVKI_RABOTODATEL
 				.getValue());
 		Double oRabotodatelType = (OSIGUROVKI_RABOTODATEL.getValueType()
@@ -66,7 +68,7 @@ public class EmployeeSallaryCalculateUtil {
 		emplSallary.setV12(BigDecimal.valueOf(m));
 		emplSallary.setV13(BigDecimal.valueOf(nBonus));
 		emplSallary.setS01(oBonusName);
-		emplSallary.setV14(BigDecimal.valueOf(pVaucher));
+		
 		emplSallary.setV15(BigDecimal.valueOf(q));
 		emplSallary.setV16(BigDecimal.valueOf(r));
 	    emplSallary.setV17(BigDecimal.valueOf(s));
