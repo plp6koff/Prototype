@@ -138,22 +138,22 @@ public class GroupSaveRowAL extends BaseActionListener{
 						Double bonusAll = grTabPeriodLoaderUtil.calculateBonusAll(profitAll, pABD.doubleValue(), pAOnBPBD.doubleValue(), 1.0d, allEmployees);
 						currentModel.setValueAt(bonusAll.toString(), i, 8);
 						rowDataI.set(8, bonusAll.toString());
-						double personalFactor =  grTabPeriodLoaderUtil.getEmployeePercentAllOnboard(settings);
-						currentModel.setValueAt(personalFactor, i, 9);
-						rowDataI.set(9, personalFactor);
+						double allTotal =  grTabPeriodLoaderUtil.getEmployeePercentAllOnboard(settings);
+						currentModel.setValueAt(allTotal, i, 9);
+						rowDataI.set(9, allTotal);
 						
 						i = i + 1;
 						Vector<Object> rowDataI1 =  currentModel.getRowData(i);
-						int profitGroup = Integer.valueOf(currentModel.getValueAt(i, 4).toString());
 						int allEployeesDept = Integer.valueOf(currentModel.getValueAt(i, 3).toString());
+						double profitGroup = Double.valueOf(currentModel.getValueAt(i, 4).toString());
+						double revenueDept = Double.valueOf(currentModel.getValueAt(i, 2).toString());
 						currentModel.setValueAt(percentGroup, i,6);
 						rowDataI1.set(6,percentGroup);
 						currentModel.setValueAt(onBoardGroup, i,7);
 						rowDataI1.set(7, onBoardGroup);
 						Double bonusGroup = grTabPeriodLoaderUtil.calculateBonusGroup(profitGroup, pGBD.doubleValue(), pGOnBPBD.doubleValue(), 1.0d, allEployeesDept);
 						currentModel.setValueAt(bonusGroup.toString(), i, 8);
-						rowDataI1.set(8, bonusGroup.toString());
-						
+						rowDataI1.set(8, bonusGroup);
 						
 						i = i + 1;
 						Vector<Object> rowDataI2 =  currentModel.getRowData(i);
@@ -164,6 +164,11 @@ public class GroupSaveRowAL extends BaseActionListener{
 						currentModel.setValueAt(bonusPersonal.toString(), i, 8);
 						rowDataI2.set(8, bonusPersonal.toString());
 					
+						double groupTotal =  grTabPeriodLoaderUtil.calculateTotalGroup(revenueDept - profitPersonal, pGBD.doubleValue());
+						rowDataI1.set(9, groupTotal);
+						double personalTotal =  grTabPeriodLoaderUtil.calculateTotalPersonal(1, pPBD.doubleValue());
+						personalTotal = BigDecimal.valueOf(personalTotal).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+						rowDataI2.set(9, personalTotal);
 						
 						i = i + 1;
 						Vector<Object> rowDataI4 =  currentModel.getRowData(i);
@@ -180,13 +185,6 @@ public class GroupSaveRowAL extends BaseActionListener{
 						currentModel.fireTableRowsUpdated(i, i+2);
 						currentModel.fireTableDataChanged();
 						groupConfTable.repaint();
-						//i++
-//						currentModel.setValueAt();
-//						currentModel.setValueAt();
-//						currentModel.setValueAt();
-//						//i++
-//						currentModel.setValueAt();
-//						currentModel.setValueAt();
 						
 						em.merge(settings);
 						
@@ -194,25 +192,6 @@ public class GroupSaveRowAL extends BaseActionListener{
 				}
 				
 				frame.setVisible(false);
-				
-//				Vector tableData1 = new Vector();
-//				Vector tableData2 = new Vector();
-//				
-//				Set<UUID> employeeSetingsIds = grTabPeriodLoaderUtil.loadData(period, em, tableData1);
-//				grTabPeriodLoaderUtil.loadData2(period, em, tableData2, employeeSetingsIds);
-//
-//				if (comboBoxPeriod.getModel().getSelectedItem() != null) {
-//					
-//					GroupCfgEmplsTableModel currentModel1 = (GroupCfgEmplsTableModel) groupConfTable1.getModel();  
-//					currentModel1.setData(tableData1);
-//					groupConfTable1.setModel(currentModel1);
-//					
-//					GroupCfgEmplsTableModel currentModel2 = (GroupCfgEmplsTableModel) groupConfTable2.getModel();  
-//					currentModel2.setData(tableData2);
-//					groupConfTable2.setModel(currentModel2);
-//					
-//					
-//				}
 				mainFrame.validate();
 				
 			} else {

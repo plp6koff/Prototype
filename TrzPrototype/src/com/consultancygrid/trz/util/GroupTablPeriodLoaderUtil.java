@@ -10,12 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
-import org.apache.log4j.Logger;
-
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.EmplDeptPeriod;
@@ -29,11 +25,13 @@ import com.consultancygrid.trz.model.RevenueEmplPeriod;
 public class GroupTablPeriodLoaderUtil {
 
 	
-	private static Logger log = Logger.getLogger(GroupTablPeriodLoaderUtil.class);
-	
 	public Set<UUID>  loadData(Period period , EntityManager em, Vector tableData) throws IOException {
 		
-		Query q = em.createQuery(" select emplDeptP from EmplDeptPeriod as emplDeptP join emplDeptP.period as period join emplDeptP.department as department  join  emplDeptP.employee as empl where  period.id = :periodId order by department.code ,empl.firstName ");
+		Query q = em.createQuery(" select emplDeptP from EmplDeptPeriod as emplDeptP "
+				+ " join emplDeptP.period  as period "
+				+ " join emplDeptP.department as department "
+				+ " join  emplDeptP.employee as empl"
+				+ "  where  period.id = :periodId and department is not null order by department.code ,empl.firstName ");
 		q.setParameter("periodId", period.getId());
 		List<EmplDeptPeriod> emplsDepartments = (List<EmplDeptPeriod>) q.getResultList();
 		Query qAllEmployees = em.createQuery("select count(empl.id) from Employee empl  ");
@@ -42,10 +40,8 @@ public class GroupTablPeriodLoaderUtil {
 	
 			for (EmplDeptPeriod emplDeptPeriod  :emplsDepartments) {
 				
-				Department department = emplDeptPeriod.getDepartment();
-				
-				BigInteger depBonus = getDepartmentRevenue(em, period, department);
-				
+				final Department department = emplDeptPeriod.getDepartment();
+				final BigInteger depBonus = getDepartmentRevenue(em, period, department);
 				
 				if ((period.getId()  != null) && period.getId().equals(emplDeptPeriod.getPeriod().getId())) {
 					
@@ -55,16 +51,13 @@ public class GroupTablPeriodLoaderUtil {
 						emplSettings = employee.getEmployeeSettingses().iterator().next();
 					}
 					employeeSetingsIds.add(emplSettings.getId());
-					Double percentPersonal = getEmployeePercentPersonal(emplSettings);
-					
-					BigInteger emplBonus = getEmployeeRevenue(em, period, employee);
-					
-					double bonusAll = add1thRow(tableData, employee, department, allEmployeesCount.intValue(), period,emplBonus,  emplSettings);
-					double bonusGroup = add2thRow(tableData, employee, department,depBonus,emplBonus,  emplSettings);
-					double bonusPersonal = add3thRow(tableData, employee, department, emplBonus, percentPersonal);
-					double totalBonus = bonusAll + bonusGroup + bonusPersonal;
-					
-					double totalPercent = (totalBonus * 100)/emplBonus.intValue();
+					final Double percentPersonal = getEmployeePercentPersonal(emplSettings);
+					final BigInteger emplBonus = getEmployeeRevenue(em, period, employee);
+					final double bonusAll = add1thRow(tableData, employee, department, allEmployeesCount.intValue(), period,emplBonus,  emplSettings);
+					final double bonusGroup = add2thRow(tableData, employee, department, depBonus, emplBonus,  emplSettings);
+					final double bonusPersonal = add3thRow(tableData, employee, department, emplBonus, percentPersonal);
+					final double totalBonus = bonusAll + bonusGroup + bonusPersonal;
+					final double totalPercent = (totalBonus * 100)/emplBonus.intValue();
 					
 					add4thRow(tableData, employee, department, totalBonus);
 					add5thRow(tableData, employee, department, totalPercent);
@@ -94,22 +87,14 @@ public class GroupTablPeriodLoaderUtil {
 				
 				Employee employee = emplSettings.getEmployee();
 				
-				Double percentPersonal = getEmployeePercentPersonal(emplSettings);
-				
-				BigInteger emplBonus = getEmployeeRevenue(em, period, employee);
-				
-				double bonusAll = add1thRow(tableData, employee, period, emplBonus,  emplSettings);
-				log.info(bonusAll);
-				double bonusGroup = add2thRow(tableData, employee, emplBonus,  emplSettings);
-				log.info(bonusGroup);
-				double bonusPersonal = add3thRow(tableData, employee, emplBonus, percentPersonal);
-				log.info(bonusPersonal);
-				double totalBonus = bonusAll + bonusGroup + bonusPersonal;
-				
-				double totalPercent = (totalBonus * 100)/(emplBonus.intValue() == 0 ? 1 : emplBonus.intValue());
-				log.info(totalBonus);
+				final Double percentPersonal = getEmployeePercentPersonal(emplSettings);
+				final BigInteger emplBonus = getEmployeeRevenue(em, period, employee);
+				final double bonusAll = add1thRow(tableData, employee, period, emplBonus,  emplSettings);
+				final double bonusGroup = add2thRow(tableData, employee, emplBonus,  emplSettings);
+				final double bonusPersonal = add3thRow(tableData, employee, emplBonus, percentPersonal);
+				final double totalBonus = bonusAll + bonusGroup + bonusPersonal;
+				final double totalPercent = (totalBonus * 100)/(emplBonus.intValue() == 0 ? 1 : emplBonus.intValue());
 				add4thRow(tableData, employee, null, totalBonus);
-				log.info(totalPercent);
 				add5thRow(tableData, employee, null, totalPercent);
 				addEmptyDelimeterRow(tableData, employee);
 				addEmptyDelimeterRow(tableData, employee);
@@ -337,7 +322,10 @@ public class GroupTablPeriodLoaderUtil {
 	}
 
 	private double add2thRow(Vector tableData, Employee employee,
-			Department department, BigInteger revenueDept, BigInteger emplDept, EmployeeSettings employeeSettings) throws IOException {
+			Department department,
+			BigInteger revenueDept,
+			BigInteger emplDept,
+			EmployeeSettings employeeSettings) throws IOException {
 		Vector<Object> oneRow = new Vector<Object>();
 		oneRow.add(department.getCode());
 		oneRow.add(EMPTY_STRING);
@@ -364,8 +352,10 @@ public class GroupTablPeriodLoaderUtil {
 		return result;
 	}
 	
-	private double add2thRow(Vector tableData, Employee employee,
-			                BigInteger emplDept, EmployeeSettings employeeSettings) throws IOException {
+	private double add2thRow(Vector tableData, 
+			Employee employee,
+		 BigInteger emplDept, 
+			 EmployeeSettings employeeSettings) throws IOException {
 		Vector<Object> oneRow = new Vector<Object>();
 		oneRow.add("N/A");
 		oneRow.add(EMPTY_STRING);
@@ -393,12 +383,18 @@ public class GroupTablPeriodLoaderUtil {
 	}
 	
 	
-	private Double calculateTotalGroup(int base, Double percentGroup){
+	public Double calculateTotalGroup(int base, Double percentGroup){
 		
 		return (base * percentGroup)/100;
 	}
 	
-	public Double calculateBonusGroup(int profitGroup, double percentGroup, double personalFactor, double jobDonePercent, int allEployeesDept){
+	public Double calculateTotalGroup(double base, Double percentGroup){
+		
+		return (base * percentGroup)/100;
+	}
+	
+	
+	public Double calculateBonusGroup(double profitGroup, double percentGroup, double personalFactor, double jobDonePercent, int allEployeesDept){
 		
 		return  BigDecimal.valueOf(profitGroup * ((percentGroup * personalFactor) / 100 )).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
@@ -454,7 +450,7 @@ public class GroupTablPeriodLoaderUtil {
 		return result;
 	}
 	
-	private Double calculateTotalPersonal(int base, Double percentPersonal){
+	public Double calculateTotalPersonal(int base, Double percentPersonal){
 		return BigDecimal.valueOf((base * percentPersonal)/100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 

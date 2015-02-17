@@ -125,11 +125,11 @@ public class GroupEditRowAL extends BaseActionListener{
 					.getLabels(LabelsConstants.GROUP_CONF_HEADER_COL7) + "-"
 					+ ResourceLoaderUtil
 					.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE1));
-			l4.setBounds(300, 30, 250, 25);
+			l4.setBounds(300, 30, 250, 50);
 			panel.add(l4);
 			JTextField tf4 = new JTextField();
 			tf4.setText(((Double)model.getValueAt(i, 7)).toString());
-			tf4.setBounds(570, 30, 100, 25);
+			tf4.setBounds(570, 50, 100, 25);
 			panel.add(tf4);
 			
 			map.put(LabelsConstants.GROUP_CONF_COL5_VALUE1 + "-" + LabelsConstants.GROUP_CONF_HEADER_COL7, tf4);
@@ -161,10 +161,10 @@ public class GroupEditRowAL extends BaseActionListener{
 					.getLabels(LabelsConstants.GROUP_CONF_HEADER_COL7) + "-"
 					+ ResourceLoaderUtil
 					.getLabels(LabelsConstants.GROUP_CONF_COL5_VALUE2));
-			l5.setBounds(300, 70, 250, 25);
+			l5.setBounds(300, 70, 250, 60);
 			panel.add(l5);
 			JTextField tf5 = new JTextField();
-			tf5.setBounds(570, 70, 100, 25);
+			tf5.setBounds(570, 90, 100, 25);
 			tf5.setText(((Double)model.getValueAt(i+1, 7)).toString());
 			panel.add(tf5);
 			
