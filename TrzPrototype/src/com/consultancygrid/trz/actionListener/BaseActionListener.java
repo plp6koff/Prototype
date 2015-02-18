@@ -43,7 +43,9 @@ public  class BaseActionListener implements ActionListener {
 
 		} finally {
 			if (em!= null && em.isOpen()) {
+				em.getTransaction().commit();
 				em.close();
+				factory.close();
 			}
 		}	
 	}

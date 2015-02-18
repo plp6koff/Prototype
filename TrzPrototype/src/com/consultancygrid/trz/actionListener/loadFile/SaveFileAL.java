@@ -1,6 +1,5 @@
 package com.consultancygrid.trz.actionListener.loadFile;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import javax.swing.JTextArea;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.model.Department;
-import com.consultancygrid.trz.model.EmplDeptPeriod;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;

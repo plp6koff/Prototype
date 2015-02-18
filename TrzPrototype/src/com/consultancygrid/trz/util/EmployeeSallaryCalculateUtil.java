@@ -7,21 +7,27 @@ import com.consultancygrid.trz.model.TrzStatic;
 
 public class EmployeeSallaryCalculateUtil {
 
-	public static void calcSettings(Double b, Double d , Double kMarker ,  Double nBonus, String oBonusName , 
-			EmployeeSalary emplSallary, TrzStatic DOD,
-			TrzStatic OSIGUROVKI_RABOTODATEL, TrzStatic OSIGUROVKI_SLUJITEL) {
+	public static void calcSettings(
+			Double b, 
+			Double d , 
+			Double kMarker ,  
+			Double nBonus, 
+			String oBonusName , 
+			EmployeeSalary emplSallary, 
+			TrzStatic DOD,
+			TrzStatic OSIGUROVKI_RABOTODATEL, 
+			TrzStatic OSIGUROVKI_SLUJITEL,
+			Double dodValue,
+			Double oRabotodatelValue,
+			Double oSlujitelValue) {
 
 		Double pVaucher = emplSallary.getV14() != null  ? emplSallary.getV14().doubleValue() : null;
 		
-		Double oRabotodatelValue = Double.valueOf(OSIGUROVKI_RABOTODATEL
-				.getValue());
 		Double oRabotodatelType = (OSIGUROVKI_RABOTODATEL.getValueType()
 				.equals("percent") ? Double.valueOf("0.01") : Double
 				.valueOf("1.0"));
-		Double oSlujitelValue = Double.valueOf(OSIGUROVKI_SLUJITEL.getValue());
 		Double oSlujitelType = (OSIGUROVKI_SLUJITEL.getValueType().equals(
 				"percent") ? Double.valueOf("0.01") : Double.valueOf("1.0"));
-		Double dodValue = Double.valueOf(DOD.getValue());
 		Double dodType = (DOD.getValueType().equals("percent") ? Double
 				.valueOf("0.01") : Double.valueOf("1.0"));
 
@@ -38,12 +44,9 @@ public class EmployeeSallaryCalculateUtil {
 		Double c = b - e;
 		c = BigDecimal.valueOf(c).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		
-		Double g = emplSallary.getV05() != null ? emplSallary.getV05().doubleValue() : 0.0; 
-		emplSallary.setV12(BigDecimal.valueOf(f));
-		Double h = emplSallary.getV06() != null ? emplSallary.getV06().doubleValue() : 0.0;
-		emplSallary.setV13(BigDecimal.valueOf(g));
-		Double i = emplSallary.getV07() != null ? emplSallary.getV07().doubleValue() : 0.0;
-		emplSallary.setV14(BigDecimal.valueOf(i));
+		Double g = emplSallary.getV06() != null ? emplSallary.getV06().doubleValue() : 0.0; 
+		Double h = emplSallary.getV07() != null ? emplSallary.getV07().doubleValue() : 0.0;
+		Double i = emplSallary.getV08() != null ? emplSallary.getV08().doubleValue() : 0.0;
 		Double j = g + i + h;
 		
 		Double tmpSumCI = d + j; 
@@ -68,7 +71,76 @@ public class EmployeeSallaryCalculateUtil {
 		emplSallary.setV12(BigDecimal.valueOf(m));
 		emplSallary.setV13(BigDecimal.valueOf(nBonus));
 		emplSallary.setS01(oBonusName);
+		emplSallary.setV14(BigDecimal.valueOf(pVaucher));
+		emplSallary.setV15(BigDecimal.valueOf(q));
+		emplSallary.setV16(BigDecimal.valueOf(r));
+	    emplSallary.setV17(BigDecimal.valueOf(s));
+	    emplSallary.setV18(BigDecimal.valueOf(t));
+	}
+	
+	
+	
+	public static void updateSettings( 
+			Double g , 
+			Double h , 
+			Double i,   
+			EmployeeSalary emplSallary, 
+			TrzStatic DOD,
+			TrzStatic OSIGUROVKI_RABOTODATEL, 
+			TrzStatic OSIGUROVKI_SLUJITEL,
+			Double dodValue,
+			Double oRabotodatelValue,
+			Double oSlujitelValue
+			) {
+
+		Double b = emplSallary.getV01() != null ? emplSallary.getV01().doubleValue() : 0.0d; 
+		Double d = emplSallary.getV03() != null ? emplSallary.getV03().doubleValue() : 0.0d;
+		Double kMarker = emplSallary.getV10() != null ? emplSallary.getV10().doubleValue() : 0.0d;
+		Double nBonus = emplSallary.getV13() != null ? emplSallary.getV13().doubleValue() : 0.0d;
 		
+		Double pVaucher = emplSallary.getV14() != null  ? emplSallary.getV14().doubleValue() : null;
+		
+		Double oRabotodatelType = (OSIGUROVKI_RABOTODATEL.getValueType()
+				.equals("percent") ? Double.valueOf("0.01") : Double
+				.valueOf("1.0"));
+		Double oSlujitelType = (OSIGUROVKI_SLUJITEL.getValueType().equals(
+				"percent") ? Double.valueOf("0.01") : Double.valueOf("1.0"));
+		Double dodType = (DOD.getValueType().equals("percent") ? Double
+				.valueOf("0.01") : Double.valueOf("1.0"));
+
+		Double e = (b - (b * (dodValue * dodType)))
+				* (oSlujitelValue * oSlujitelType) + b * (dodValue * dodType);
+		e = BigDecimal.valueOf(e).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		
+		
+		Double f = oRabotodatelValue * oRabotodatelType * b;
+		f = BigDecimal.valueOf(f).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		Double c = b - e;
+		c = BigDecimal.valueOf(c).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		
+		Double j = g + i + h;
+		
+		Double tmpSumCI = d + j; 
+		Double l = (tmpSumCI < j) ? kMarker : tmpSumCI;
+		Double m = (tmpSumCI < j) ? (kMarker - tmpSumCI) : 0.0d;
+		Double q = pVaucher  + nBonus + l;
+		Double r = 0.0;
+		Double s = (q-c)*1+f;
+		Double t = s + q;
+		//Populate Salary
+		emplSallary.setV01(BigDecimal.valueOf(b));
+		emplSallary.setV02(BigDecimal.valueOf(c));
+		emplSallary.setV03(BigDecimal.valueOf(d));
+		emplSallary.setV04(BigDecimal.valueOf(e));
+		emplSallary.setV05(BigDecimal.valueOf(f));
+		emplSallary.setV06(BigDecimal.valueOf(g));
+		emplSallary.setV07(BigDecimal.valueOf(h));
+		emplSallary.setV08(BigDecimal.valueOf(i));
+		emplSallary.setV09(BigDecimal.valueOf(j));
+		emplSallary.setV10(BigDecimal.valueOf(kMarker));
+		emplSallary.setV11(BigDecimal.valueOf(l));
+		emplSallary.setV12(BigDecimal.valueOf(m));
+		emplSallary.setV13(BigDecimal.valueOf(nBonus));
 		emplSallary.setV15(BigDecimal.valueOf(q));
 		emplSallary.setV16(BigDecimal.valueOf(r));
 	    emplSallary.setV17(BigDecimal.valueOf(s));

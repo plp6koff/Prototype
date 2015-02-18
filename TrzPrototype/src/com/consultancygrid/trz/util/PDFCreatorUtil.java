@@ -49,68 +49,68 @@ public class PDFCreatorUtil {
 	 */
 	public static void main(String[] args) {
 
-		System.out.println("FOP ExampleXML2PDF\n");
-		System.out.println("Preparing...");
-
-		// Setup directories
-
-		TrzStatic dod = null;
-		TrzStatic oR = null;
-		TrzStatic oS = null;
-		
-		
-		
-		BigDecimal b = null;
-		BigDecimal d = null;
-		BigDecimal h = null;
-		BigDecimal u = null;
-		BigDecimal r = null;
-		EmployeeSalary emplSal = null;
-
-		dod = new TrzStatic();
-		dod.setValueType("percent");
-		dod.setValue("10");
-
-		oR = new TrzStatic();
-		oR.setValueType("percent");
-		oR.setValue("17.8");
-
-		oS = new TrzStatic();
-		oS.setValueType("percent");
-		oS.setValue("12.9");
-
-		emplSal = new EmployeeSalary();
-
-		b = BigDecimal.valueOf(Double.valueOf(1000.0));
-		d = BigDecimal.valueOf(Double.valueOf(1000.0));
-		h = BigDecimal.valueOf(Double.valueOf(800.0));
-		r = BigDecimal.valueOf(Double.valueOf(500.0));
-
-		emplSal = new EmployeeSalary();
-		Employee empl = new Employee();
-		empl.setFirstName("Anton");
-		empl.setLastName("Georgiev");
-		Period period = new Period();
-		period.setCode("2015-12");
-		emplSal.setEmployee(empl);
-		emplSal.setPeriod(period);
-		emplSal.setV01(BigDecimal.valueOf(Double.valueOf("1000")));
-		emplSal.setV06(BigDecimal.valueOf(Double.valueOf("800")));
-		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
-												  d.doubleValue(),
-												  h.doubleValue(),
-												  u.doubleValue(),
-												  "Test",
-												  emplSal, dod, oR, oS);
-		StringBuffer sb = new StringBuffer(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><v>");
-		sb.append("<v1>" + emplSal.getV01().toString() + "</v1>");
-		sb.append("<v2>" + emplSal.getV02().toString() + "</v2>");
-		sb.append("<v3>" + emplSal.getV03().toString() + "</v3>");
-		sb.append("<v4>" + emplSal.getV04().toString() + "</v4>");
-		sb.append("<v5>" + emplSal.getV05().toString() + "</v5>");
-		sb.append("<v6>" + emplSal.getV06().toString() + "</v6>");
-		sb.append("<v22>" + emplSal.getV22().toString() + "</v22></v>");
+//		System.out.println("FOP ExampleXML2PDF\n");
+//		System.out.println("Preparing...");
+//
+//		// Setup directories
+//
+//		TrzStatic dod = null;
+//		TrzStatic oR = null;
+//		TrzStatic oS = null;
+//		
+//		
+//		
+//		BigDecimal b = null;
+//		BigDecimal d = null;
+//		BigDecimal h = null;
+//		BigDecimal u = null;
+//		BigDecimal r = null;
+//		EmployeeSalary emplSal = null;
+//
+//		dod = new TrzStatic();
+//		dod.setValueType("percent");
+//		dod.setValue("10");
+//
+//		oR = new TrzStatic();
+//		oR.setValueType("percent");
+//		oR.setValue("17.8");
+//
+//		oS = new TrzStatic();
+//		oS.setValueType("percent");
+//		oS.setValue("12.9");
+//
+//		emplSal = new EmployeeSalary();
+//
+//		b = BigDecimal.valueOf(Double.valueOf(1000.0));
+//		d = BigDecimal.valueOf(Double.valueOf(1000.0));
+//		h = BigDecimal.valueOf(Double.valueOf(800.0));
+//		r = BigDecimal.valueOf(Double.valueOf(500.0));
+//
+//		emplSal = new EmployeeSalary();
+//		Employee empl = new Employee();
+//		empl.setFirstName("Anton");
+//		empl.setLastName("Georgiev");
+//		Period period = new Period();
+//		period.setCode("2015-12");
+//		emplSal.setEmployee(empl);
+//		emplSal.setPeriod(period);
+//		emplSal.setV01(BigDecimal.valueOf(Double.valueOf("1000")));
+//		emplSal.setV06(BigDecimal.valueOf(Double.valueOf("800")));
+//		EmployeeSallaryCalculateUtil.calcSettings(b.doubleValue(),
+//												  d.doubleValue(),
+//												  h.doubleValue(),
+//												  u.doubleValue(),
+//												  "Test",
+//												  emplSal, dod, oR, oS);
+//		StringBuffer sb = new StringBuffer(
+//				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><v>");
+//		sb.append("<v1>" + emplSal.getV01().toString() + "</v1>");
+//		sb.append("<v2>" + emplSal.getV02().toString() + "</v2>");
+//		sb.append("<v3>" + emplSal.getV03().toString() + "</v3>");
+//		sb.append("<v4>" + emplSal.getV04().toString() + "</v4>");
+//		sb.append("<v5>" + emplSal.getV05().toString() + "</v5>");
+//		sb.append("<v6>" + emplSal.getV06().toString() + "</v6>");
+//		sb.append("<v22>" + emplSal.getV22().toString() + "</v22></v>");
 
 	}
 

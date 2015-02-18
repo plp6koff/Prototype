@@ -130,7 +130,7 @@ public class LoadFileAL extends BaseActionListener {
 				if  (("VAUCHER1".equals(entry.getKey().getKey()))
 						|| ("VAUCHER2".equals(entry.getKey().getKey()))) {
 							
-					vauchers = vauchers + Double.valueOf(entry.getKey().getValue());
+					vauchers = vauchers + Double.valueOf(entry.getValue().getText());
 				}
 				em.persist(ps);
 			}
@@ -148,6 +148,18 @@ public class LoadFileAL extends BaseActionListener {
 				final File folder = new File(
 						ResourceLoaderUtil
 								.getConfig(Constants.DEFAULT_DATA_DIR));
+				if (folder == null || !folder.exists()) {
+					try {
+						JOptionPane.showMessageDialog(mainFrame,
+								"Folder : " + ResourceLoaderUtil
+								.getConfig(Constants.DEFAULT_DATA_DIR) + " does not exists !!!",
+								ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR),
+								JOptionPane.ERROR_MESSAGE);
+					} catch (HeadlessException | IOException e2) {
+						e2.printStackTrace();
+					}
+				}
+				
 				for (final File fileEntry : folder.listFiles()) {
 
 					System.out.println(fileEntry.getName());
@@ -347,22 +359,25 @@ public class LoadFileAL extends BaseActionListener {
 				Query emplQ = em
 						.createQuery("from Employee where matchcode = :mCode and isActive = 'Y'");
 				emplQ.setParameter("mCode", mCode);
-				Employee employee = ((List<Employee>) emplQ.getResultList()).get(0);
-				matchCodes.remove(employee.getMatchCode());
-				// Department
-				Department department = codeDeptPair.get(uDept.getId()
-						.getDepId());
-
-				createEmplDeptPeriod(em, period, employee, department,
-						singleAvg.getId().getRevenue());
-				EmployeeSettingsUtil.createSettings(em, period, employee,  vauchers);
-				EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
-
-				EmplDeptPeriod emplDeptPeriod = new EmplDeptPeriod();
-				emplDeptPeriod.setDepartment(department);
-				emplDeptPeriod.setEmployee(employee);
-				emplDeptPeriod.setPeriod(period);
-				em.persist(emplDeptPeriod);
+				
+				List<Employee> listEmployee = (List<Employee>) emplQ.getResultList();
+				
+				if (listEmployee != null && !listEmployee.isEmpty()) {
+					Employee employee = listEmployee.get(0);
+					matchCodes.remove(employee.getMatchCode());
+					// Department
+					Department department = codeDeptPair.get(uDept.getId().getDepId());
+					createEmplDeptPeriod(em, period, employee, department,
+							singleAvg.getId().getRevenue());
+					EmployeeSettingsUtil.createSettings(em, period, employee);
+					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
+	
+					EmplDeptPeriod emplDeptPeriod = new EmplDeptPeriod();
+					emplDeptPeriod.setDepartment(department);
+					emplDeptPeriod.setEmployee(employee);
+					emplDeptPeriod.setPeriod(period);
+					em.persist(emplDeptPeriod);
+				}
 			}
 		}
 		
@@ -375,7 +390,7 @@ public class LoadFileAL extends BaseActionListener {
 			if (empls!= null && !empls.isEmpty()){
 				
 				Employee employee = empls.get(0);
-				EmployeeSettingsUtil.createSettings(em, period, employee, vauchers);
+				EmployeeSettingsUtil.createSettings(em, period, employee);
 				EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
 			}
 		}

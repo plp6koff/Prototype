@@ -55,7 +55,9 @@ public class LoadCreatePeriodPanelAL extends BaseActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 
-		createPanelMain.remove(2);
+		if (false) {
+			createPanelMain.remove(3);
+		}
 		JPanel createPanelInner = new JPanel(null);
 		createPanelInner.setBounds(5, 5, 1000, 500);
 		
@@ -125,7 +127,7 @@ public class LoadCreatePeriodPanelAL extends BaseActionListener {
 						JTextField textFieldValue = new JTextField();
 						textFieldValue.setBounds(400, y, 150, 25);
 						textFieldValue.setColumns(10);
-						textFieldValue.setText("0.0");
+						textFieldValue.setText(singleStatic.getValue());
 						createPanelInner.add(textFieldValue);
 						map.put(singleStatic, textFieldValue);
 						y = y + delta;

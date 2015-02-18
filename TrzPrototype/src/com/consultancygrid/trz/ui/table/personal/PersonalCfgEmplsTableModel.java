@@ -161,4 +161,8 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 	public void setEmplSals(List<EmployeeSalary> emplSals) {
 		this.emplSals = emplSals;
 	}
+	
+	public void clearData() {
+		this.data = new Vector<Object>();
+	}
 }

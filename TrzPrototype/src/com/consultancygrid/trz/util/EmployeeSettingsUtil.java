@@ -12,8 +12,7 @@ import com.consultancygrid.trz.model.Period;
 
 public class EmployeeSettingsUtil {
 
-	public static void createSettings(EntityManager em, Period period,
-			Employee empl,  Double vauchers) {
+	public static void createSettings(EntityManager em, Period period, Employee empl) {
 
 		EmployeeSettings settings = new EmployeeSettings();
 		settings.setPeriod(period);

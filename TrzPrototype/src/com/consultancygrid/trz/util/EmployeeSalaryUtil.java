@@ -43,8 +43,9 @@ public class EmployeeSalaryUtil {
 			salary.setV17(lastSalary.getV17());
 			salary.setV18(lastSalary.getV18());
 			salary.setV19(lastSalary.getV19());
-			salary.setV14(BigDecimal.valueOf(vauchers));
-		}
+		} 
+		salary.setV14(BigDecimal.valueOf(vauchers));
+		
 		salary.setEmployee(empl);
 		salary.setPeriod(period);
 		em.persist(salary);

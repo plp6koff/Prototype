@@ -46,9 +46,11 @@ import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class GroupEditRowAL extends BaseActionListener{
 
+	private PersonalCfgEmplsTable personalConfTable;
 	private GroupCfgEmplsTable groupConfTable1;
 	private GroupCfgEmplsTable groupConfTable2;
 	private JComboBox comboBoxPeriod;
+	private JComboBox comboBoxEmployee;
 	
 	private HashMap<TrzStatic, JTextField> map ;
 	private HashMap<Department, JTextField> mapDept;
@@ -57,27 +59,24 @@ public class GroupEditRowAL extends BaseActionListener{
 	public GroupEditRowAL(PrototypeMainFrame mainFrame, 
 						 GroupCfgEmplsTable groupConfTable1,
 						 GroupCfgEmplsTable groupConfTable2,
-						 JComboBox comboBoxPeriod, JTabbedPane tabbedPaneDep) {
+						 JComboBox comboBoxPeriod,
+						 JComboBox comboBoxEmployee,
+						 JTabbedPane tabbedPaneDep, 
+						 PersonalCfgEmplsTable personalConfTable) {
 		super(mainFrame);
 		this.groupConfTable1 = groupConfTable1;
 		this.groupConfTable2 = groupConfTable2;
 		this.comboBoxPeriod = comboBoxPeriod;
 		this.tabbedPaneDep = tabbedPaneDep;
+		this.personalConfTable = personalConfTable;
+		this.comboBoxEmployee = comboBoxEmployee;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
 		try {
 			
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
-			
-			Period period =  (Period)comboBoxPeriod.getSelectedItem();
 			
 			GroupCfgEmplsTableModel model = null;
 			GroupCfgEmplsTable groupConfTable = null;
@@ -91,8 +90,6 @@ public class GroupEditRowAL extends BaseActionListener{
 			i = groupConfTable.getSelectedRow();
 			model = (GroupCfgEmplsTableModel) groupConfTable.getModel();
 					
-
-			
 			HashMap<String, JTextField> map = new HashMap<String, JTextField>();
 			
 			
@@ -172,7 +169,7 @@ public class GroupEditRowAL extends BaseActionListener{
 			
 			JButton saveBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
 			saveBtn.setBounds(230, 200, 100, 25);
-			saveBtn.addActionListener(new GroupSaveRowAL(mainFrame, groupConfTable1, groupConfTable2, comboBoxPeriod , map, popUp, tabbedPaneDep));
+			saveBtn.addActionListener(new GroupSaveRowAL(mainFrame, groupConfTable1, groupConfTable2, comboBoxPeriod , comboBoxEmployee,  map, popUp, tabbedPaneDep, personalConfTable));
 			panel.add(saveBtn);
 			JButton cnclBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.BUTT_CANCEL));
 			cnclBtn.setBounds(380, 200, 100, 25);
@@ -188,12 +185,7 @@ public class GroupEditRowAL extends BaseActionListener{
 		} catch (Exception e1) {
 			Logger.error(e1);
 
-		} finally {
-			if (em!= null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
-			}
-		}	
+		} 
 	}
 	
 }

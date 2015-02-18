@@ -6,7 +6,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.io.File;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +26,11 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneLayout;
@@ -48,23 +48,17 @@ import com.consultancygrid.trz.actionListener.employee.SettingsEmployeeComboAL;
 import com.consultancygrid.trz.actionListener.group.GroupEditRowAL;
 import com.consultancygrid.trz.actionListener.group.GroupTabPeriodComboAL;
 import com.consultancygrid.trz.actionListener.loadFile.LoadCreatePeriodPanelAL;
-import com.consultancygrid.trz.actionListener.loadFile.LoadFileAL;
-import com.consultancygrid.trz.actionListener.loadFile.OpenFileAL;
 import com.consultancygrid.trz.actionListener.loadFile.SaveFileAL;
-import com.consultancygrid.trz.actionListener.period.SavePeriodAL;
 import com.consultancygrid.trz.actionListener.period.SettingsPeriodComboAL;
-import com.consultancygrid.trz.actionListener.personal.PersonRowEditAL;
 import com.consultancygrid.trz.actionListener.personal.EmployeePersonTabComboAL;
+import com.consultancygrid.trz.actionListener.personal.PersonRowEditAL;
+import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdLvlsCfgComboAL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdSaveAL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdSettingsComboAL;
-import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdLvlsCfgComboAL;
-import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
-import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.TargetPeriod;
-import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.render.DepartmentCustomRender;
 import com.consultancygrid.trz.render.EmployeeCustomRender;
 import com.consultancygrid.trz.render.HeaderRenderer;
@@ -91,7 +85,7 @@ public class PrototypeMainFrame extends JFrame {
 	private static EntityManagerFactory factory = Persistence
 			.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
-	private static EntityManager em = factory.createEntityManager();
+	public static EntityManager em = factory.createEntityManager();
 	private JTextField textField;
 	private JComboBox<Employee> comboBoxEmployees;
 	
@@ -106,6 +100,27 @@ public class PrototypeMainFrame extends JFrame {
 				try {
 					PrototypeMainFrame frame = new PrototypeMainFrame();
 					frame.setVisible(true);
+					frame.addWindowListener(new WindowAdapter()
+					{
+					    public void windowClosing(WindowEvent e)
+					    {
+					        JFrame frame = (JFrame)e.getSource();
+					 
+					        int result = JOptionPane.showConfirmDialog(
+					            frame,
+					            "Are you sure you want to exit the application?",
+					            "Exit Application",
+					            JOptionPane.YES_NO_OPTION);
+					 
+					        if (result == JOptionPane.YES_OPTION)
+					            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					        if (em.getTransaction().isActive()) {
+					        	em.getTransaction().commit();
+					        }
+					        em.close();
+					        factory.close();
+					    }
+					});
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -141,8 +156,13 @@ public class PrototypeMainFrame extends JFrame {
 		
 		EmplComboBoxModel emplComboBoxModel = new EmplComboBoxModel(employees);
 		JComboBox comboBoxEmployees = new JComboBox<>(emplComboBoxModel);
+		PersonalCfgEmplsTable personalConfTable = new PersonalCfgEmplsTable();
+		personalConfTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		comboBoxEmployees.setBounds(150, 40, 300, 25);
+		comboBoxEmployees.setRenderer(new EmployeeCustomRender());
+		
 		//Draw
-		drawFirstTab(tabbedPane, comboBoxEmployees);
+		drawFirstTab(tabbedPane, comboBoxEmployees, personalConfTable);
 		
 		// Second Tab
 		Query qPeriod = em.createQuery(" from Period order by code desc");
@@ -158,7 +178,7 @@ public class PrototypeMainFrame extends JFrame {
 		PeriodComboBoxModel trzComboBoxModel = new PeriodComboBoxModel(allPeriods);
 		JComboBox periodsComboBox = new JComboBox<>(trzComboBoxModel);
 		//Draw
-		drawSecondTab(tabbedPane, departTable, departTable2, periodsComboBox);
+		drawSecondTab(tabbedPane, departTable, departTable2, periodsComboBox, comboBoxEmployees, personalConfTable);
 
 		//Rest
 		JPanel panLinkPeriod2Empl = new JPanel(null);
@@ -208,24 +228,25 @@ public class PrototypeMainFrame extends JFrame {
 		drawCreateTargetLevels(tabbedPaneSettings, comboTargetsCTL);
 		drawEmployee2TargetPeriod(tabbedPaneSettings, comboTargetsP2E,  emplComboBoxModel);
 		em.getTransaction().commit();
-		em.close();
-		factory.close();
+		//em.close();
+		//factory.close();
 	}
 
+	
+	
+	
+	
 	/**
 	 * 
 	 * @param comboBox
 	 * @param tabbedPane
 	 * @throws IOException
 	 */
-	private void drawFirstTab(JTabbedPane tabbedPane, JComboBox comboBoxEmployees) throws IOException {
+	private void drawFirstTab(JTabbedPane tabbedPane, JComboBox comboBoxEmployees, PersonalCfgEmplsTable personalConfTable) throws IOException {
 
 		JPanel firstInnerPanel = new JPanel(null);
 		JFileChooser fc = new JFileChooser();
-		PersonalCfgEmplsTable personalConfTable = new PersonalCfgEmplsTable();
-		personalConfTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		comboBoxEmployees.setBounds(150, 40, 300, 25);
-		comboBoxEmployees.setRenderer(new EmployeeCustomRender());
+		
 		JButton saveButt = new JButton("Export as PDF ...");
 		saveButt.setEnabled(true);
 		saveButt.setBounds(650, 40, 150, 25);
@@ -248,9 +269,6 @@ public class PrototypeMainFrame extends JFrame {
 		JScrollPane pesonPanel = new JScrollPane(personalConfTable);
 		pesonPanel.setLayout(new ScrollPaneLayout());
 		pesonPanel.setColumnHeader(new JViewport() {
-			
-			
-			
 			@Override
 			public Dimension getPreferredSize() {
 				Dimension d = super.getPreferredSize();
@@ -289,7 +307,9 @@ public class PrototypeMainFrame extends JFrame {
 	private void drawSecondTab(JTabbedPane tabbedPane,
 								GroupCfgEmplsTable table, 
 								GroupCfgEmplsTable table2, 
-								JComboBox comboBox) throws IOException {
+								JComboBox comboBox, 
+								JComboBox comboBoxEmployee,
+								PersonalCfgEmplsTable personalConfTable) throws IOException {
 		//Main panel
 		JPanel secondInnerPanel = new JPanel(null);
 		//Tabbed panel
@@ -331,7 +351,7 @@ public class PrototypeMainFrame extends JFrame {
 				ResourceLoaderUtil
 						.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
 		editRow.setBounds(490, 40, 150, 25);
-		editRow.addActionListener(new GroupEditRowAL(this, table, table2, comboBox, tabbedPaneDept));
+		editRow.addActionListener(new GroupEditRowAL(this, table, table2, comboBox, comboBoxEmployee, tabbedPaneDept, personalConfTable));
 		secondInnerPanel.add(editRow);
 		//Action listener
 		GroupTabPeriodComboAL tPCAL = new GroupTabPeriodComboAL(this, comboBox, table, table2);

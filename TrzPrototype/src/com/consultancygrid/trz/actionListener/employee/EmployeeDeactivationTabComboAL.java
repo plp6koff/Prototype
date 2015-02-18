@@ -104,6 +104,7 @@ public class EmployeeDeactivationTabComboAL extends BaseActionListener {
 			if (em != null && em.isOpen()) {
 				em.getTransaction().commit();
 				em.close();
+				factory.close();
 			}
 		}
 

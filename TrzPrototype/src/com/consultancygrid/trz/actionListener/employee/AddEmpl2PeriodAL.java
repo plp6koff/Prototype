@@ -119,6 +119,7 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 			if (em!= null && em.isOpen()) {
 				em.getTransaction().commit();
 				em.close();
+				factory.close();
 			}
 		}	
 	}

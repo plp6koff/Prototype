@@ -107,7 +107,7 @@ public class SaveEmployeeAL extends BaseActionListener {
 					employee.setMatchCode(matchCode);
 					em.persist(employee);
 					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
-					EmployeeSettingsUtil.createSettings(em, period, employee, vauchers);
+					EmployeeSettingsUtil.createSettings(em, period, employee);
 					EmplComboBoxModel model = (EmplComboBoxModel) employeesCombo.getModel();
 					model.addItem(employee);
 					employeesCombo.getParent().revalidate();
@@ -165,6 +165,7 @@ public class SaveEmployeeAL extends BaseActionListener {
 			if (em != null && em.isOpen()) {
 				em.getTransaction().commit();
 				em.close();
+				factory.close();
 			}
 		}
 	}

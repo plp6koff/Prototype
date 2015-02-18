@@ -24,6 +24,7 @@ import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.EmployeeSettings;
+import com.consultancygrid.trz.model.PeriodSetting;
 import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTable;
@@ -105,28 +106,46 @@ public class PersonRowSaveAL extends BaseActionListener{
 				String oBonusName = v14Str;
 				emplSallary.setS01(v14Str);
 				
-//				BigDecimal v15 = parseValue(emplSallary.getV14(),v15Str); 
-//				Double pVaucher = v15.doubleValue();
-//				emplSallary.setV14(v15);
 				
 				Query qPeriodTrzStatic = em
-						.createQuery(" from TrzStatic");
-				List<TrzStatic> trzResult = (List<TrzStatic>) qPeriodTrzStatic
-						.getResultList();
+						.createQuery(" from PeriodSetting as pS where period.id = :periodId");
+				qPeriodTrzStatic.setParameter("periodId", emplSallary.getPeriod().getId());
+				
+				List<PeriodSetting> periodSettings 
+				   = (List<PeriodSetting>) qPeriodTrzStatic.getResultList();
+				
 				TrzStatic DOD = null;
 				TrzStatic OSIGUROVKI_RABOTODATEL = null;
 				TrzStatic OSIGUROVKI_SLUJITEL = null;
-				for (TrzStatic singleTrz : trzResult) {
+				Double dodValue = 0.0d;
+				Double oRabotodatelValue = 0.0d;
+				Double oSlujitelValue = 0.0d;
+				for (PeriodSetting singlePS : periodSettings) {
+					
+					TrzStatic singleTrz = singlePS.getTrzStatic();
+					
 					if ("DOD".equals(singleTrz.getKey())) {
 						DOD = singleTrz;
+						dodValue = Double.valueOf(singlePS.getValue());
 					} else if("OSIGUROVKI_RABOTODATEL".equals(singleTrz.getKey())) {
 						OSIGUROVKI_RABOTODATEL = singleTrz;
+						oRabotodatelValue = Double.valueOf(singlePS.getValue());
 					} else if("OSIGUROVKI_SLUJITEL".equals(singleTrz.getKey())) {
 						OSIGUROVKI_SLUJITEL = singleTrz;
+						oSlujitelValue = Double.valueOf(singlePS.getValue());
 					}
-				}
-				EmployeeSallaryCalculateUtil.calcSettings(b, d, kMarker,
-						 nBonus , oBonusName, emplSallary, DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL);
+				}	
+				EmployeeSallaryCalculateUtil.calcSettings(
+						 b, 
+						 d, 
+						 kMarker,
+						 nBonus, 
+						 oBonusName, 
+						 emplSallary, 
+						 DOD, 
+						 OSIGUROVKI_RABOTODATEL,
+						 OSIGUROVKI_SLUJITEL,
+						 dodValue, oRabotodatelValue, oSlujitelValue);
 				
 				em.merge(emplSallary);
 				em.merge(settings);
@@ -152,6 +171,7 @@ public class PersonRowSaveAL extends BaseActionListener{
 			if (em!= null && em.isOpen()) {
 				em.getTransaction().commit();
 				em.close();
+				factory.close();
 			}
 		}	
 	}

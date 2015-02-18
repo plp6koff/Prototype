@@ -83,7 +83,9 @@ public class GroupTabPeriodComboAL extends BaseActionListener {
 
 		} finally {
 			if (em!= null && em.isOpen()) {
+				em.getTransaction().commit();
 				em.close();
+				factory.close();
 			}
 		}
 
