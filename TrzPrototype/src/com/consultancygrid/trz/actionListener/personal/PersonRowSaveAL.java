@@ -117,9 +117,11 @@ public class PersonRowSaveAL extends BaseActionListener{
 				TrzStatic DOD = null;
 				TrzStatic OSIGUROVKI_RABOTODATEL = null;
 				TrzStatic OSIGUROVKI_SLUJITEL = null;
+				TrzStatic CACHE_TAX = null;
 				Double dodValue = 0.0d;
 				Double oRabotodatelValue = 0.0d;
 				Double oSlujitelValue = 0.0d;
+				Double cacheTaxValue = 0.0d;
 				for (PeriodSetting singlePS : periodSettings) {
 					
 					TrzStatic singleTrz = singlePS.getTrzStatic();
@@ -133,7 +135,10 @@ public class PersonRowSaveAL extends BaseActionListener{
 					} else if("OSIGUROVKI_SLUJITEL".equals(singleTrz.getKey())) {
 						OSIGUROVKI_SLUJITEL = singleTrz;
 						oSlujitelValue = Double.valueOf(singlePS.getValue());
-					}
+					} else if("CACHE_TAX".equals(singleTrz.getKey())) {
+						CACHE_TAX = singleTrz;
+						cacheTaxValue = Double.valueOf(singlePS.getValue());
+					} 
 				}	
 				EmployeeSallaryCalculateUtil.calcSettings(
 						 b, 
@@ -145,7 +150,8 @@ public class PersonRowSaveAL extends BaseActionListener{
 						 DOD, 
 						 OSIGUROVKI_RABOTODATEL,
 						 OSIGUROVKI_SLUJITEL,
-						 dodValue, oRabotodatelValue, oSlujitelValue);
+						 CACHE_TAX,
+						 dodValue, oRabotodatelValue, oSlujitelValue, cacheTaxValue);
 				
 				em.merge(emplSallary);
 				em.merge(settings);

@@ -67,7 +67,7 @@ public class SaveFileAL extends BaseActionListener {
 		EmployeeSalary emplSallary = model.getEmplSals().get(i);
 		fc.showSaveDialog(mainFrame);
 		File selectedPath = fc.getSelectedFile();
-		File resultPdf = PDFCreatorUtil.createPDF(emplSallary, department, 	selectedPath.getAbsolutePath());
+		PDFCreatorUtil.createPDF(emplSallary, department, 	selectedPath.getAbsolutePath());
 	}
 
 }

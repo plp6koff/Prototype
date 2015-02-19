@@ -114,7 +114,7 @@ public class LoadFileAL extends BaseActionListener {
 
 			em.persist(period);
 
-			persistPersonSettings(period, vauchers);
+			vauchers = persistPersonSettings(period);
 			CSVReaderUtil util = new CSVReaderUtil();
 			if (file != null) {
 				util.readCSVcarloFibu(file);
@@ -145,8 +145,7 @@ public class LoadFileAL extends BaseActionListener {
 
 					System.out.println(fileEntry.getName());
 					String name = fileEntry.getName();
-					Query q = em
-							.createQuery("from InputFileType  where prefix = :prefix");
+					Query q = em.createQuery("from InputFileType  where prefix = :prefix");
 					if (name.startsWith(f1)) {
 						q.setParameter("prefix", f1);
 					} else if (name.startsWith(f2)) {
@@ -181,13 +180,9 @@ public class LoadFileAL extends BaseActionListener {
 		}
 
 		PeriodComboBoxModel periodComboModel = (PeriodComboBoxModel) comboBoxPeriod.getModel();
-		List<Period> allPeriods = periodComboModel.getComboBoxItemList();
 		try {
-
 			init();
 			empl2Period2Depart(em, period, matchCodes, vauchers);
-			//Query qPeriod = em.createQuery(" from Period");
-			//allPeriods = (List<Period>) qPeriod.getResultList();
 		} catch (Exception e1) {
 			LOG.error(e1);
 			try {
@@ -334,8 +329,8 @@ public class LoadFileAL extends BaseActionListener {
 		}
 	}
 
-	private void persistPersonSettings(Period period, Double vauchers) {
-
+	private double persistPersonSettings(Period period) {
+		Double vauchers = 0.0d;
 		for (Entry<TrzStatic, JTextField> entry : map.entrySet()) {
 
 			PeriodSetting ps = new PeriodSetting();
@@ -350,6 +345,7 @@ public class LoadFileAL extends BaseActionListener {
 			}
 			em.persist(ps);
 		}
+		return vauchers;
 	}
 
 	/**

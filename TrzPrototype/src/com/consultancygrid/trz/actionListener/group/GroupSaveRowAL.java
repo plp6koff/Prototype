@@ -300,9 +300,11 @@ public class GroupSaveRowAL extends BaseActionListener {
 		TrzStatic DOD = null;
 		TrzStatic OSIGUROVKI_RABOTODATEL = null;
 		TrzStatic OSIGUROVKI_SLUJITEL = null;
+		TrzStatic CACHE_TAX = null;
 		Double dodValue = 0.0d;
 		Double oRabotodatelValue = 0.0d;
 		Double oSlujitelValue = 0.0d;
+		Double cacheTaxValue = 0.0d;
 		for (PeriodSetting singlePS : settings) {
 
 			TrzStatic singleTrz = singlePS.getTrzStatic();
@@ -316,13 +318,16 @@ public class GroupSaveRowAL extends BaseActionListener {
 			} else if ("OSIGUROVKI_SLUJITEL".equals(singleTrz.getKey())) {
 				OSIGUROVKI_SLUJITEL = singleTrz;
 				oSlujitelValue = Double.valueOf(singlePS.getValue());
-			}
+			} else if("CACHE_TAX".equals(singleTrz.getKey())) {
+				CACHE_TAX = singleTrz;
+				cacheTaxValue = Double.valueOf(singlePS.getValue());
+			} 
 		}
 
 		EmployeeSallaryCalculateUtil.updateSettings(bonusPersonal, bonusGroup,
-				bonusAll, salary, DOD, OSIGUROVKI_RABOTODATEL,
-				OSIGUROVKI_SLUJITEL, dodValue, oRabotodatelValue,
-				oSlujitelValue);
+				bonusAll, salary, DOD, OSIGUROVKI_RABOTODATEL, CACHE_TAX, 
+				OSIGUROVKI_SLUJITEL, dodValue, oRabotodatelValue, 
+				oSlujitelValue, cacheTaxValue);
 		em.merge(salary);
 		// } catch (Exception e1) {
 		// logger.error(e1);

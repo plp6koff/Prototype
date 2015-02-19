@@ -17,9 +17,11 @@ public class EmployeeSallaryCalculateUtil {
 			TrzStatic DOD,
 			TrzStatic OSIGUROVKI_RABOTODATEL, 
 			TrzStatic OSIGUROVKI_SLUJITEL,
+			TrzStatic CACHE_TAX, 
 			Double dodValue,
 			Double oRabotodatelValue,
-			Double oSlujitelValue) {
+			Double oSlujitelValue,
+			Double cacheTaxValue) {
 
 		Double pVaucher = emplSallary.getV14() != null  ? emplSallary.getV14().doubleValue() : null;
 		
@@ -30,9 +32,10 @@ public class EmployeeSallaryCalculateUtil {
 				"percent") ? Double.valueOf("0.01") : Double.valueOf("1.0"));
 		Double dodType = (DOD.getValueType().equals("percent") ? Double
 				.valueOf("0.01") : Double.valueOf("1.0"));
-
-		Double e = (b - (b * (dodValue * dodType)))
-				* (oSlujitelValue * oSlujitelType) + b * (dodValue * dodType);
+		Double cacheTaxType = (CACHE_TAX.getValueType().equals("percent") ? Double
+				.valueOf("0.01") : Double.valueOf("1.0"));
+		
+		Double e =  (b * (dodValue * dodType)) + (b * (oSlujitelValue * oSlujitelType));
 		e = BigDecimal.valueOf(e).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		
 		
@@ -51,7 +54,8 @@ public class EmployeeSallaryCalculateUtil {
 		Double m = (tmpSumCI < kMarker) ? (kMarker - tmpSumCI) : 0.0d;
 		Double q = pVaucher  + nBonus + l;
 		Double r = 0.0;
-		Double s = (q-c)*1+f;
+		Double cache = cacheTaxValue * cacheTaxType;
+		Double s = (q-c)*cache+f;
 		Double t = s + q;
 		//Populate Salary
 		emplSallary.setV01(BigDecimal.valueOf(b));
@@ -85,9 +89,11 @@ public class EmployeeSallaryCalculateUtil {
 			TrzStatic DOD,
 			TrzStatic OSIGUROVKI_RABOTODATEL, 
 			TrzStatic OSIGUROVKI_SLUJITEL,
+			TrzStatic CACHE_TAX, 
 			Double dodValue,
 			Double oRabotodatelValue,
-			Double oSlujitelValue
+			Double oSlujitelValue,
+			Double cacheTaxValue
 			) {
 
 		Double b = emplSallary.getV01() != null ? emplSallary.getV01().doubleValue() : 0.0d; 
@@ -104,9 +110,10 @@ public class EmployeeSallaryCalculateUtil {
 				"percent") ? Double.valueOf("0.01") : Double.valueOf("1.0"));
 		Double dodType = (DOD.getValueType().equals("percent") ? Double
 				.valueOf("0.01") : Double.valueOf("1.0"));
+		Double cacheTaxType = (CACHE_TAX.getValueType().equals("percent") ? Double
+				.valueOf("0.01") : Double.valueOf("1.0"));
 
-		Double e = (b - (b * (dodValue * dodType)))
-				* (oSlujitelValue * oSlujitelType) + b * (dodValue * dodType);
+		Double e =  (b * (dodValue * dodType)) + (b * (oSlujitelValue * oSlujitelType));
 		e = BigDecimal.valueOf(e).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		
 		
@@ -122,7 +129,10 @@ public class EmployeeSallaryCalculateUtil {
 		Double m = (tmpSumCI < tmpSumCI) ? (kMarker - tmpSumCI) : 0.0d;
 		Double q = pVaucher  + nBonus + l;
 		Double r = 0.0;
-		Double s = (q-c)*1+f;
+		
+		Double cache = cacheTaxValue * cacheTaxType;
+		
+		Double s = (q-c)*cache+f;
 		Double t = s + q;
 		//Populate Salary
 		emplSallary.setV01(BigDecimal.valueOf(b));
