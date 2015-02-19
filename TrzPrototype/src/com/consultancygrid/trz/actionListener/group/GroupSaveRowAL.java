@@ -1,6 +1,5 @@
 package com.consultancygrid.trz.actionListener.group;
 
-import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
 
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
@@ -8,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -40,7 +36,7 @@ import com.consultancygrid.trz.util.ResourceLoaderUtil;
 public class GroupSaveRowAL extends BaseActionListener {
 
 	private Logger logger = Logger.getLogger(GroupSaveRowAL.class);
-	
+
 	private PersonalCfgEmplsTable personalConfTable;
 	private GroupCfgEmplsTable groupConfTable1;
 	private GroupCfgEmplsTable groupConfTable2;
@@ -55,10 +51,9 @@ public class GroupSaveRowAL extends BaseActionListener {
 			GroupCfgEmplsTable groupConfTable1,
 			GroupCfgEmplsTable groupConfTable2,
 			JComboBox<Period> comboBoxPeriod,
-			JComboBox<Employee> comboBoxEmployee, 
-			HashMap<String, JTextField> map,
-			JFrame frame, JTabbedPane tabbedPaneDep,
-			PersonalCfgEmplsTable personalConfTable) {
+			JComboBox<Employee> comboBoxEmployee,
+			HashMap<String, JTextField> map, JFrame frame,
+			JTabbedPane tabbedPaneDep, PersonalCfgEmplsTable personalConfTable) {
 
 		super(mainFrame);
 		this.groupConfTable1 = groupConfTable1;
@@ -74,8 +69,6 @@ public class GroupSaveRowAL extends BaseActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
 		GroupCfgEmplsTableModel model = null;
 		GroupCfgEmplsTable groupConfTable = null;
 		GroupTablPeriodLoaderUtil grTabPeriodLoaderUtil = new GroupTablPeriodLoaderUtil();
@@ -89,11 +82,7 @@ public class GroupSaveRowAL extends BaseActionListener {
 		int i = -1;
 		try {
 
-			factory = Persistence
-					.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
-
+			init();
 
 			if (tabbedPaneDep.getSelectedIndex() == 0) {
 
@@ -119,8 +108,7 @@ public class GroupSaveRowAL extends BaseActionListener {
 				q1.setParameter("firstName", nameRaw1);
 				q1.setParameter("lastName", nameRaw2);
 
-				List<EmployeeSettings> allSettings = (List<EmployeeSettings>) q1
-						.getResultList();
+				List<EmployeeSettings> allSettings = (List<EmployeeSettings>) q1.getResultList();
 
 				if (allSettings != null && !allSettings.isEmpty()) {
 
@@ -178,7 +166,8 @@ public class GroupSaveRowAL extends BaseActionListener {
 					currentModel.setValueAt(bonusAll.toString(), i, 8);
 					rowDataI.set(8, bonusAll.toString());
 
-					double allTotal = grTabPeriodLoaderUtil.getEmployeePercentAllOnboard(settings);
+					double allTotal = grTabPeriodLoaderUtil
+							.getEmployeePercentAllOnboard(settings);
 					currentModel.setValueAt(allTotal, i, 9);
 					rowDataI.set(9, allTotal);
 
@@ -194,10 +183,9 @@ public class GroupSaveRowAL extends BaseActionListener {
 					rowDataI1.set(6, percentGroup);
 					currentModel.setValueAt(onBoardGroup, i, 7);
 					rowDataI1.set(7, onBoardGroup);
-					bonusGroup = grTabPeriodLoaderUtil
-							.calculateBonusGroup(profitGroup,
-									pGBD.doubleValue(), pGOnBPBD.doubleValue(),
-									1.0d, allEployeesDept);
+					bonusGroup = grTabPeriodLoaderUtil.calculateBonusGroup(
+							profitGroup, pGBD.doubleValue(),
+							pGOnBPBD.doubleValue(), 1.0d, allEployeesDept);
 					currentModel.setValueAt(bonusGroup.toString(), i, 8);
 					rowDataI1.set(8, bonusGroup);
 
@@ -238,15 +226,22 @@ public class GroupSaveRowAL extends BaseActionListener {
 					currentModel.setValueAt(BigDecimal.valueOf(totalPercent)
 							.setScale(2, BigDecimal.ROUND_HALF_UP)
 							.doubleValue(), i, 5);
-					rowDataI5.set(
-							5,
-							BigDecimal.valueOf(totalPercent)
-									.setScale(2, BigDecimal.ROUND_HALF_UP)
-									.doubleValue());
+					rowDataI5.set(5, BigDecimal.valueOf(totalPercent).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 					em.merge(settings);
+					
+					
+					Query sq = em.createQuery(" from EmployeeSalary as sal  where  sal.period.id = :periodId and sal.employee.firstName = :firstName and sal.employee.lastName = :lastName");
+					sq.setParameter("periodId", period.getId());
+					sq.setParameter("firstName", nameRaw1);
+					sq.setParameter("lastName", nameRaw2);
+					EmployeeSalary salary = ((List<EmployeeSalary>) sq.getResultList()).get(0);
+					salary.setV06(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV07(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV08(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+					salary.setV09(BigDecimal.valueOf(bonusAll + bonusGroup + bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+					em.merge(salary);
 
 				}
-
 
 			} else {
 				JOptionPane.showMessageDialog(mainFrame, ResourceLoaderUtil
@@ -257,24 +252,22 @@ public class GroupSaveRowAL extends BaseActionListener {
 				return;
 			}
 
+			comboBoxEmployee.setSelectedIndex(0);
+			saveSalary(bonusAll, bonusGroup, bonusPersonal, period, nameRaw1,nameRaw2);
+			currentModel.fireTableRowsUpdated(i - 3, i + 2);
+			currentModel.fireTableDataChanged();
+			groupConfTable.repaint();
+			((PersonalCfgEmplsTableModel) personalConfTable.getModel()).clearData();
+			frame.setVisible(false);
+			mainFrame.validate();
 		} catch (Exception e1) {
 
 			logger.error(e1);
+			rollBack();
 		} finally {
-			if (em != null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
-				factory.close();
-			}
+			commit();
 		}
-		comboBoxEmployee.setSelectedIndex(0);
-		saveSalary(bonusAll, bonusGroup, bonusPersonal, period, nameRaw1, nameRaw2);
-		currentModel.fireTableRowsUpdated(i - 3, i + 2);
-		currentModel.fireTableDataChanged();
-		groupConfTable.repaint();
-		((PersonalCfgEmplsTableModel)personalConfTable.getModel()).clearData();
-		frame.setVisible(false);
-		mainFrame.validate();
+
 
 	}
 
@@ -282,79 +275,61 @@ public class GroupSaveRowAL extends BaseActionListener {
 			Double bonusPersonal, Period period, String firstName,
 			String lastName) {
 
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
-		try {
+		// try {
+		//
+		// init();
 
-			factory = Persistence
-					.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
+		Query qSal = em
+				.createQuery("select sal from EmployeeSalary as sal  join sal.employee as empl  where "
+						+ "  empl.firstName = :firstName and empl.lastName = :lastName and sal.period.id = :periodId");
+		qSal.setParameter("periodId", period.getId());
+		qSal.setParameter("firstName", firstName);
+		qSal.setParameter("lastName", lastName);
 
-			Query qSal = em
-					.createQuery("select sal from EmployeeSalary as sal  join sal.employee as empl  where "
-							+ "  empl.firstName = :firstName and empl.lastName = :lastName and sal.period.id = :periodId");
-			qSal.setParameter("periodId", period.getId());
-			qSal.setParameter("firstName", firstName);
-			qSal.setParameter("lastName", lastName);
+		List<EmployeeSalary> allSallaries = (List<EmployeeSalary>) qSal
+				.getResultList();
+		EmployeeSalary salary = allSallaries.get(0);
 
-			List<EmployeeSalary> allSallaries = (List<EmployeeSalary>) qSal
-					.getResultList();
-			EmployeeSalary salary = allSallaries.get(0);
-			
-			
-			Query qPeriodTrzStatic = em
-					.createQuery(" from PeriodSetting as pS where period.id = :periodId");
-			qPeriodTrzStatic.setParameter("periodId", period.getId());
-			
-			List<PeriodSetting> settings = (List<PeriodSetting>) qPeriodTrzStatic.getResultList();
-			
-			TrzStatic DOD = null;
-			TrzStatic OSIGUROVKI_RABOTODATEL = null;
-			TrzStatic OSIGUROVKI_SLUJITEL = null;
-			Double dodValue = 0.0d;
-			Double oRabotodatelValue = 0.0d;
-			Double oSlujitelValue = 0.0d;
-			for (PeriodSetting singlePS : settings) {
-				
-				TrzStatic singleTrz = singlePS.getTrzStatic();
-				
-				if ("DOD".equals(singleTrz.getKey())) {
-					DOD = singleTrz;
-					dodValue = Double.valueOf(singlePS.getValue());
-				} else if("OSIGUROVKI_RABOTODATEL".equals(singleTrz.getKey())) {
-					OSIGUROVKI_RABOTODATEL = singleTrz;
-					oRabotodatelValue = Double.valueOf(singlePS.getValue());
-				} else if("OSIGUROVKI_SLUJITEL".equals(singleTrz.getKey())) {
-					OSIGUROVKI_SLUJITEL = singleTrz;
-					oSlujitelValue = Double.valueOf(singlePS.getValue());
-				}
-			}
-			
-			EmployeeSallaryCalculateUtil.updateSettings(
-					bonusPersonal,
-					bonusGroup,
-					bonusAll,
-					salary, 
-					DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL,
-					dodValue, oRabotodatelValue, oSlujitelValue);
-			em.merge(salary);
-		} catch (Exception e1) {
-			
-			logger.error(e1);
-		} finally {
-			if (em != null && em.isOpen()) {
-				try {
-					if (em.isJoinedToTransaction()) {
-						em.getTransaction().commit();
-					}
-				} catch (Exception e){
-					logger.error(e);
-				}
-				em.close();
-				factory.close();
+		Query qPeriodTrzStatic = em
+				.createQuery(" from PeriodSetting as pS where period.id = :periodId");
+		qPeriodTrzStatic.setParameter("periodId", period.getId());
+
+		List<PeriodSetting> settings = (List<PeriodSetting>) qPeriodTrzStatic
+				.getResultList();
+
+		TrzStatic DOD = null;
+		TrzStatic OSIGUROVKI_RABOTODATEL = null;
+		TrzStatic OSIGUROVKI_SLUJITEL = null;
+		Double dodValue = 0.0d;
+		Double oRabotodatelValue = 0.0d;
+		Double oSlujitelValue = 0.0d;
+		for (PeriodSetting singlePS : settings) {
+
+			TrzStatic singleTrz = singlePS.getTrzStatic();
+
+			if ("DOD".equals(singleTrz.getKey())) {
+				DOD = singleTrz;
+				dodValue = Double.valueOf(singlePS.getValue());
+			} else if ("OSIGUROVKI_RABOTODATEL".equals(singleTrz.getKey())) {
+				OSIGUROVKI_RABOTODATEL = singleTrz;
+				oRabotodatelValue = Double.valueOf(singlePS.getValue());
+			} else if ("OSIGUROVKI_SLUJITEL".equals(singleTrz.getKey())) {
+				OSIGUROVKI_SLUJITEL = singleTrz;
+				oSlujitelValue = Double.valueOf(singlePS.getValue());
 			}
 		}
+
+		EmployeeSallaryCalculateUtil.updateSettings(bonusPersonal, bonusGroup,
+				bonusAll, salary, DOD, OSIGUROVKI_RABOTODATEL,
+				OSIGUROVKI_SLUJITEL, dodValue, oRabotodatelValue,
+				oSlujitelValue);
+		em.merge(salary);
+		// } catch (Exception e1) {
+		// logger.error(e1);
+		// rollBack();
+		// } finally {
+		// commit();
+		// }
 	}
 
 	private BigDecimal parseValue(BigDecimal initValue, String newValStr) {

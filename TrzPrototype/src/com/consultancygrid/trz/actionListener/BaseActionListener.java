@@ -1,27 +1,25 @@
 package com.consultancygrid.trz.actionListener;
 
-import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.EntityTransaction;
 
 import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
+import com.consultancygrid.trz.util.HibernateUtil;
 
 
 
 public  class BaseActionListener implements ActionListener {
 
-	protected EntityManagerFactory factory = null;
-	protected EntityManager em = null;
 	protected PrototypeMainFrame mainFrame;
-	
-	
+	protected EntityTransaction transaction;
+	protected EntityManager em;
 	public BaseActionListener(PrototypeMainFrame mainFrame) {
 		
 		this.mainFrame = mainFrame;
@@ -31,26 +29,36 @@ public  class BaseActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		try {
-			
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
+			init();
 			eventCore();
-			
 			
 		} catch (Exception e1) {
 			Logger.error(e1);
-
+			rollBack();
 		} finally {
-			if (em!= null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
-				factory.close();
-			}
+			commit();
 		}	
 	}
 	
-	protected void eventCore() {
+	protected void eventCore() throws IOException {
 		
 	};
+	
+	protected void rollBack() {
+		if (transaction!= null && transaction.isActive()) {
+			transaction.rollback();
+		}
+	}
+	
+	protected void commit() {
+		if (transaction!= null && transaction.isActive()) {
+			transaction.commit();
+		}
+	}
+	
+	protected void init() {
+		em = HibernateUtil.getEntityManager();
+		transaction = em.getTransaction();
+		transaction.begin();
+	}
 }

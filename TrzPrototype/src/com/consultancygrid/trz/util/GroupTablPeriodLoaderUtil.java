@@ -5,13 +5,16 @@ import static com.consultancygrid.trz.base.Constants.EMPTY_STRING;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.EmplDeptPeriod;
@@ -32,6 +35,7 @@ public class GroupTablPeriodLoaderUtil {
 				+ " join emplDeptP.department as department "
 				+ " join  emplDeptP.employee as empl"
 				+ "  where  period.id = :periodId and department is not null order by department.code ,empl.firstName ");
+		
 		q.setParameter("periodId", period.getId());
 		List<EmplDeptPeriod> emplsDepartments = (List<EmplDeptPeriod>) q.getResultList();
 		Query qAllEmployees = em.createQuery("select count(empl.id) from Employee empl  ");
@@ -53,7 +57,7 @@ public class GroupTablPeriodLoaderUtil {
 					employeeSetingsIds.add(emplSettings.getId());
 					final Double percentPersonal = getEmployeePercentPersonal(emplSettings);
 					final BigInteger emplBonus = getEmployeeRevenue(em, period, employee);
-					final double bonusAll = add1thRow(tableData, employee, department, allEmployeesCount.intValue(), period,emplBonus,  emplSettings);
+					final double bonusAll = add1thRow(tableData, employee, department, allEmployeesCount.intValue(), period, emplBonus,  emplSettings);
 					final double bonusGroup = add2thRow(tableData, employee, department, depBonus, emplBonus,  emplSettings);
 					final double bonusPersonal = add3thRow(tableData, employee, department, emplBonus, percentPersonal);
 					final double totalBonus = bonusAll + bonusGroup + bonusPersonal;
@@ -68,24 +72,51 @@ public class GroupTablPeriodLoaderUtil {
 					sq.setParameter("periodId", period.getId());
 					sq.setParameter("emplId", employee.getId());
 					EmployeeSalary salary = ((List<EmployeeSalary>) sq.getResultList()).get(0);
-					salary.setV06(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
-					salary.setV07(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
-					salary.setV08(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
-					em.merge(salary);
+					if (checkIsPropertyInited(salary.getV06()) 
+						|| checkIsPropertyInited(salary.getV07())
+						|| checkIsPropertyInited(salary.getV08())) {
+						
+						salary.setV06(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
+						salary.setV07(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
+						salary.setV08(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+						salary.setV09(BigDecimal.valueOf(bonusAll + bonusGroup + bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+						em.merge(salary);
+					}
 			}	
 		}
 			return employeeSetingsIds;
 	}	
 	
+	private boolean checkIsPropertyInited(BigDecimal property) {
+		return property == null || BigDecimal.ZERO.equals(property);
+	}
 	
-	public void loadData2(Period period , EntityManager em, Vector tableData, Set<UUID> employeeSetingsIds) throws IOException {
-		Query emplSettingsQ = em.createQuery(" from EmployeeSettings as emplS  where  emplS.period.id = :periodId");
+	private boolean checkIsPropertyChanged(BigDecimal property, BigDecimal oldVal) {
+		return property.compareTo(oldVal) != 0;
+	}
+	
+	
+	public void loadData2(Period period , EntityManager em, Vector tableData) throws IOException {
+		
+		
+		Query q = em.createQuery(" select empl.id from EmplDeptPeriod as emplDeptP "
+					+ " join emplDeptP.period  as period "
+					+ " join emplDeptP.department as department "
+					+ " join  emplDeptP.employee as empl"
+					+ "  where  period.id = :periodId and department is not null order by department.code ,empl.firstName ");
+		q.setParameter("periodId", period.getId());
+		List<UUID> emplsIds = (List<UUID>) q.getResultList();
+		
+		
+		
+		Query emplSettingsQ = em.createQuery(" from EmployeeSettings as emplS  where  emplS.period.id = :periodId and emplS.employee.id not in (:revokeList)");
 		emplSettingsQ.setParameter("periodId", period.getId());
-		for (EmployeeSettings emplSettings : (List<EmployeeSettings>)emplSettingsQ.getResultList()){
+		emplSettingsQ.setParameter("revokeList", emplsIds);
+		List<EmployeeSettings> allSettings = (List<EmployeeSettings>)emplSettingsQ.getResultList();
+		for (EmployeeSettings emplSettings : allSettings){
 			
-			if (!employeeSetingsIds.contains(emplSettings.getId())) {
-				
 				Employee employee = emplSettings.getEmployee();
+				
 				
 				final Double percentPersonal = getEmployeePercentPersonal(emplSettings);
 				final BigInteger emplBonus = getEmployeeRevenue(em, period, employee);
@@ -103,11 +134,17 @@ public class GroupTablPeriodLoaderUtil {
 				sq.setParameter("periodId", period.getId());
 				sq.setParameter("emplId", employee.getId());
 				EmployeeSalary salary = ((List<EmployeeSalary>) sq.getResultList()).get(0);
-				salary.setV07(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
-				salary.setV08(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
-				salary.setV09(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
-				em.merge(salary);
-			}
+				salary.setV06(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
+				if (checkIsPropertyInited(salary.getV06()) 
+						|| checkIsPropertyInited(salary.getV07())
+						|| checkIsPropertyInited(salary.getV08())) {
+						
+						salary.setV06(BigDecimal.valueOf(bonusAll).setScale(2, BigDecimal.ROUND_HALF_UP));
+						salary.setV07(BigDecimal.valueOf(bonusGroup).setScale(2, BigDecimal.ROUND_HALF_UP));
+						salary.setV08(BigDecimal.valueOf(bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+						salary.setV09(BigDecimal.valueOf(bonusAll + bonusGroup + bonusPersonal).setScale(2, BigDecimal.ROUND_HALF_UP));
+						em.merge(salary);
+					}
 		}
 
 	}

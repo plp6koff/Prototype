@@ -1,39 +1,24 @@
 package com.consultancygrid.trz.actionListener.period;
 
+import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
+
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
-import javax.swing.JTable;
 
 import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
-import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
-import com.consultancygrid.trz.model.EmplDeptPeriod;
-import com.consultancygrid.trz.model.Employee;
-import com.consultancygrid.trz.model.EmployeeSettings;
 import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.RevenueDeptPeriod;
-import com.consultancygrid.trz.model.RevenueEmplPeriod;
 import com.consultancygrid.trz.ui.combo.DepartmentComboBoxModel;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
-import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
-import com.consultancygrid.trz.ui.table.group.GroupCfgEmplsTableModel;
-import com.consultancygrid.trz.util.ResourceLoaderUtil;
-
-import static com.consultancygrid.trz.base.Constants.*;
 /**
  * ACtion Listener for code list
  * 

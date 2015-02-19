@@ -125,6 +125,14 @@ public class GroupCfgEmplsTableModel extends AbstractTableModel {
 								// If you change only one cell you need to call
 								// the appropriate fire event
 	}
+	
+	public void removeData() {
+		this.data = new Vector<Object>();
+		fireTableRowsDeleted(0, 0);
+		fireTableDataChanged();
+	}
+	
+	
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {

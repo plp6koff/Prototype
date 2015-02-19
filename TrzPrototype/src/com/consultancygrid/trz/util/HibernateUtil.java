@@ -1,31 +1,30 @@
 package com.consultancygrid.trz.util;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
+import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class HibernateUtil {
 
-	private static SessionFactory sessionFactory;
-	private static ServiceRegistry serviceRegistry;
+	 private static EntityManagerFactory factory;
+     private static EntityManager entityManager;
 
-	@SuppressWarnings("unused")
-	private static SessionFactory createSessionFactory() {
-		Configuration configuration = new Configuration();
-		configuration.configure();
-		serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-	            configuration.getProperties()).build();
-		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-		return sessionFactory;
-	}
+     public static void initiate(){
+    	 
+         factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+         entityManager=factory.createEntityManager();
+     }
 
-	public static SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
+     public static EntityManager getEntityManager() {
+         return entityManager;
+     }
 
-	public static void shutdown() {
-		getSessionFactory().close();
-	}
+     public static void close(){
+         entityManager.close();
+         factory.close();
+     }
+
 
 }

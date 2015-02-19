@@ -38,20 +38,17 @@ public class EmployeeSallaryCalculateUtil {
 		
 		Double f = oRabotodatelValue * oRabotodatelType * b;
 		f = BigDecimal.valueOf(f).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-		// =(B6-(B6*0,1))*0,129+B6*0,1
-		// =(B6-(B6*0,1))*0,129+B6*0,1
-		//
 		Double c = b - e;
 		c = BigDecimal.valueOf(c).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		
-		Double g = emplSallary.getV06() != null ? emplSallary.getV06().doubleValue() : 0.0; 
-		Double h = emplSallary.getV07() != null ? emplSallary.getV07().doubleValue() : 0.0;
-		Double i = emplSallary.getV08() != null ? emplSallary.getV08().doubleValue() : 0.0;
+		Double g = emplSallary.getV06() != null ? emplSallary.getV06().doubleValue() : 0.0d; 
+		Double h = emplSallary.getV07() != null ? emplSallary.getV07().doubleValue() : 0.0d;
+		Double i = emplSallary.getV08() != null ? emplSallary.getV08().doubleValue() : 0.0d;
 		Double j = g + i + h;
 		
 		Double tmpSumCI = d + j; 
-		Double l = (tmpSumCI < j) ? kMarker : tmpSumCI;
-		Double m = (tmpSumCI < j) ? (kMarker - tmpSumCI) : 0.0d;
+		Double l = (tmpSumCI < kMarker) ? kMarker : tmpSumCI;
+		Double m = (tmpSumCI < kMarker) ? (kMarker - tmpSumCI) : 0.0d;
 		Double q = pVaucher  + nBonus + l;
 		Double r = 0.0;
 		Double s = (q-c)*1+f;
@@ -121,8 +118,8 @@ public class EmployeeSallaryCalculateUtil {
 		Double j = g + i + h;
 		
 		Double tmpSumCI = d + j; 
-		Double l = (tmpSumCI < j) ? kMarker : tmpSumCI;
-		Double m = (tmpSumCI < j) ? (kMarker - tmpSumCI) : 0.0d;
+		Double l = (tmpSumCI < tmpSumCI) ? kMarker : tmpSumCI;
+		Double m = (tmpSumCI < tmpSumCI) ? (kMarker - tmpSumCI) : 0.0d;
 		Double q = pVaucher  + nBonus + l;
 		Double r = 0.0;
 		Double s = (q-c)*1+f;

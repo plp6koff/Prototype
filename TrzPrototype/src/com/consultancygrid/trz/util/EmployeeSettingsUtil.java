@@ -18,11 +18,9 @@ public class EmployeeSettingsUtil {
 		settings.setPeriod(period);
 		settings.setEmployee(empl);
 
-		Query q = em
-				.createQuery(" from EmployeeSettings as settings  where  settings.employee.id = :employeeId order by settings.period.code desc");
+		Query q = em.createQuery(" from EmployeeSettings as settings  where  settings.employee.id = :employeeId order by settings.period.code desc");
 		q.setParameter("employeeId", empl.getId());
-		List<EmployeeSettings> emplSettingsList = (List<EmployeeSettings>) q
-				.getResultList();
+		List<EmployeeSettings> emplSettingsList = (List<EmployeeSettings>) q.getResultList();
 		EmployeeSettings initSettings = null;
 		if (emplSettingsList != null && !emplSettingsList.isEmpty()) {
 			initSettings = emplSettingsList.get(0);

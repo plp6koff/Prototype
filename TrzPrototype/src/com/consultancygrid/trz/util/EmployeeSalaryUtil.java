@@ -17,8 +17,7 @@ public class EmployeeSalaryUtil {
 		Query q = em
 				.createQuery(" from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.dateEnd desc");
 		q.setParameter("employeeId", empl.getId());
-		List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q
-				.getResultList();
+		List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q.getResultList();
 
 		EmployeeSalary salary = new EmployeeSalary();
 		if (emplSals != null && !emplSals.isEmpty()) {
@@ -45,7 +44,6 @@ public class EmployeeSalaryUtil {
 			salary.setV19(lastSalary.getV19());
 		} 
 		salary.setV14(BigDecimal.valueOf(vauchers));
-		
 		salary.setEmployee(empl);
 		salary.setPeriod(period);
 		em.persist(salary);

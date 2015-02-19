@@ -25,6 +25,14 @@ public class PeriodCustomRender implements ListCellRenderer {
 		  JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index,
 			        isSelected, cellHasFocus);
 		  
+		  if (index == -1) {
+			  try {
+					renderer.setText(ResourceLoaderUtil.getLabels(LabelsConstants.COMBO_PERIOD));
+				} catch (IOException e) {
+					e.printStackTrace();
+				} 
+		  }
+		  
 		  if (value instanceof Period) {
 			  
 			  Period tempPeriod = (Period) value;
