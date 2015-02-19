@@ -46,6 +46,10 @@ public class PeriodComboBoxModel implements ComboBoxModel<Period> {
 
 	}
 	
+	public void addAll(List<Period> period) {
+		comboBoxItemList.clear();
+		comboBoxItemList.addAll(period);
+	}	
 
 	@Override
 	public Period getSelectedItem() {

@@ -21,7 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.pmw.tinylog.Logger;
+
+
+import org.apache.log4j.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.Constants;
@@ -49,6 +51,8 @@ import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class LoadFileAL extends BaseActionListener {
 
+	Logger LOG  = Logger.getLogger(LoadFileAL.class);
+	
 	static private final String newline = "\n";
 	private static final String f1 = "order";
 	private static final String f2 = "turhauptdisponent";
@@ -160,7 +164,7 @@ public class LoadFileAL extends BaseActionListener {
 			}
 			createPanelMain.remove(createPanelInner);
 		} catch (Exception e1) {
-			Logger.error(e1);
+			LOG.error(e1);
 			try {
 				JOptionPane.showMessageDialog(mainFrame, ResourceLoaderUtil
 						.getLabels(LabelsConstants.SET_TAB_LOAD_FILE_ERROR),
@@ -182,11 +186,10 @@ public class LoadFileAL extends BaseActionListener {
 
 			init();
 			empl2Period2Depart(em, period, matchCodes, vauchers);
-			Query qPeriod = em.createQuery(" from Period");
-			allPeriods = (List<Period>) qPeriod.getResultList();
-
+			//Query qPeriod = em.createQuery(" from Period");
+			//allPeriods = (List<Period>) qPeriod.getResultList();
 		} catch (Exception e1) {
-			Logger.error(e1);
+			LOG.error(e1);
 			try {
 				JOptionPane.showMessageDialog(mainFrame, ResourceLoaderUtil
 						.getLabels(LabelsConstants.SET_TAB_LOAD_FILE_ERROR),
@@ -195,15 +198,17 @@ public class LoadFileAL extends BaseActionListener {
 						JOptionPane.ERROR_MESSAGE);
 			} catch (HeadlessException | IOException e2) {
 				e2.printStackTrace();
+				LOG.error(e2);
 			}
 			rollBack();
 		} finally {
 			commit();
 		}
 
-		periodComboModel.reinit(allPeriods);
+		
 		periodComboModel.setSelectedItem("Default");
-		comboBoxPeriod.updateUI();
+		periodComboModel.addItem(period);
+		comboBoxPeriod.setSelectedItem("Default");
 		comboBoxPeriod.revalidate();
 		comboBoxPeriod.repaint();
 		this.fieldCode.setText("");
@@ -217,6 +222,7 @@ public class LoadFileAL extends BaseActionListener {
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (HeadlessException | IOException e1) {
 			e1.printStackTrace();
+			LOG.error(e1);
 		}
 	}
 
