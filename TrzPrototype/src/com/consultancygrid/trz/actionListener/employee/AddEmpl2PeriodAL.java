@@ -133,7 +133,7 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 		
 		this.comboBoxEmployee.setEnabled(false);
 		this.comboBoxDepartment.setEnabled(false);
-		Query qPeriod = em.createQuery(" from Period");
+		Query qPeriod = em.createQuery(" select p from Period as p order by p.code");
 		List<Period> allPeriods = (List<Period>) qPeriod.getResultList();
 		this.comboBoxPeriod.setModel(new PeriodComboBoxModel(allPeriods));
 		this.panLinkPeriod2Empl.validate();
