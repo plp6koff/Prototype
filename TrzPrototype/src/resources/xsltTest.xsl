@@ -185,7 +185,7 @@
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-										     <xsl:value-of select="v10" />
+										     <xsl:value-of select="v12" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
@@ -203,7 +203,7 @@
 									</fo:table-cell>
 									<fo:table-cell>
 										<fo:block>
-										     <xsl:value-of select="v11" />
+										     <xsl:value-of select="v13" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>

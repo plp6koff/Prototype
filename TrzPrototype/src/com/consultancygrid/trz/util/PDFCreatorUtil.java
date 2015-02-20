@@ -1,10 +1,8 @@
 package com.consultancygrid.trz.util;
 
 //Java
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -23,17 +21,10 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-import org.apache.log4j.Logger;
-import org.dom4j.DocumentException;
 import org.xml.sax.SAXException;
 
-import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
-import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
-import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.PeriodSetting;
-import com.consultancygrid.trz.model.TrzStatic;
 
 /**
  * This class demonstrates the conversion of an XML file to PDF using JAXP
@@ -138,7 +129,15 @@ public class PDFCreatorUtil {
 		return sb.toString();
 	}
 
-	public static File createPDF(EmployeeSalary emplSal, Department department, String outDirPath) {
+	public static File createPDF(
+			String fileName, 
+			String departmentName,
+			String employeeName,
+			String periodCode,
+			EmployeeSalary emplSal,  
+			String outDirPath, 
+			Double vaucher1,
+			Double vaucher2) {
 		
 		File outDir = null;
 		File pdffile = null;
@@ -151,7 +150,7 @@ public class PDFCreatorUtil {
 			outDir.mkdirs();
 			// Setup input and output files
 			File xsltfile = new File(baseDir, "xsltTest.xsl");
-			 pdffile = new File(outDirPath, "PDF" + emplSal.getEmployee().getMatchCode()+emplSal.getPeriod().getCode()+".pdf");
+			 pdffile = new File(outDirPath, fileName);
 
 			System.out.println("Stylesheet: " + xsltfile);
 			System.out.println("Output: PDF (" + pdffile + ")");
@@ -184,40 +183,25 @@ public class PDFCreatorUtil {
 
 			try {
 				// Construct fop with desired output format
-				Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF,
-						foUserAgent, out);
+				Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF,	foUserAgent, out);
 
 				// Setup XSLT
 				TransformerFactory factory = TransformerFactory.newInstance();
-				Transformer transformer = factory
-						.newTransformer(new StreamSource(xsltfile));
+				Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
 				transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 				// Set the value of a <param> in the stylesheet
-				transformer.setParameter("paramPeriod", emplSal.getPeriod()
-						.getCode());
-				transformer.setParameter("paramEmployee", emplSal.getEmployee()
-						.getFirstName()
-						+ " "
-						+ emplSal.getEmployee().getLastName());
+				transformer.setParameter("paramPeriod", periodCode);
+				transformer.setParameter("paramEmployee", employeeName);
 				
-				transformer.setParameter("paramDepartment", department.getCode());
-				transformer.setParameter("paramOthers", emplSal.getV10().add(emplSal.getV11()).add(emplSal.getV08()));
+				transformer.setParameter("paramDepartment", departmentName);
+				transformer.setParameter("paramOthers", emplSal.getV10().add(emplSal.getV13()).add(emplSal.getV08()));
+				transformer.setParameter("paramVauch1", vaucher1);
+				transformer.setParameter("paramVauch2", vaucher2);
 				
-				for(PeriodSetting pS :emplSal.getPeriod().getPeriodSettings()) {
-					
-					if ("VAUCHER1".equals(pS.getTrzStatic())) {
-						transformer.setParameter("paramVauch1", pS.getValue());
-					} else if ("VAUCHER2".equals(pS.getTrzStatic())) {
-						transformer.setParameter("paramVauch2", pS.getValue());
-					}
-				}
-				
-
 				File tmpFile = new File(outDir, "xmlTmp.xml");
 				FileUtils.writeStringToFile(tmpFile, tempFile, "UTF-8");
 				// Setup input for XSLT transformation
 				Source src = new StreamSource(tmpFile);
-
 				// Resulting SAX events (the generated FO) must be piped through
 				// to FOP
 				Result res = new SAXResult(fop.getDefaultHandler());

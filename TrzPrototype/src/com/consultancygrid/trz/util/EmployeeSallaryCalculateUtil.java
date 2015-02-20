@@ -66,17 +66,17 @@ public class EmployeeSallaryCalculateUtil {
 		emplSallary.setV06(BigDecimal.valueOf(g));
 		emplSallary.setV07(BigDecimal.valueOf(h));
 		emplSallary.setV08(BigDecimal.valueOf(i));
-		emplSallary.setV09(BigDecimal.valueOf(j));
+		emplSallary.setV09(BigDecimal.valueOf(j).setScale(2, BigDecimal.ROUND_HALF_UP));
 		emplSallary.setV10(BigDecimal.valueOf(kMarker));
-		emplSallary.setV11(BigDecimal.valueOf(l));
+		emplSallary.setV11(BigDecimal.valueOf(l).setScale(2, BigDecimal.ROUND_HALF_UP));
 		emplSallary.setV12(BigDecimal.valueOf(m));
 		emplSallary.setV13(BigDecimal.valueOf(nBonus));
 		emplSallary.setS01(oBonusName);
 		emplSallary.setV14(BigDecimal.valueOf(pVaucher));
-		emplSallary.setV15(BigDecimal.valueOf(q));
+		emplSallary.setV15(BigDecimal.valueOf(q).setScale(2, BigDecimal.ROUND_HALF_UP));
 		emplSallary.setV16(BigDecimal.valueOf(r));
-	    emplSallary.setV17(BigDecimal.valueOf(s));
-	    emplSallary.setV18(BigDecimal.valueOf(t));
+	    emplSallary.setV17(BigDecimal.valueOf(s).setScale(2, BigDecimal.ROUND_HALF_UP));
+	    emplSallary.setV18(BigDecimal.valueOf(t).setScale(2, BigDecimal.ROUND_HALF_UP));
 	}
 	
 	
@@ -143,14 +143,14 @@ public class EmployeeSallaryCalculateUtil {
 		emplSallary.setV06(BigDecimal.valueOf(g));
 		emplSallary.setV07(BigDecimal.valueOf(h));
 		emplSallary.setV08(BigDecimal.valueOf(i));
-		emplSallary.setV09(BigDecimal.valueOf(j));
+		emplSallary.setV09(BigDecimal.valueOf(j).setScale(2, BigDecimal.ROUND_HALF_UP));
 		emplSallary.setV10(BigDecimal.valueOf(kMarker));
-		emplSallary.setV11(BigDecimal.valueOf(l));
+		emplSallary.setV11(BigDecimal.valueOf(l).setScale(2, BigDecimal.ROUND_HALF_UP));
 		emplSallary.setV12(BigDecimal.valueOf(m));
 		emplSallary.setV13(BigDecimal.valueOf(nBonus));
-		emplSallary.setV15(BigDecimal.valueOf(q));
+		emplSallary.setV15(BigDecimal.valueOf(q).setScale(2, BigDecimal.ROUND_HALF_UP));
 		emplSallary.setV16(BigDecimal.valueOf(r));
-	    emplSallary.setV17(BigDecimal.valueOf(s));
-	    emplSallary.setV18(BigDecimal.valueOf(t));
+	    emplSallary.setV17(BigDecimal.valueOf(s).setScale(2, BigDecimal.ROUND_HALF_UP));
+	    emplSallary.setV18(BigDecimal.valueOf(t).setScale(2, BigDecimal.ROUND_HALF_UP));
 	}
 }
