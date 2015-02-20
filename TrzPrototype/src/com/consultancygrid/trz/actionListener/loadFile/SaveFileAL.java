@@ -1,6 +1,8 @@
 package com.consultancygrid.trz.actionListener.loadFile;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -9,6 +11,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.model.Department;
@@ -19,7 +23,8 @@ import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTableModel;
-import com.consultancygrid.trz.util.PDFCreatorUtil;
+import com.consultancygrid.trz.util.pdf.PDFCreatorUtil;
+import com.consultancygrid.trz.util.pdf.PDFInputData;
 
 public class SaveFileAL extends BaseActionListener {
 
@@ -41,9 +46,25 @@ public class SaveFileAL extends BaseActionListener {
 		this.comboBoxEmployee = comboBoxEmployee;
 		this.personalConfTable = personalConfTable;
 	}
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		try {
+			init();
+			PDFInputData inputDataPDF = processData();
+			PDFCreatorUtil.createPDF(inputDataPDF);
+		} catch (Exception e1) {
+			Logger.error(e1);
+			rollBack();
+		} finally {
+			commit();
+		}	
+	}
 
 	
-	protected void eventCore() {
+	protected PDFInputData processData() {
 
 		EmplComboBoxModel emplMod = ((EmplComboBoxModel) comboBoxEmployee.getModel());
 		
@@ -58,7 +79,6 @@ public class SaveFileAL extends BaseActionListener {
 		if (allDepartments != null && !allDepartments.isEmpty()) {
 			department = allDepartments.get(0);
 		}
-		
 		
 		
 		PersonalCfgEmplsTableModel model = (PersonalCfgEmplsTableModel) personalConfTable.getModel();
@@ -88,7 +108,19 @@ public class SaveFileAL extends BaseActionListener {
 		String departmentName =  department.getCode();
 		String employeeName = emplSallary.getEmployee().getFirstName() + " " + emplSallary.getEmployee().getLastName();
 		String periodCode = emplSallary.getPeriod().getCode();
-		PDFCreatorUtil.createPDF(fileName, departmentName, employeeName, periodCode , emplSallary, selectedPath.getAbsolutePath(), vaucher1, vaucher2);
+		
+		String xmlFile = PDFCreatorUtil.fileFromObj(emplSallary);
+		BigDecimal sum = emplSallary.getV10().add(emplSallary.getV13()).add(emplSallary.getV08());
+		PDFInputData result = new PDFInputData(fileName, 
+				departmentName, 
+				employeeName, 
+				periodCode, 
+				sum.doubleValue(),
+				xmlFile, 
+				selectedPath.getAbsolutePath(),
+				vaucher1, 
+				vaucher2);
+		return result;
 	}
 
 }

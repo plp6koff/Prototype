@@ -1,4 +1,4 @@
-package com.consultancygrid.trz.util;
+package com.consultancygrid.trz.util.pdf;
 
 //Java
 import java.io.File;
@@ -105,7 +105,7 @@ public class PDFCreatorUtil {
 
 	}
 
-	private static String fileFromObj(EmployeeSalary emplSal) {
+	public static String fileFromObj(EmployeeSalary emplSal) {
 		StringBuffer sb = new StringBuffer(
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><v>");
 		sb.append("<v1>" + emplSal.getV01().toString() + "</v1>");
@@ -129,28 +129,20 @@ public class PDFCreatorUtil {
 		return sb.toString();
 	}
 
-	public static File createPDF(
-			String fileName, 
-			String departmentName,
-			String employeeName,
-			String periodCode,
-			EmployeeSalary emplSal,  
-			String outDirPath, 
-			Double vaucher1,
-			Double vaucher2) {
+	public static File createPDF(PDFInputData input) {
 		
 		File outDir = null;
 		File pdffile = null;
 		try {
 
-			String tempFile = fileFromObj(emplSal);
+			String tempFile = input.getXmlFile();
 
 			File baseDir = new File("src/resources");
 			outDir = new File(baseDir, "out");
 			outDir.mkdirs();
 			// Setup input and output files
 			File xsltfile = new File(baseDir, "xsltTest.xsl");
-			 pdffile = new File(outDirPath, fileName);
+			 pdffile = new File(input.getOutDirPath(), input.getFileName());
 
 			System.out.println("Stylesheet: " + xsltfile);
 			System.out.println("Output: PDF (" + pdffile + ")");
@@ -190,13 +182,13 @@ public class PDFCreatorUtil {
 				Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
 				transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 				// Set the value of a <param> in the stylesheet
-				transformer.setParameter("paramPeriod", periodCode);
-				transformer.setParameter("paramEmployee", employeeName);
+				transformer.setParameter("paramPeriod", input.getPeriodCode());
+				transformer.setParameter("paramEmployee", input.getEmployeeName());
 				
-				transformer.setParameter("paramDepartment", departmentName);
-				transformer.setParameter("paramOthers", emplSal.getV10().add(emplSal.getV13()).add(emplSal.getV08()));
-				transformer.setParameter("paramVauch1", vaucher1);
-				transformer.setParameter("paramVauch2", vaucher2);
+				transformer.setParameter("paramDepartment", input.getDepartmentName());
+				transformer.setParameter("paramOthers", input.getSum());
+				transformer.setParameter("paramVauch1", input.getVaucher1());
+				transformer.setParameter("paramVauch2", input.getVaucher2());
 				
 				File tmpFile = new File(outDir, "xmlTmp.xml");
 				FileUtils.writeStringToFile(tmpFile, tempFile, "UTF-8");
