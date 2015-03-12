@@ -105,7 +105,7 @@ public class SaveFileAL extends BaseActionListener {
 		fc.showSaveDialog(mainFrame);
 		File selectedPath = fc.getSelectedFile();
 		String fileName ="PDF" + emplSallary.getEmployee().getMatchCode()+emplSallary.getPeriod().getCode()+".pdf" ;
-		String departmentName =  department.getCode();
+		String departmentName =  (department != null ? department.getCode()  : "");
 		String employeeName = emplSallary.getEmployee().getFirstName() + " " + emplSallary.getEmployee().getLastName();
 		String periodCode = emplSallary.getPeriod().getCode();
 		

@@ -138,7 +138,7 @@ public class LoadFileAL extends BaseActionListener {
 										JOptionPane.ERROR_MESSAGE);
 						return;
 					} catch (HeadlessException | IOException e2) {
-						e2.printStackTrace();
+						LOG.error(e2);
 					}
 				}
 				for (final File fileEntry : folder.listFiles()) {
@@ -171,7 +171,7 @@ public class LoadFileAL extends BaseActionListener {
 								.getLabels(LabelsConstants.ALERT_MSG_ERR),
 						JOptionPane.ERROR_MESSAGE);
 			} catch (HeadlessException | IOException e2) {
-				e2.printStackTrace();
+				LOG.error(e2);
 			}
 			rollBack();
 
@@ -192,7 +192,6 @@ public class LoadFileAL extends BaseActionListener {
 								.getLabels(LabelsConstants.ALERT_MSG_ERR),
 						JOptionPane.ERROR_MESSAGE);
 			} catch (HeadlessException | IOException e2) {
-				e2.printStackTrace();
 				LOG.error(e2);
 			}
 			rollBack();
@@ -370,8 +369,7 @@ public class LoadFileAL extends BaseActionListener {
 			matchCodes.add(singleData.getKey());
 			InputData inputData = new InputData();
 			inputData.setInputFileType(ift);
-			inputData.setRevenue(BigDecimal.valueOf(Double.valueOf(singleData
-					.getValue().replace(",", "."))));
+			inputData.setRevenue(BigDecimal.valueOf(Double.valueOf(singleData.getValue().replace(",", "."))));
 			inputData.setMatchcode(singleData.getKey());
 			inputData.setPeriod(period);
 			em.persist(inputData);
@@ -391,14 +389,16 @@ public class LoadFileAL extends BaseActionListener {
 			InputData inputData = new InputData();
 			inputData.setInputFileType(ift);
 			inputData
-					.setRevenue(BigDecimal.valueOf(Double
-							.valueOf(singleNameBasedData.getValue().replace(
-									",", "."))));
+					.setRevenue(BigDecimal.valueOf(Double.valueOf(singleNameBasedData.getValue().replace(",", "."))));
 			final String tmpMatch = translationMap.get(rawName);
-			inputData.setMatchcode(tmpMatch);
-			matchCodes.add(tmpMatch);
-			inputData.setPeriod(period);
-			em.persist(inputData);
+			if (tmpMatch != null && !"".equals(tmpMatch)) {
+				inputData.setMatchcode(tmpMatch);
+				matchCodes.add(tmpMatch);
+				inputData.setPeriod(period);
+				em.persist(inputData);
+			} else {
+				LOG.info("ERRORO : "  + rawName + " NOT EXISTS!!!");
+			}
 		}
 		return matchCodes;
 	}

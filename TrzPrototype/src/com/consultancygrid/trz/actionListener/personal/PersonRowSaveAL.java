@@ -12,9 +12,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import org.pmw.tinylog.Logger;
@@ -192,4 +196,5 @@ public class PersonRowSaveAL extends BaseActionListener{
 			 return initValue;
 		}
 	}
+	
 }
