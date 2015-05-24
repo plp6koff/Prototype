@@ -99,7 +99,6 @@ public class GroupEditRowAL extends BaseActionListener{
 			popUp.setBounds(100, 100, 800, 300);
 			popUp.setAlwaysOnTop(true);
 			popUp.setResizable(false);
-			popUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			popUp.setTitle("Edit " + nameRaw);
 			popUp.setVisible(true);
 			

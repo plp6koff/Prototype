@@ -65,7 +65,7 @@ public class EmplDeptPeriod implements java.io.Serializable {
 		this.department = department;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL, optional= true)
+	@ManyToOne(fetch = FetchType.LAZY, optional= true)
 	@JoinColumn(name = "FK_EMPLOYEE_ID", nullable = false)
 	public Employee getEmployee() {
 		return this.employee;

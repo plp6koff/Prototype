@@ -43,6 +43,7 @@ public class Period implements java.io.Serializable {
 	private Set<RevenueDeptPeriod> revenueDeptPeriods = new HashSet<RevenueDeptPeriod>(
 			0);
 	private Set<PeriodSetting> periodSettings = new HashSet<PeriodSetting>(0);
+	
 
 	public Period() {
 	}

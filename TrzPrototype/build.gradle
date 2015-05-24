@@ -4,8 +4,8 @@ apply plugin: 'maven'
 apply plugin: 'application'
 
 sourceCompatibility = 1.7
-version = 'beta-18.02-0243'
-mainClassName='com.consultancygrid.trz.ui.frame.PrototypeMainFrame'
+version = 'beta-300415-1'
+mainClassName='com.consultancygrid.trz.ui.frame.LoginFrame'
 
 repositories {
 	mavenCentral()
@@ -76,6 +76,11 @@ jar {
 	into('META-INF') {
 		from  'src/META-INF'
 	}
+	into('bin') {
+		from  'trzInfo.log'
+	}
+		
+	from 'src/log4j.xml'
 }
 
 

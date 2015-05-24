@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -22,8 +23,8 @@ import org.pmw.tinylog.Logger;
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Employee;
+import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
-import com.consultancygrid.trz.ui.table.employee.EmployeeActiveTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 /**
@@ -35,13 +36,15 @@ import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class EmployeeDeactivationTabComboAL extends BaseActionListener {
 
-	JTable table;
+	private JTable table;
+	private JComboBox<Employee> employeBox;
 
 	public EmployeeDeactivationTabComboAL(PrototypeMainFrame mainFrame,
-			JTable table) {
+			JTable table, JComboBox<Employee> employeBox) {
 
 		super(mainFrame);
 		this.table = table;
+		this.employeBox = employeBox;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -77,11 +80,19 @@ public class EmployeeDeactivationTabComboAL extends BaseActionListener {
 				Employee emp = employees.get(0);
 				emp.setIsActive(isActive ? "Y" : "N");
 				em.merge(emp);
+				
 			}
 			JOptionPane.showMessageDialog(mainFrame,
 					ResourceLoaderUtil.getLabels(LabelsConstants.SET_DEACT_SAVE_OK),
 					ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_INFO),
 					JOptionPane.INFORMATION_MESSAGE);
+			EmplComboBoxModel ecbm = (EmplComboBoxModel) employeBox.getModel();
+			Query qE = em.createQuery(" select e from Employee as e where e.isActive = 'Y' order by e.firstName ");
+			ecbm.clear();
+			ecbm.addAll((List<Employee>) qE.getResultList());
+			employeBox.setSelectedItem("Default");
+			employeBox.revalidate();
+			employeBox.repaint();
 
 		} catch (Exception e1) {
 			

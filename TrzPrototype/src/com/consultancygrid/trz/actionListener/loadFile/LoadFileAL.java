@@ -69,7 +69,8 @@ public class LoadFileAL extends BaseActionListener {
 	private JPanel createFormPanel;
 	private HashMap<TrzStatic, JTextField> map;
 
-	public LoadFileAL(PrototypeMainFrame mainFrame, JFileChooser fc,
+	public LoadFileAL(PrototypeMainFrame mainFrame, 
+			JFileChooser fc,
 			JTextArea log, File file, JComboBox<Period> comboBoxPeriod,
 			JTextField fieldCode, HashMap<TrzStatic, JTextField> map,
 			JPanel createPanelMain, JPanel createPanelInner) {
@@ -90,11 +91,11 @@ public class LoadFileAL extends BaseActionListener {
 
 		createPanelMain.revalidate();
 		createPanelMain.repaint();
-
+		PeriodComboBoxModel periodComboModel = null;
 		Period period = new Period();
 		period.setCode(fieldCode.getText());
 		String code = this.fieldCode.getText();
-		Set<String> matchCodes = null;
+		Set<String> matchCodes = new HashSet<String>();
 		double vauchers = 0.0d;
 
 		try {
@@ -104,21 +105,23 @@ public class LoadFileAL extends BaseActionListener {
 				JOptionPane
 						.showMessageDialog(
 								mainFrame,
-								ResourceLoaderUtil
-										.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_ERR_CODE),
-								ResourceLoaderUtil
-										.getLabels(LabelsConstants.ALERT_MSG_ERR),
+								ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_ERR_CODE),
+								ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR),
 								JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
 			em.persist(period);
+			em.flush();
 
 			vauchers = persistPersonSettings(period);
 			CSVReaderUtil util = new CSVReaderUtil();
+			
 			if (file != null) {
+			
 				util.readCSVcarloFibu(file);
 				log.append("Loading: " + file.getName() + "." + newline);
+				LOG.info("Loading: " + file.getName() + "." + newline);
 				log.setCaretPosition(log.getDocument().getLength());
 			} else {
 				final File folder = new File(
@@ -129,12 +132,9 @@ public class LoadFileAL extends BaseActionListener {
 						JOptionPane
 								.showMessageDialog(
 										mainFrame,
-										"Folder : "
-												+ ResourceLoaderUtil
-														.getConfig(Constants.DEFAULT_DATA_DIR)
-												+ " does not exists !!!",
-										ResourceLoaderUtil
-												.getLabels(LabelsConstants.ALERT_MSG_ERR),
+										"Folder : " + ResourceLoaderUtil.getConfig(Constants.DEFAULT_DATA_DIR)
+										+ " does not exists !!!",
+										ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR),
 										JOptionPane.ERROR_MESSAGE);
 						return;
 					} catch (HeadlessException | IOException e2) {
@@ -143,7 +143,7 @@ public class LoadFileAL extends BaseActionListener {
 				}
 				for (final File fileEntry : folder.listFiles()) {
 
-					System.out.println(fileEntry.getName());
+					LOG.info(fileEntry.getName());
 					String name = fileEntry.getName();
 					Query q = em.createQuery("from InputFileType  where prefix = :prefix");
 					if (name.startsWith(f1)) {
@@ -155,34 +155,20 @@ public class LoadFileAL extends BaseActionListener {
 					} else if (name.startsWith(f4)) {
 						q.setParameter("prefix", f4);
 					} else {
-						System.err.println("Error Format!");
+						LOG.info("File : " +  name + " will be skipped!");
+						continue;
 					}
 					List<InputFileType> selectedFile = (List<InputFileType>) q.getResultList();
-					matchCodes = processSingleFileMatchToInput(fileEntry, em, selectedFile.get(0), period);
+					Set<String> matchCodesTmp 
+						= processSingleFileMatchToInput(fileEntry, em, selectedFile.get(0), period);
+					matchCodes.addAll(matchCodesTmp);
+				
 				}
 			}
 			createPanelMain.remove(createPanelInner);
-		} catch (Exception e1) {
-			LOG.error(e1);
-			try {
-				JOptionPane.showMessageDialog(mainFrame, ResourceLoaderUtil
-						.getLabels(LabelsConstants.SET_TAB_LOAD_FILE_ERROR),
-						ResourceLoaderUtil
-								.getLabels(LabelsConstants.ALERT_MSG_ERR),
-						JOptionPane.ERROR_MESSAGE);
-			} catch (HeadlessException | IOException e2) {
-				LOG.error(e2);
-			}
-			rollBack();
-
-		} finally {
-			commit();
-		}
-
-		PeriodComboBoxModel periodComboModel = (PeriodComboBoxModel) comboBoxPeriod.getModel();
-		try {
-			init();
+			periodComboModel = (PeriodComboBoxModel) comboBoxPeriod.getModel();
 			empl2Period2Depart(em, period, matchCodes, vauchers);
+			
 		} catch (Exception e1) {
 			LOG.error(e1);
 			try {
@@ -198,7 +184,6 @@ public class LoadFileAL extends BaseActionListener {
 		} finally {
 			commit();
 		}
-
 		
 		periodComboModel.setSelectedItem("Default");
 		periodComboModel.addItem(period);
@@ -228,8 +213,7 @@ public class LoadFileAL extends BaseActionListener {
 	 * @param matchCodes
 	 * @param vauchers
 	 */
-	public void empl2Period2Depart(EntityManager em, Period period,
-			Set<String> matchCodes, Double vauchers) {
+	public void empl2Period2Depart(EntityManager em, Period period, Set<String> matchCodes, Double vauchers) {
 
 		Map<String, Department> codeDeptPair = createDepEmplPeriod(period);
 		BigDecimal bPeriodRevenue = person2Department(matchCodes, codeDeptPair,	period, vauchers);
@@ -270,26 +254,24 @@ public class LoadFileAL extends BaseActionListener {
 
 				UserDepartment uDept = uDepts.get(0);
 				// Period Match code
-				Query emplQ = em
-						.createQuery("from Employee where matchcode = :mCode and isActive = 'Y'");
+				Query emplQ = em.createQuery("from Employee where matchcode = :mCode and isActive = 'Y'");
 				emplQ.setParameter("mCode", mCode);
-				List<Employee> listEmployee = (List<Employee>) emplQ
-						.getResultList();
+				List<Employee> listEmployee = (List<Employee>) emplQ.getResultList();
 
 				if (listEmployee != null && !listEmployee.isEmpty()) {
 
 					Employee employee = listEmployee.get(0);
 					matchCodes.remove(employee.getMatchCode());
 					// Department
-					Department department = codeDeptPair.get(uDept.getId()
-							.getDepId());
-					// Settings
+					Department department = codeDeptPair.get(uDept.getId().getDepId());
+					// Setting
 					EmployeeSettingsUtil.createSettings(em, period, employee);
 					// Salary
 					EmployeeSalaryUtil.createSalary(em, period, employee,
 							vauchers);
 					// Department to Period
 					createEmplDeptPeriod(em, period, employee, department);
+					
 					// Period Employee Revenue
 					createRevenueEmplPeriod(em, period, employee,  singleAvg.getId().getRevenue());
 
@@ -307,7 +289,7 @@ public class LoadFileAL extends BaseActionListener {
 	 */
 	private void allPersonsNoDepartments(Set<String> matchCodes, Period period, Double vauchers) {
 		
-		
+		if (matchCodes != null && !matchCodes.isEmpty()) {
 		Query avgQ = em.createQuery("from AvgInputData  where  id.periodCode = :pCode and matchCode in (:restMatchCodes)");
 		avgQ.setParameter("pCode", period.getCode());
 		avgQ.setParameter("restMatchCodes", matchCodes);
@@ -325,6 +307,7 @@ public class LoadFileAL extends BaseActionListener {
 					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
 					createRevenueEmplPeriod(em, period, employee, singleAvg.getId().getRevenue());
 				}
+		}
 		}
 	}
 
@@ -374,7 +357,7 @@ public class LoadFileAL extends BaseActionListener {
 			inputData.setPeriod(period);
 			em.persist(inputData);
 		}
-
+		em.flush();
 		Query emplQ = em.createQuery(" from MatchcodeList ");
 		List<MatchcodeList> resultMatchcodeList = (List<MatchcodeList>) emplQ.getResultList();
 		Map<String, String> translationMap = new HashMap<String, String>();
@@ -400,11 +383,13 @@ public class LoadFileAL extends BaseActionListener {
 				LOG.info("ERRORO : "  + rawName + " NOT EXISTS!!!");
 			}
 		}
+		em.flush();
 		return matchCodes;
 	}
 
 	private Map<String, Department> createDepEmplPeriod(Period period) {
-
+		
+        em.refresh(period);
 		Map<String, Department> codeDeptPair = new HashMap<String, Department>();
 
 		Query deptRevQ = em	.createQuery(" from DepartmentRevenue  where  id.periodCode = :pCode");
@@ -416,10 +401,18 @@ public class LoadFileAL extends BaseActionListener {
 
 			Department department = null;
 			String code = deptRev.getId().getCode();
+			Query depQ = em.createQuery("from Department where code = :dCode");
+			depQ.setParameter("dCode", code);
+			department = ((List<Department>) depQ.getResultList()).get(0);
+//			if (department == null) {
+//				Department deptNew = new Department();
+//				deptNew.setCode(code);
+//				deptNew.setLabel(code);
+//				em.persist(deptNew);
+//				em.flush();
+//				department = deptNew;
+//			}
 			if (!codeDeptPair.keySet().contains(code)) {
-				Query depQ = em.createQuery("from Department where code = :dCode");
-				depQ.setParameter("dCode", code);
-				department = ((List<Department>) depQ.getResultList()).get(0);
 				codeDeptPair.put(code, department);
 			} else {
 				department = codeDeptPair.get(code);
@@ -429,6 +422,7 @@ public class LoadFileAL extends BaseActionListener {
 			revDeptPer.setPeriod(period);
 			revDeptPer.setRevenue(deptRev.getId().getDepRevenue());
 			em.persist(revDeptPer);
+			em.flush();
 		}
 
 		return codeDeptPair;
@@ -449,6 +443,7 @@ public class LoadFileAL extends BaseActionListener {
 		emplDeptPeriod.setEmployee(empl);
 		emplDeptPeriod.setPeriod(period);
 		em.persist(emplDeptPeriod);
+		em.flush();
 	}
 
 	/**
@@ -467,6 +462,7 @@ public class LoadFileAL extends BaseActionListener {
 		rEP.setPeriod(period);
 		rEP.setRevenue(revenueEmpl4Period);
 		em.persist(rEP);
+		em.flush();
 	}
 
 }

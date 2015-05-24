@@ -47,5 +47,6 @@ public class EmployeeSalaryUtil {
 		salary.setEmployee(empl);
 		salary.setPeriod(period);
 		em.persist(salary);
+		em.flush();
 	}
 }

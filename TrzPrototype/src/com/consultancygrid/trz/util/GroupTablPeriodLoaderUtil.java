@@ -5,9 +5,10 @@ import static com.consultancygrid.trz.base.Constants.EMPTY_STRING;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
@@ -35,7 +36,7 @@ public class GroupTablPeriodLoaderUtil {
 						+ " join emplDeptP.period  as period "
 						+ " join emplDeptP.department as department "
 						+ " join  emplDeptP.employee as empl"
-						+ "  where  period.id = :periodId and department is not null order by department.code ,empl.firstName ");
+						+ "  where  period.id = :periodId and department is not null and empl.isActive = 'Y' order by department.code ,empl.firstName ");
 
 		q.setParameter("periodId", period.getId());
 		List<EmplDeptPeriod> emplsDepartments = (List<EmplDeptPeriod>) q
@@ -45,11 +46,28 @@ public class GroupTablPeriodLoaderUtil {
 		Set<UUID> employeeSetingsIds = new HashSet<UUID>();
 		Long allEmployeesCount = (Long) qAllEmployees.getSingleResult();
 
+		Map<String, Long> deptPerns =  new HashMap<String, Long>();
+		
 		for (EmplDeptPeriod emplDeptPeriod : emplsDepartments) {
 
 			final Department department = emplDeptPeriod.getDepartment();
-			final BigInteger depBonus = getDepartmentRevenue(em, period,
-					department);
+			
+			if (!deptPerns.containsKey(department.getCode())) {
+				Query qAllEmplsInDept = em
+						.createQuery("select count(emplDeptP.id) from EmplDeptPeriod as emplDeptP "
+						+ " join emplDeptP.period  as period "
+						+ " join emplDeptP.department as department "
+						+ " join  emplDeptP.employee as empl "
+						+ " where  period.id = :periodId  and department.id = :deptId and empl.isActive = 'Y'");
+				
+				qAllEmplsInDept.setParameter("periodId", period.getId());
+				qAllEmplsInDept.setParameter("deptId", department.getId());
+				
+				Long qAllEmplsInDeptCount = (Long) qAllEmplsInDept.getSingleResult();
+				deptPerns.put(department.getCode(), qAllEmplsInDeptCount);
+			}
+			
+			final BigInteger depBonus = getDepartmentRevenue(em, period, department);
 
 			if ((period.getId() != null)
 					&& period.getId()
@@ -69,8 +87,7 @@ public class GroupTablPeriodLoaderUtil {
 				final double bonusAll = add1thRow(tableData, employee,
 						department, allEmployeesCount.intValue(), period,
 						emplBonus, emplSettings);
-				final double bonusGroup = add2thRow(tableData, employee,
-						department, depBonus, emplBonus, emplSettings);
+				final double bonusGroup = add2thRow(tableData, employee, department, depBonus, emplBonus, emplSettings, deptPerns);
 				final double bonusPersonal = add3thRow(tableData, employee,
 						department, emplBonus, percentPersonal);
 				final double totalBonus = bonusAll + bonusGroup + bonusPersonal;
@@ -124,13 +141,14 @@ public class GroupTablPeriodLoaderUtil {
 						+ "  where  period.id = :periodId and department is not null order by department.code ,empl.firstName ");
 		q.setParameter("periodId", period.getId());
 		List<UUID> emplsIds = (List<UUID>) q.getResultList();
-
+		if (emplsIds == null || emplsIds.isEmpty()) {
+			return;
+		}
 		Query emplSettingsQ = em
 				.createQuery(" from EmployeeSettings as emplS  where  emplS.period.id = :periodId and emplS.employee.id not in (:revokeList)");
 		emplSettingsQ.setParameter("periodId", period.getId());
 		emplSettingsQ.setParameter("revokeList", emplsIds);
-		List<EmployeeSettings> allSettings = (List<EmployeeSettings>) emplSettingsQ
-				.getResultList();
+		List<EmployeeSettings> allSettings = (List<EmployeeSettings>) emplSettingsQ.getResultList();
 		for (EmployeeSettings emplSettings : allSettings) {
 
 			Employee employee = emplSettings.getEmployee();
@@ -195,12 +213,15 @@ public class GroupTablPeriodLoaderUtil {
 			Department department) {
 
 		Query tempPer = em
-				.createQuery(" from RevenueDeptPeriod as revDeptPer  where  revDeptPer.period.id = :periodId and revDeptPer.department.id = :deptId ");
+				.createQuery(" from RevenueDeptPeriod as revDeptPer  where  revDeptPer.period.id = :periodId and revDeptPer.department.id = :deptId  order by revDeptPer.period.code desc");
 		tempPer.setParameter("periodId", period.getId());
 		tempPer.setParameter("deptId", department.getId());
 
-		RevenueDeptPeriod revenueDeptPeriod = (RevenueDeptPeriod) tempPer
-				.getSingleResult();
+		List<RevenueDeptPeriod> revenueDeptPeriods = (List<RevenueDeptPeriod>) tempPer.getResultList();
+		RevenueDeptPeriod revenueDeptPeriod = null;
+		if  (revenueDeptPeriods != null && !revenueDeptPeriods.isEmpty()) {
+			revenueDeptPeriod = revenueDeptPeriods.get(0);
+		}
 		return revenueDeptPeriod.getRevenue() != null ? revenueDeptPeriod
 				.getRevenue().toBigInteger() : BigInteger.ZERO;
 	}
@@ -412,12 +433,13 @@ public class GroupTablPeriodLoaderUtil {
 
 	private double add2thRow(Vector tableData, Employee employee,
 			Department department, BigInteger revenueDept, BigInteger emplDept,
-			EmployeeSettings employeeSettings) throws IOException {
+			EmployeeSettings employeeSettings, Map<String, Long> deptPernsCountMap) throws IOException {
 		Vector<Object> oneRow = new Vector<Object>();
 		oneRow.add(department.getCode());
 		oneRow.add(EMPTY_STRING);
 		oneRow.add(revenueDept.toString());// To be extracted from db
-		int allEmployeesDept = department.getEmplDeptPeriods().size();
+		//int allEmployeesDept = department.getEmplDeptPeriods().size();
+		Long allEmployeesDept = deptPernsCountMap.get(department.getCode());
 		oneRow.add(allEmployeesDept);// To be provided as
 		int profitGroup = revenueDept.intValue() - emplDept.intValue();
 		oneRow.add(profitGroup);
@@ -482,7 +504,7 @@ public class GroupTablPeriodLoaderUtil {
 	}
 
 	public Double calculateBonusGroup(double profitGroup, double percentGroup,
-			double personalFactor, double jobDonePercent, int allEployeesDept) {
+			double personalFactor, double jobDonePercent, long allEployeesDept) {
 
 		return BigDecimal
 				.valueOf(profitGroup * ((percentGroup * personalFactor) / 100))

@@ -67,5 +67,6 @@ public class EmployeeSettingsUtil {
 			settings.setPersonGroupOnboardingPercent(tempOnBoard_gr);
 		}
 		em.persist(settings);
+		em.flush();
 	}
 }

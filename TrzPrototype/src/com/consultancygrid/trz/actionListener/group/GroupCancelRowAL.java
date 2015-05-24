@@ -44,19 +44,19 @@ public class GroupCancelRowAL extends BaseActionListener{
 
 	private GroupCfgEmplsTable groupConfTable;
 	private JComboBox comboBoxPeriod;
-	private JFrame frame;
+	private JFrame popUp;
 	
-	public GroupCancelRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable, JComboBox comboBoxPeriod, JFrame frame) {
+	public GroupCancelRowAL(PrototypeMainFrame mainFrame, GroupCfgEmplsTable groupConfTable, JComboBox comboBoxPeriod, JFrame popUp) {
 		super(mainFrame);
 		this.groupConfTable = groupConfTable;
 		this.comboBoxPeriod = comboBoxPeriod;
-		this.frame = frame;
+		this.popUp = popUp;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			
-		this.frame.setVisible(false);;
+		this.popUp.setVisible(false);;
 		this.groupConfTable.setEditingRow(-1);
 		this.groupConfTable.clearSelection();
 		this.groupConfTable.revalidate();

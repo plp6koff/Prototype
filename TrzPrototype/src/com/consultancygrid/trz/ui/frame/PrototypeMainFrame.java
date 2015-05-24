@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -44,11 +45,13 @@ import com.consultancygrid.trz.actionListener.employee.SaveEmployeeAL;
 import com.consultancygrid.trz.actionListener.employee.SettingsEmployeeComboAL;
 import com.consultancygrid.trz.actionListener.group.GroupEditRowAL;
 import com.consultancygrid.trz.actionListener.group.GroupTabPeriodComboAL;
+import com.consultancygrid.trz.actionListener.group.PeriodDelRowAL;
 import com.consultancygrid.trz.actionListener.loadFile.LoadCreatePeriodPanelAL;
 import com.consultancygrid.trz.actionListener.loadFile.SaveFileAL;
 import com.consultancygrid.trz.actionListener.period.SettingsPeriodComboAL;
 import com.consultancygrid.trz.actionListener.personal.EmployeePersonTabComboAL;
 import com.consultancygrid.trz.actionListener.personal.PersonRowEditAL;
+import com.consultancygrid.trz.actionListener.statistic.LoadStatistic1AL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdLvlsCfgComboAL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdSaveAL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdSettingsComboAL;
@@ -69,6 +72,7 @@ import com.consultancygrid.trz.ui.table.employee.EmployeeActiveTable;
 import com.consultancygrid.trz.ui.table.group.GroupCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTableModel;
+import com.consultancygrid.trz.ui.table.personal.statistic1.PrsStat1CfgEmplsTable;
 import com.consultancygrid.trz.ui.table.targetLevel.TargetLevelCfgTable;
 import com.consultancygrid.trz.util.HibernateUtil;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
@@ -87,6 +91,9 @@ public class PrototypeMainFrame extends JFrame {
 	/**
 	 * Launch the application.
 	 */
+	
+
+	
 	public static void main(String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
@@ -98,13 +105,18 @@ public class PrototypeMainFrame extends JFrame {
 					tx = em.getTransaction();
 					tx.begin();
 					PrototypeMainFrame frame = new PrototypeMainFrame();
+					ImageIcon myAppImage = new ImageIcon("/resources/imgs/img.png");
+					if(myAppImage != null) {
+						myAppImage =  new ImageIcon(getClass().getResource("/resources/imgs/img.png"));
+					}
+					frame.setIconImage(myAppImage.getImage());
 					frame.setVisible(true);
 					frame.addWindowListener(new WindowAdapter()
 					{
 					    public void windowClosing(WindowEvent e)
 					    {
 					        JFrame frame = (JFrame)e.getSource();
-					 
+					       
 					        int result = JOptionPane.showConfirmDialog(
 					            frame,
 					            "Are you sure you want to exit the application?",
@@ -151,10 +163,8 @@ public class PrototypeMainFrame extends JFrame {
 		getContentPane().add(tabbedPane);
 
 		// First Tab
-		PersonalCfgEmplsTableModel personalCfgModel = new PersonalCfgEmplsTableModel();
-		Vector tableData = new Vector();
-		Query qE = em.createQuery(" from Employee as e order by e.firstName");
-		List<Employee> employees = (List<Employee>)qE.getResultList();
+		Query qE = em.createQuery(" select e from Employee as e where e.isActive = 'Y' order by e.firstName ");
+		List<Employee> employees = (List<Employee>) qE.getResultList();
 		
 		
 		EmplComboBoxModel emplComboBoxModel = new EmplComboBoxModel(employees);
@@ -180,12 +190,29 @@ public class PrototypeMainFrame extends JFrame {
 		drawSecondTab(tabbedPane, departTable, departTable2, periodsComboBox, comboBoxEmployees, personalConfTable);
 
 		
+		JTabbedPane tabbedPaneStatistics = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.addTab("Statistics", null, tabbedPaneStatistics, null);
+
+		
+		drawStatistic31FirstTab(tabbedPaneStatistics, trzComboBoxModel);
+		
+		JPanel stat2Panel = new JPanel(null);
+		stat2Panel.setBounds(5, 5, 1000, 150);
+		tabbedPaneStatistics.addTab("Statistic - 3.2.", stat2Panel);
+		
+		JPanel stat3Panel = new JPanel(null);
+		stat3Panel.setBounds(5, 5, 1000, 150);
+		tabbedPaneStatistics.addTab("Statistic - 3.3.", stat3Panel);
+		
+		
 		//Rest
 		JPanel panLinkPeriod2Empl = new JPanel(null);
 		JTabbedPane tabbedPaneSettings = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addTab(
 				ResourceLoaderUtil.getLabels(LabelsConstants.SETTINGS), null,
 				tabbedPaneSettings, null);
+		
+		
 		
 		/**
 		 * Settings
@@ -196,12 +223,15 @@ public class PrototypeMainFrame extends JFrame {
 		drawLoadFileSettingsTab(tabbedPaneSettings, comboBoxPeriod, departTable, departTable2);
 		
 		//Deactivation user
+		Query qEAll = em.createQuery(" from Employee as e order by e.firstName ");
+		List<Employee> allEmpls = (List<Employee>) qEAll.getResultList();
+		
 		Object[] dataheader ={ResourceLoaderUtil.getLabels(LabelsConstants.SET_DEACT_HEAD1),
 							  ResourceLoaderUtil.getLabels(LabelsConstants.SET_DEACT_HEAD2)};
-		Object[][] data = new Object[employees.size()][2];
+		Object[][] data = new Object[allEmpls.size()][2];
 		DefaultTableModel emplActTModel = new DefaultTableModel();
 		int i = 0;
-		for (Employee empl : (List<Employee>) qE.getResultList()) {
+		for (Employee empl : allEmpls) {
 			Object[] dataInternal = new Object[2];
 			String name = empl.getFirstName() + " " + empl.getLastName();
 			Boolean isActive = ("Y".equals(empl.getIsActive()));
@@ -213,7 +243,7 @@ public class PrototypeMainFrame extends JFrame {
 		}
 		emplActTModel.setDataVector(data, dataheader);
 		EmployeeActiveTable emplDeactvTable = new EmployeeActiveTable(emplActTModel);
-		drawEmployeeDeactivation(tabbedPaneSettings,emplDeactvTable);
+		drawEmployeeDeactivation(tabbedPaneSettings,emplDeactvTable, comboBoxEmployees);
 		//drawCreatePeriod(tabbedPane, departTable, tabbedPaneSettings,  comboBoxPeriod, panLinkPeriod2Empl);
 		
 		//Create Employee
@@ -227,11 +257,84 @@ public class PrototypeMainFrame extends JFrame {
 		drawCreateTarget(tabbedPaneSettings, comboTargetsCTL, comboTargetsP2E);
 		drawCreateTargetLevels(tabbedPaneSettings, comboTargetsCTL);
 		drawEmployee2TargetPeriod(tabbedPaneSettings, comboTargetsP2E,  emplComboBoxModel);
+		PeriodComboBoxModel trzCombo2DelBoxModel = new PeriodComboBoxModel(allPeriods);
+		JComboBox<Period> prds2DelComboBox = new JComboBox<Period>(trzCombo2DelBoxModel);
+		//TODO Add period initial one
+		drawDeletePeriod(tabbedPaneSettings,
+				prds2DelComboBox, periodsComboBox, departTable, departTable2);
+		
 	}
 
 	
 	
-	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException
+	 */
+	private void drawStatistic31FirstTab(JTabbedPane tabbedPane, 
+			PeriodComboBoxModel trzComboBoxModel) throws IOException {
+
+		
+		
+		
+		JPanel stat1Panel = new JPanel(null);
+		stat1Panel.setBounds(5, 5, 1000, 150);
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//		JComboBox comboBoxEmployees1 = new JComboBox<>(emplComboBoxModel);
+//		personalConfTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//		comboBoxEmployees1.setBounds(150, 40, 300, 25);
+//		comboBoxEmployees1.setRenderer(new EmployeeCustomRender());
+		JComboBox periodsComboBox1 = new JComboBox<>(trzComboBoxModel);
+		
+		PrsStat1CfgEmplsTable pStatCfgEmpls = new PrsStat1CfgEmplsTable();
+		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		JPanel frstStatPanel = new JPanel(null);
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+//		JButton saveButt = new JButton("Export as XSL ...");
+//		saveButt.setEnabled(true);
+//		saveButt.setBounds(650, 40, 150, 25);
+		
+		
+		periodsComboBox1.setBounds(150, 40, 300, 25);
+		periodsComboBox1.setRenderer(new PeriodCustomRender());
+		
+		
+		JButton loadButt = new JButton("Load Statistic");
+		loadButt.setEnabled(true);
+		loadButt.setBounds(650, 40, 150, 25);
+		PrsStat1CfgEmplsTable prsStat1CfgEmplsTable = new PrsStat1CfgEmplsTable();
+		loadButt.addActionListener(new LoadStatistic1AL(this, frstStatPanel, periodsComboBox1, prsStat1CfgEmplsTable, fc));
+		frstStatPanel.add(loadButt);
+		
+		JScrollPane pesonPanel = new JScrollPane(prsStat1CfgEmplsTable);
+		pesonPanel.setLayout(new ScrollPaneLayout());
+		pesonPanel.setColumnHeader(new JViewport() {
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension d = super.getPreferredSize();
+				d.height = 110;
+				return d;
+			}
+		});
+		JTableHeader header = prsStat1CfgEmplsTable.getTableHeader();
+		header.setDefaultRenderer(new HeaderRenderer(header
+				.getDefaultRenderer()));
+
+		pesonPanel.setBounds(20, 150, 1200, 600);
+		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		pesonPanel.setAutoscrolls(true);
+		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.1."));
+		frstStatPanel.setLayout(null);
+//		frstStatPanel.add(comboBoxEmployees);
+		frstStatPanel.add(periodsComboBox1);
+		frstStatPanel.add(pesonPanel);
+		tabbedPane.addTab("Statistic- 3.1.", frstStatPanel);
+	}
 	
 	/**
 	 * 
@@ -489,7 +592,7 @@ public class PrototypeMainFrame extends JFrame {
 				panLinkPeriod2Empl);
 	}
 
-	private void drawEmployeeDeactivation(JTabbedPane tabbedPaneSettings, EmployeeActiveTable table) throws IOException {
+	private void drawEmployeeDeactivation(JTabbedPane tabbedPaneSettings,  EmployeeActiveTable table, JComboBox<Employee> comboBoxEmployees) throws IOException {
 
 		JPanel panel = new JPanel();
 		//table.setPreferredScrollableViewportSize(table.getPreferredSize());
@@ -499,7 +602,7 @@ public class PrototypeMainFrame extends JFrame {
 		editEmployeePanel.setBounds(40, 40, 500, 600);
 		JButton saveButton = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.SET_CRT_EMPL_SAVE));
 		saveButton.setBounds(100, 140, 200, 30);
-		saveButton.addActionListener(new EmployeeDeactivationTabComboAL(this, table));
+		saveButton.addActionListener(new EmployeeDeactivationTabComboAL(this, table, comboBoxEmployees));
 		panel.add(saveButton);
 		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_DEACT_TAB), 
 								panel);
@@ -549,7 +652,7 @@ public class PrototypeMainFrame extends JFrame {
 		btnSavePeriod.setBounds(30, 200, 200, 25);
 		btnSavePeriod.addActionListener(new SaveEmployeeAL(this, createFormPanel,  map, periods, employeesCombo));
 		createFormPanel.add(btnSavePeriod);
-		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_LOAD_FILE_TAB),	createFormPanel);
+		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_CRT_EMPL_FILE_TAB),	createFormPanel);
 	}
 	
 	
@@ -626,6 +729,37 @@ public class PrototypeMainFrame extends JFrame {
 		panSetCrtTrg.add(btnSavePeriod);
 		tabbedPaneSettings.addTab(ResourceLoaderUtil
 				.getLabels(LabelsConstants.TRG_SETT_TAB_CREATE), panSetCrtTrg);
+	}
+	
+	
+	private void drawDeletePeriod(
+			JTabbedPane tabbedPaneSettings,
+			JComboBox<Period> comboPeriods, 
+			JComboBox<Period> comboPeriods2,
+			GroupCfgEmplsTable departTable,
+			GroupCfgEmplsTable departTable2)
+			throws IOException {
+
+
+		JPanel panSetDelete = new JPanel();
+		panSetDelete.setLayout(null);
+		panSetDelete.setBounds(10, 60, 1000, 500);
+		
+		
+		comboPeriods.setBounds(150, 40, 300, 25);
+		comboPeriods.setRenderer(new PeriodCustomRender());
+		panSetDelete.add(comboPeriods);
+		//Save Button
+		JButton deleteRow = new JButton("Delete");
+		deleteRow.setBounds(490, 40, 150, 25);
+		deleteRow.addActionListener(
+				new PeriodDelRowAL(this,  
+						comboPeriods, 
+						comboPeriods2,
+						departTable,
+						departTable2));
+		panSetDelete.add(deleteRow);
+		tabbedPaneSettings.addTab("Delete Period", panSetDelete);
 	}
 
 
