@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -52,6 +51,8 @@ import com.consultancygrid.trz.actionListener.period.SettingsPeriodComboAL;
 import com.consultancygrid.trz.actionListener.personal.EmployeePersonTabComboAL;
 import com.consultancygrid.trz.actionListener.personal.PersonRowEditAL;
 import com.consultancygrid.trz.actionListener.statistic.LoadStatistic1AL;
+import com.consultancygrid.trz.actionListener.statistic.LoadStatistic4AL;
+import com.consultancygrid.trz.actionListener.statistic.LoadStatistic5AL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdLvlsCfgComboAL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdSaveAL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdSettingsComboAL;
@@ -71,8 +72,9 @@ import com.consultancygrid.trz.ui.combo.TargetComboBoxModel;
 import com.consultancygrid.trz.ui.table.employee.EmployeeActiveTable;
 import com.consultancygrid.trz.ui.table.group.GroupCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTable;
-import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.ui.table.personal.statistic1.PrsStat1CfgEmplsTable;
+import com.consultancygrid.trz.ui.table.personal.statistic4.PrsStat4CfgEmplsTable;
+import com.consultancygrid.trz.ui.table.personal.statistic5.PrsStat5CfgEmplsTable;
 import com.consultancygrid.trz.ui.table.targetLevel.TargetLevelCfgTable;
 import com.consultancygrid.trz.util.HibernateUtil;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
@@ -203,6 +205,10 @@ public class PrototypeMainFrame extends JFrame {
 		JPanel stat3Panel = new JPanel(null);
 		stat3Panel.setBounds(5, 5, 1000, 150);
 		tabbedPaneStatistics.addTab("Statistic - 3.3.", stat3Panel);
+		
+		drawStat34Tab(tabbedPaneStatistics, trzComboBoxModel, emplComboBoxModel);
+		
+		drawStat35Tab(tabbedPaneStatistics, trzComboBoxModel, emplComboBoxModel);
 		
 		
 		//Rest
@@ -335,6 +341,134 @@ public class PrototypeMainFrame extends JFrame {
 		frstStatPanel.add(pesonPanel);
 		tabbedPane.addTab("Statistic- 3.1.", frstStatPanel);
 	}
+	
+	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException
+	 */
+	private void drawStat34Tab(JTabbedPane tabbedPane, 
+			PeriodComboBoxModel trzComboBoxModel,
+			EmplComboBoxModel emplComboBoxModel) throws IOException {
+		
+		
+		
+		JPanel stat4Panel = new JPanel(null);
+		stat4Panel.setBounds(5, 5, 1000, 150);
+		
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+		JComboBox comboBoxEmployees34 = new JComboBox<>(emplComboBoxModel);
+		comboBoxEmployees34.setBounds(150, 40, 300, 25);
+		comboBoxEmployees34.setRenderer(new EmployeeCustomRender());
+		
+		JComboBox periodsComboBox34 = new JComboBox<>(trzComboBoxModel);
+		periodsComboBox34.setBounds(150, 100, 300, 25);
+		periodsComboBox34.setRenderer(new PeriodCustomRender());
+		
+		PrsStat4CfgEmplsTable pStatCfgEmpls = new PrsStat4CfgEmplsTable();
+		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		
+		JButton loadButt = new JButton("Load Statistic");
+		loadButt.setEnabled(true);
+		loadButt.setBounds(650, 40, 150, 25);
+		
+		PrsStat4CfgEmplsTable prsStat4Table = new PrsStat4CfgEmplsTable();
+		loadButt.addActionListener(new LoadStatistic4AL(this, stat4Panel, periodsComboBox34, comboBoxEmployees34, prsStat4Table, fc));
+		stat4Panel.add(loadButt);
+		
+		JScrollPane pesonPanel = new JScrollPane(prsStat4Table);
+		pesonPanel.setLayout(new ScrollPaneLayout());
+		pesonPanel.setColumnHeader(new JViewport() {
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension d = super.getPreferredSize();
+				d.height = 110;
+				return d;
+			}
+		});
+		JTableHeader header = prsStat4Table.getTableHeader();
+		header.setDefaultRenderer(new HeaderRenderer(header
+				.getDefaultRenderer()));
+
+		pesonPanel.setBounds(20, 150, 1200, 600);
+		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		pesonPanel.setAutoscrolls(true);
+		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.4."));
+		stat4Panel.setLayout(null);
+		stat4Panel.add(comboBoxEmployees34);
+		stat4Panel.add(periodsComboBox34);
+		stat4Panel.add(pesonPanel);
+		tabbedPane.addTab("Statistic- 3.4.", stat4Panel);
+	}
+
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException
+	 */
+	private void drawStat35Tab(JTabbedPane tabbedPane, 
+			PeriodComboBoxModel trzComboBoxModel,
+			EmplComboBoxModel emplComboBoxModel) throws IOException {
+		
+		
+		
+		JPanel stat5Panel = new JPanel(null);
+		stat5Panel.setBounds(5, 5, 1000, 150);
+		
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+		JComboBox comboBoxEmployees1 = new JComboBox<>(emplComboBoxModel);
+		comboBoxEmployees1.setBounds(150, 40, 300, 25);
+		comboBoxEmployees1.setRenderer(new EmployeeCustomRender());
+		
+		JComboBox periodsComboBox1 = new JComboBox<>(trzComboBoxModel);
+		periodsComboBox1.setBounds(150, 100, 300, 25);
+		periodsComboBox1.setRenderer(new PeriodCustomRender());
+		
+		PrsStat1CfgEmplsTable pStatCfgEmpls = new PrsStat1CfgEmplsTable();
+		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		
+		JButton loadButt = new JButton("Load Statistic");
+		loadButt.setEnabled(true);
+		loadButt.setBounds(650, 40, 150, 25);
+		
+		PrsStat5CfgEmplsTable prsStat5Table = new PrsStat5CfgEmplsTable();
+		loadButt.addActionListener(new LoadStatistic5AL(this, stat5Panel, periodsComboBox1, comboBoxEmployees1, prsStat5Table, fc));
+		stat5Panel.add(loadButt);
+		
+		JScrollPane pesonPanel = new JScrollPane(prsStat5Table);
+		pesonPanel.setLayout(new ScrollPaneLayout());
+		pesonPanel.setColumnHeader(new JViewport() {
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension d = super.getPreferredSize();
+				d.height = 110;
+				return d;
+			}
+		});
+		JTableHeader header = prsStat5Table.getTableHeader();
+		header.setDefaultRenderer(new HeaderRenderer(header
+				.getDefaultRenderer()));
+
+		pesonPanel.setBounds(20, 150, 1200, 600);
+		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		pesonPanel.setAutoscrolls(true);
+		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.5."));
+		stat5Panel.setLayout(null);
+		stat5Panel.add(comboBoxEmployees1);
+		stat5Panel.add(periodsComboBox1);
+		stat5Panel.add(pesonPanel);
+		tabbedPane.addTab("Statistic- 3.5.", stat5Panel);
+	}
+	
 	
 	/**
 	 * 
