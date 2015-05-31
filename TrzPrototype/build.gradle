@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'application'
 
 sourceCompatibility = 1.7
-version = 'statistica145-25.05'
+version = 'statistic2and3-31.05'
 mainClassName='com.consultancygrid.trz.ui.frame.LoginFrame'
 
 repositories {

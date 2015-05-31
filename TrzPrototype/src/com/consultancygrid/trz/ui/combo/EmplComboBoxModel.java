@@ -18,7 +18,9 @@ public class EmplComboBoxModel implements ComboBoxModel<Employee> {
 	
 	public EmplComboBoxModel(List<Employee> comboBoxItemList) {
 		
-		this.comboBoxItemList = comboBoxItemList;
+		this.comboBoxItemList = new ArrayList<>();
+		this.comboBoxItemList.add(new Employee());
+		this.comboBoxItemList.addAll(comboBoxItemList);
 	}
 	
 	public EmplComboBoxModel() {

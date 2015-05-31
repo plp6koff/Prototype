@@ -36,7 +36,16 @@ public class PeriodCustomRender implements ListCellRenderer {
 		  if (value instanceof Period) {
 			  
 			  Period tempPeriod = (Period) value;
-			  renderer.setText(tempPeriod.getCode());
+			  if (tempPeriod.getId() == null) {
+				  try {
+					renderer.setText(ResourceLoaderUtil.getLabels(LabelsConstants.COMBO_PERIOD));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			  } else {
+				  renderer.setText(tempPeriod.getCode());
+			  }
 			  
 		  } else {
 			  try {

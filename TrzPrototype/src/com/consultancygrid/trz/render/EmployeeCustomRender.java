@@ -25,7 +25,16 @@ public class EmployeeCustomRender implements ListCellRenderer {
 		  if (value instanceof Employee) {
 			  
 			  Employee tempEmployee = (Employee) value;
-			  renderer.setText(tempEmployee.getFirstName() + " " +tempEmployee.getLastName());
+			  if (tempEmployee.getId() == null) {
+				  try {
+					renderer.setText(ResourceLoaderUtil.getLabels(LabelsConstants.COMBO_EMPL));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			  } else {
+				  renderer.setText(tempEmployee.getFirstName() + " " +tempEmployee.getLastName());
+			  }
 			  
 		  } else {
 			  try {

@@ -51,6 +51,9 @@ import com.consultancygrid.trz.actionListener.period.SettingsPeriodComboAL;
 import com.consultancygrid.trz.actionListener.personal.EmployeePersonTabComboAL;
 import com.consultancygrid.trz.actionListener.personal.PersonRowEditAL;
 import com.consultancygrid.trz.actionListener.statistic.LoadStatistic1AL;
+import com.consultancygrid.trz.actionListener.statistic.LoadStatistic1MiniAL;
+import com.consultancygrid.trz.actionListener.statistic.LoadStatistic2AL;
+import com.consultancygrid.trz.actionListener.statistic.LoadStatistic3AL;
 import com.consultancygrid.trz.actionListener.statistic.LoadStatistic4AL;
 import com.consultancygrid.trz.actionListener.statistic.LoadStatistic5AL;
 import com.consultancygrid.trz.actionListener.targetPeriod.TrgPrdLvlsCfgComboAL;
@@ -73,6 +76,9 @@ import com.consultancygrid.trz.ui.table.employee.EmployeeActiveTable;
 import com.consultancygrid.trz.ui.table.group.GroupCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.statistic1.PrsStat1CfgEmplsTable;
+import com.consultancygrid.trz.ui.table.personal.statistic1.mini.PrsStat1MiniCfgEmplsTable;
+import com.consultancygrid.trz.ui.table.personal.statistic2.PrsStat2CfgEmplsTable;
+import com.consultancygrid.trz.ui.table.personal.statistic3.PrsStat3CfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.statistic4.PrsStat4CfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.statistic5.PrsStat5CfgEmplsTable;
 import com.consultancygrid.trz.ui.table.targetLevel.TargetLevelCfgTable;
@@ -162,6 +168,8 @@ public class PrototypeMainFrame extends JFrame {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 0, 0);
+		
+		
 		getContentPane().add(tabbedPane);
 
 		// First Tab
@@ -190,24 +198,31 @@ public class PrototypeMainFrame extends JFrame {
 		GroupCfgEmplsTable departTable2 = new GroupCfgEmplsTable();
 		//Draw
 		drawSecondTab(tabbedPane, departTable, departTable2, periodsComboBox, comboBoxEmployees, personalConfTable);
-
 		
 		JTabbedPane tabbedPaneStatistics = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPaneStatistics.setBounds(0, 0, 0, 0);
 		tabbedPane.addTab("Statistics", null, tabbedPaneStatistics, null);
-
+		ImageIcon myAppImage = new ImageIcon("/resources/imgs/empl.png");
+		if(myAppImage != null) {
+			myAppImage =  new ImageIcon(getClass().getResource("/resources/imgs/empl.png"));
+		}
+		tabbedPane.setIconAt(0, myAppImage);
+		
+		ImageIcon myAppImageGrp = new ImageIcon("/resources/imgs/group.png");
+		if(myAppImageGrp != null) {
+			myAppImageGrp =  new ImageIcon(getClass().getResource("/resources/imgs/group.png"));
+		}
+		tabbedPane.setIconAt(1, myAppImageGrp);
+		ImageIcon myAppStat = new ImageIcon("/resources/imgs/statistic.png");
+		if(myAppStat != null) {
+			myAppStat =  new ImageIcon(getClass().getResource("/resources/imgs/statistic.png"));
+		}
+		tabbedPane.setIconAt(2, myAppStat);
 		
 		drawStatistic31FirstTab(tabbedPaneStatistics, trzComboBoxModel);
-		
-		JPanel stat2Panel = new JPanel(null);
-		stat2Panel.setBounds(5, 5, 1000, 150);
-		tabbedPaneStatistics.addTab("Statistic - 3.2.", stat2Panel);
-		
-		JPanel stat3Panel = new JPanel(null);
-		stat3Panel.setBounds(5, 5, 1000, 150);
-		tabbedPaneStatistics.addTab("Statistic - 3.3.", stat3Panel);
-		
+		drawStatistic32FirstTab(tabbedPaneStatistics, trzComboBoxModel, emplComboBoxModel);
+		drawStat33Tab(tabbedPaneStatistics, trzComboBoxModel);		
 		drawStat34Tab(tabbedPaneStatistics, trzComboBoxModel, emplComboBoxModel);
-		
 		drawStat35Tab(tabbedPaneStatistics, trzComboBoxModel, emplComboBoxModel);
 		
 		
@@ -217,9 +232,11 @@ public class PrototypeMainFrame extends JFrame {
 		tabbedPane.addTab(
 				ResourceLoaderUtil.getLabels(LabelsConstants.SETTINGS), null,
 				tabbedPaneSettings, null);
-		
-		
-		
+		ImageIcon myAppImageSett = new ImageIcon("/resources/imgs/settings.png");
+		if(myAppImageSett != null) {
+			myAppImageSett =  new ImageIcon(getClass().getResource("/resources/imgs/settings.png"));
+		}
+		tabbedPane.setIconAt(3, myAppImageSett);
 		/**
 		 * Settings
 		 */
@@ -260,9 +277,18 @@ public class PrototypeMainFrame extends JFrame {
 		List<TargetPeriod> allTargets = (List<TargetPeriod>) qTargets.getResultList();
 		JComboBox comboTargetsCTL = new JComboBox<>(new TargetComboBoxModel(allTargets));
 		JComboBox comboTargetsP2E = new JComboBox<>(new TargetComboBoxModel(allTargets));
+		
+		
 		drawCreateTarget(tabbedPaneSettings, comboTargetsCTL, comboTargetsP2E);
 		drawCreateTargetLevels(tabbedPaneSettings, comboTargetsCTL);
 		drawEmployee2TargetPeriod(tabbedPaneSettings, comboTargetsP2E,  emplComboBoxModel);
+		ImageIcon targetImage = new ImageIcon("/resources/imgs/target.png");
+		if(targetImage != null) {
+			targetImage =  new ImageIcon(getClass().getResource("/resources/imgs/target.png"));
+		}
+		tabbedPaneSettings.setIconAt(3, targetImage);
+		tabbedPaneSettings.setIconAt(4, targetImage);
+		tabbedPaneSettings.setIconAt(5, targetImage);
 		PeriodComboBoxModel trzCombo2DelBoxModel = new PeriodComboBoxModel(allPeriods);
 		JComboBox<Period> prds2DelComboBox = new JComboBox<Period>(trzCombo2DelBoxModel);
 		//TODO Add period initial one
@@ -285,8 +311,7 @@ public class PrototypeMainFrame extends JFrame {
 		
 		
 		
-		JPanel stat1Panel = new JPanel(null);
-		stat1Panel.setBounds(5, 5, 1000, 150);
+		JPanel frstStatPanel = new JPanel(null);
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 //		JComboBox comboBoxEmployees1 = new JComboBox<>(emplComboBoxModel);
@@ -298,13 +323,10 @@ public class PrototypeMainFrame extends JFrame {
 		PrsStat1CfgEmplsTable pStatCfgEmpls = new PrsStat1CfgEmplsTable();
 		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		JPanel frstStatPanel = new JPanel(null);
+		PrsStat1MiniCfgEmplsTable pStatMiniCfgEmpls = new PrsStat1MiniCfgEmplsTable();
+		pStatMiniCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		
-//		JButton saveButt = new JButton("Export as XSL ...");
-//		saveButt.setEnabled(true);
-//		saveButt.setBounds(650, 40, 150, 25);
-		
 		
 		periodsComboBox1.setBounds(150, 40, 300, 25);
 		periodsComboBox1.setRenderer(new PeriodCustomRender());
@@ -313,11 +335,17 @@ public class PrototypeMainFrame extends JFrame {
 		JButton loadButt = new JButton("Load Statistic");
 		loadButt.setEnabled(true);
 		loadButt.setBounds(650, 40, 150, 25);
-		PrsStat1CfgEmplsTable prsStat1CfgEmplsTable = new PrsStat1CfgEmplsTable();
-		loadButt.addActionListener(new LoadStatistic1AL(this, frstStatPanel, periodsComboBox1, prsStat1CfgEmplsTable, fc));
+		loadButt.addActionListener(new LoadStatistic1AL(this, frstStatPanel, periodsComboBox1, pStatCfgEmpls, fc));
 		frstStatPanel.add(loadButt);
 		
-		JScrollPane pesonPanel = new JScrollPane(prsStat1CfgEmplsTable);
+		
+		JButton loadMiniButt = new JButton("Load Statistic Short");
+		loadMiniButt.setEnabled(true);
+		loadMiniButt.setBounds(650, 80, 150, 25);
+		loadMiniButt.addActionListener(new LoadStatistic1MiniAL(this, frstStatPanel, periodsComboBox1, pStatMiniCfgEmpls, fc));
+		frstStatPanel.add(loadMiniButt);
+		
+		JScrollPane pesonPanel = new JScrollPane(pStatCfgEmpls);
 		pesonPanel.setLayout(new ScrollPaneLayout());
 		pesonPanel.setColumnHeader(new JViewport() {
 			@Override
@@ -327,22 +355,160 @@ public class PrototypeMainFrame extends JFrame {
 				return d;
 			}
 		});
-		JTableHeader header = prsStat1CfgEmplsTable.getTableHeader();
+		JTableHeader header = pStatCfgEmpls.getTableHeader();
 		header.setDefaultRenderer(new HeaderRenderer(header
 				.getDefaultRenderer()));
 
-		pesonPanel.setBounds(20, 150, 1200, 600);
+		pesonPanel.setBounds(20, 150, 1400, 400);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
 		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.1."));
+		
+		JScrollPane pesonPanelMini = new JScrollPane(pStatMiniCfgEmpls);
+		pesonPanelMini.setLayout(new ScrollPaneLayout());
+		pesonPanelMini.setColumnHeader(new JViewport() {
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension d = super.getPreferredSize();
+				d.height = 110;
+				return d;
+			}
+		});
+		JTableHeader headerMini = pStatMiniCfgEmpls.getTableHeader();
+		headerMini.setDefaultRenderer(new HeaderRenderer(headerMini
+				.getDefaultRenderer()));
+
+		pesonPanelMini.setBounds(20, 560, 800, 300);
+		pesonPanelMini.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		pesonPanelMini.setAutoscrolls(true);
+		pesonPanelMini.setBorder(BorderFactory.createTitledBorder("Statistic 3.1. Mini"));
+		
 		frstStatPanel.setLayout(null);
 //		frstStatPanel.add(comboBoxEmployees);
 		frstStatPanel.add(periodsComboBox1);
 		frstStatPanel.add(pesonPanel);
+		frstStatPanel.add(pesonPanelMini);
 		tabbedPane.addTab("Statistic- 3.1.", frstStatPanel);
 	}
 	
 	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException
+	 */
+	private void drawStatistic32FirstTab(JTabbedPane tabbedPane, 
+			PeriodComboBoxModel trzComboBoxModel,
+			EmplComboBoxModel emplComboBoxModel) throws IOException {
+
+		
+		JPanel frstStatPane2 = new JPanel(null);
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		JComboBox comboBoxEmployees2 = new JComboBox<>(emplComboBoxModel);
+		comboBoxEmployees2.setBounds(150, 40, 300, 25);
+		comboBoxEmployees2.setRenderer(new EmployeeCustomRender());
+		
+		PrsStat2CfgEmplsTable pStatCfgEmpls = new PrsStat2CfgEmplsTable();
+		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		JComboBox periodsComboBox2 = new JComboBox<>(trzComboBoxModel);
+		periodsComboBox2.setBounds(150, 40, 300, 25);
+		periodsComboBox2.setRenderer(new PeriodCustomRender());
+		
+		
+		JButton loadButt = new JButton("Load Statistic");
+		loadButt.setEnabled(true);
+		loadButt.setBounds(650, 40, 150, 25);
+		loadButt.addActionListener(new LoadStatistic2AL(this, frstStatPane2,  comboBoxEmployees2, pStatCfgEmpls, fc));
+		frstStatPane2.add(loadButt);
+		
+		
+		JScrollPane pesonPanel = new JScrollPane(pStatCfgEmpls);
+		pesonPanel.setLayout(new ScrollPaneLayout());
+		pesonPanel.setColumnHeader(new JViewport() {
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension d = super.getPreferredSize();
+				d.height = 110;
+				return d;
+			}
+		});
+		JTableHeader header = pStatCfgEmpls.getTableHeader();
+		header.setDefaultRenderer(new HeaderRenderer(header
+				.getDefaultRenderer()));
+
+		pesonPanel.setBounds(20, 150, 1200, 400);
+		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		pesonPanel.setAutoscrolls(true);
+		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.2."));
+		
+		
+		frstStatPane2.setLayout(null);
+		frstStatPane2.add(comboBoxEmployees2);
+		frstStatPane2.add(periodsComboBox2);
+		frstStatPane2.add(pesonPanel);
+		tabbedPane.addTab("Statistic- 3.2.", frstStatPane2);
+	}
+	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException
+	 */
+	private void drawStat33Tab(JTabbedPane tabbedPane, 
+			PeriodComboBoxModel trzComboBoxModel) throws IOException {
+		
+		
+		
+		JPanel stat3Panel = new JPanel(null);
+		stat3Panel.setBounds(5, 5, 1300, 600);
+		
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+		
+		JComboBox periodsComboBox33 = new JComboBox<>(trzComboBoxModel);
+		periodsComboBox33.setBounds(40, 100, 300, 25);
+		periodsComboBox33.setRenderer(new PeriodCustomRender());
+		
+		PrsStat3CfgEmplsTable prsStat3Table = new PrsStat3CfgEmplsTable();
+		prsStat3Table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		
+		JButton loadButt = new JButton("Load Statistic");
+		loadButt.setEnabled(true);
+		loadButt.setBounds(650, 40, 150, 25);
+		
+		loadButt.addActionListener(new LoadStatistic3AL(this, stat3Panel, periodsComboBox33, prsStat3Table, fc));
+		stat3Panel.add(loadButt);
+		
+		JScrollPane pesonPanel = new JScrollPane(prsStat3Table);
+		pesonPanel.setLayout(new ScrollPaneLayout());
+		pesonPanel.setColumnHeader(new JViewport() {
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension d = super.getPreferredSize();
+				d.height = 110;
+				return d;
+			}
+		});
+		JTableHeader header = prsStat3Table.getTableHeader();
+		header.setDefaultRenderer(new HeaderRenderer(header
+				.getDefaultRenderer()));
+
+		pesonPanel.setBounds(40, 150, 1200, 600);
+		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		pesonPanel.setAutoscrolls(true);
+		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.3."));
+		stat3Panel.setLayout(null);
+		stat3Panel.add(periodsComboBox33);
+		stat3Panel.add(pesonPanel);
+		tabbedPane.addTab("Statistic- 3.3.", stat3Panel);
+	}
 	/**
 	 * 
 	 * @param comboBox
@@ -741,6 +907,12 @@ public class PrototypeMainFrame extends JFrame {
 		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_DEACT_TAB), 
 								panel);
 		
+		ImageIcon activeImage = new ImageIcon("/resources/imgs/activate.png");
+		if(activeImage != null) {
+			activeImage =  new ImageIcon(getClass().getResource("/resources/imgs/activate.png"));
+		}
+		tabbedPaneSettings.setIconAt(1, activeImage);
+		
 	}
 	
 	private void drawCreateEmployee(JTabbedPane tabbedPaneSettings, List<Period> periods, JComboBox employeesCombo)
@@ -787,6 +959,13 @@ public class PrototypeMainFrame extends JFrame {
 		btnSavePeriod.addActionListener(new SaveEmployeeAL(this, createFormPanel,  map, periods, employeesCombo));
 		createFormPanel.add(btnSavePeriod);
 		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_CRT_EMPL_FILE_TAB),	createFormPanel);
+		
+		
+		ImageIcon emplImage = new ImageIcon("/resources/imgs/empl.png");
+		if(emplImage != null) {
+			emplImage =  new ImageIcon(getClass().getResource("/resources/imgs/empl.png"));
+		}
+		tabbedPaneSettings.setIconAt(2, emplImage);
 	}
 	
 	
@@ -894,6 +1073,12 @@ public class PrototypeMainFrame extends JFrame {
 						departTable2));
 		panSetDelete.add(deleteRow);
 		tabbedPaneSettings.addTab("Delete Period", panSetDelete);
+		
+		ImageIcon delImage = new ImageIcon("/resources/imgs/delete.png");
+		if(delImage != null) {
+			delImage =  new ImageIcon(getClass().getResource("/resources/imgs/delete.png"));
+		}
+		tabbedPaneSettings.setIconAt(6, delImage);
 	}
 
 
@@ -951,6 +1136,14 @@ public class PrototypeMainFrame extends JFrame {
 		createPeriodPanel.setBorder(BorderFactory
 				.createTitledBorder(ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_CRT_PERIOD_HEADER)));
 		tabbedPaneSettings.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.SET_LOAD_FILE_TAB), createPeriodPanel);
+		
+		ImageIcon fileImage = new ImageIcon("/resources/imgs/file.png");
+		if(fileImage != null) {
+			fileImage =  new ImageIcon(getClass().getResource("/resources/imgs/file.png"));
+		}
+		tabbedPaneSettings.setIconAt(0, fileImage);
+		
+		
 
 	}
 

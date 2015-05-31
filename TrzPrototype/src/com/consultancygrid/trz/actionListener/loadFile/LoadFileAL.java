@@ -234,16 +234,33 @@ public class LoadFileAL extends BaseActionListener {
 	private BigDecimal person2Department(Set<String> matchCodes,
 			Map<String, Department> codeDeptPair, Period period, Double vauchers) {
 
+		
 		Query avgQ = em
-				.createQuery("from AvgInputData  where  id.periodCode = :pCode");
+				.createNativeQuery("select   DISTINCT(MATCHCODE), REVENUE from AVG_INPUT_DATA where PERIOD_CODE = :pCode ");
 		avgQ.setParameter("pCode", period.getCode());
-		List<AvgInputData> avgs = (List<AvgInputData>) avgQ.getResultList();
+		List<Object[]> avgs = (List<Object[]>) avgQ.getResultList();
 		BigDecimal bDecimal = BigDecimal.ZERO;
 
-		for (AvgInputData singleAvg : avgs) {
+		Map<String, BigDecimal> dataMap = new HashMap<String, BigDecimal>();
+		for (Object[] singleAvg : avgs) {
+			
+			final String mCode = (String)singleAvg[0];
+			final BigDecimal revenue = (BigDecimal)singleAvg[1];
+			if (dataMap.containsKey(mCode)) {
+				BigDecimal newRevenue = dataMap.get(mCode).add(revenue);
+				dataMap.put(mCode, newRevenue);
+			} else{
+				dataMap.put(mCode, revenue);
+			}
+		}
+		
+		
+		for (Map.Entry<String, BigDecimal> singlePair : dataMap.entrySet()) {
 
-			bDecimal = bDecimal.add(singleAvg.getId().getRevenue());
-			String mCode = singleAvg.getId().getMatchcode();
+			final String mCode = singlePair.getKey();
+			final BigDecimal revenue = singlePair.getValue();
+			
+			bDecimal = bDecimal.add(revenue);
 			Query machDept = em
 					.createQuery("from UserDepartment  where id.matchcode = :mCode");
 			machDept.setParameter("mCode", mCode);
@@ -254,10 +271,11 @@ public class LoadFileAL extends BaseActionListener {
 
 				UserDepartment uDept = uDepts.get(0);
 				// Period Match code
+				System.err.println("MATCHCODE : " + mCode);
 				Query emplQ = em.createQuery("from Employee where matchcode = :mCode and isActive = 'Y'");
 				emplQ.setParameter("mCode", mCode);
 				List<Employee> listEmployee = (List<Employee>) emplQ.getResultList();
-
+				
 				if (listEmployee != null && !listEmployee.isEmpty()) {
 
 					Employee employee = listEmployee.get(0);
@@ -265,16 +283,19 @@ public class LoadFileAL extends BaseActionListener {
 					// Department
 					Department department = codeDeptPair.get(uDept.getId().getDepId());
 					// Setting
+					System.err.println("Start Settings create with Period : " + period.getCode());
+					System.err.println("Start Settings create with Employee : " + employee.getMatchCode());
 					EmployeeSettingsUtil.createSettings(em, period, employee);
 					// Salary
+					System.err.println("Start Salary");
 					EmployeeSalaryUtil.createSalary(em, period, employee,
 							vauchers);
 					// Department to Period
+					System.err.println("Start Dept Period");
 					createEmplDeptPeriod(em, period, employee, department);
 					
 					// Period Employee Revenue
-					createRevenueEmplPeriod(em, period, employee,  singleAvg.getId().getRevenue());
-
+					createRevenueEmplPeriod(em, period, employee,  revenue);
 				}
 			}
 		}
@@ -295,17 +316,36 @@ public class LoadFileAL extends BaseActionListener {
 		avgQ.setParameter("restMatchCodes", matchCodes);
 		List<AvgInputData> avgsNoDept = (List<AvgInputData>) avgQ.getResultList();
 		
-		for (AvgInputData singleAvg : avgsNoDept) {
-		
+		Map<String, BigDecimal> dataMap = new HashMap<String, BigDecimal>();
+			for (AvgInputData singleAvg : avgsNoDept) {
+				
+				
+				final String mCode = singleAvg.getId().getMatchcode();
+				final BigDecimal revenue = singleAvg.getId().getRevenue();
+				
+				if (dataMap.containsKey(mCode)) {
+					BigDecimal newRevenue = dataMap.get(mCode).add(revenue);
+					dataMap.put(mCode, newRevenue);
+				} else{
+					dataMap.put(mCode, revenue);
+				}
+			}
+			
+			
+			for (Map.Entry<String, BigDecimal> singlePair : dataMap.entrySet()) {	
+			
+				final String mCode = singlePair.getKey();
+				final BigDecimal revenue = singlePair.getValue();
+				
 				Query emplQ = em.createQuery("from Employee where matchcode = :mCode and isActive = 'Y'");
-				emplQ.setParameter("mCode", singleAvg.getId().getMatchcode());
+				emplQ.setParameter("mCode", mCode);
 				List<Employee> empls = (List<Employee>) emplQ.getResultList();
 				
 				if (empls != null && !empls.isEmpty()) {
 					Employee employee = empls.get(0);
 					EmployeeSettingsUtil.createSettings(em, period, employee);
 					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
-					createRevenueEmplPeriod(em, period, employee, singleAvg.getId().getRevenue());
+					createRevenueEmplPeriod(em, period, employee, revenue);
 				}
 		}
 		}
@@ -362,7 +402,7 @@ public class LoadFileAL extends BaseActionListener {
 		List<MatchcodeList> resultMatchcodeList = (List<MatchcodeList>) emplQ.getResultList();
 		Map<String, String> translationMap = new HashMap<String, String>();
 		for (MatchcodeList mCL : resultMatchcodeList) {
-			translationMap.put(mCL.getId().getFirstName() + " "
+			translationMap.put(mCL.getId().getFirstName() + ""
 					+ mCL.getId().getLastName(), mCL.getId().getMatchcode());
 		}
 
@@ -404,14 +444,6 @@ public class LoadFileAL extends BaseActionListener {
 			Query depQ = em.createQuery("from Department where code = :dCode");
 			depQ.setParameter("dCode", code);
 			department = ((List<Department>) depQ.getResultList()).get(0);
-//			if (department == null) {
-//				Department deptNew = new Department();
-//				deptNew.setCode(code);
-//				deptNew.setLabel(code);
-//				em.persist(deptNew);
-//				em.flush();
-//				department = deptNew;
-//			}
 			if (!codeDeptPair.keySet().contains(code)) {
 				codeDeptPair.put(code, department);
 			} else {
@@ -422,8 +454,8 @@ public class LoadFileAL extends BaseActionListener {
 			revDeptPer.setPeriod(period);
 			revDeptPer.setRevenue(deptRev.getId().getDepRevenue());
 			em.persist(revDeptPer);
-			em.flush();
 		}
+		em.flush();
 
 		return codeDeptPair;
 	}

@@ -27,7 +27,9 @@ public class CSVReadProcTRZ implements CSVReadProc{
 				String tmpName =  rowValues.get(0).replace(" ", "").trim();
 				if (tmpName.length() > 0) {
 					
-					if (tmpName.contains(" ")) {
+					if (Character.isUpperCase(tmpName.charAt(0))
+							&& Character.isLowerCase(tmpName.charAt(1))) {
+						
 						matchNameBased.put(tmpName, rowValues.get(1));
 					} else {
 						matchCodeRev.put(tmpName, rowValues.get(1));

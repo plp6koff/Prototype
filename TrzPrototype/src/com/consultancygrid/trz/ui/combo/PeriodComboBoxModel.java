@@ -15,7 +15,9 @@ public class PeriodComboBoxModel implements ComboBoxModel<Period> {
 	
 	public PeriodComboBoxModel(List<Period> comboBoxItemList) {
 		
-		this.comboBoxItemList = comboBoxItemList;
+		this.comboBoxItemList = new ArrayList<>();
+		this.comboBoxItemList.add(new Period());
+		this.comboBoxItemList.addAll(comboBoxItemList);
 	}
 	
 	public PeriodComboBoxModel() {
