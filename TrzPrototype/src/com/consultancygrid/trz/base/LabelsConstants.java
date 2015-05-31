@@ -163,6 +163,43 @@ public interface LabelsConstants {
      String TRG_SETT_TAB_LVLS_BONUS = "target_sett_tab_levels_bonus";
      String TRG_SETT_TAB_EMPL2TRG = "target_sett_tab_empl2trg";
      String TRG_SETT_TAB_EMPL2TRG_VAL = "target_sett_tab_empl2trg_val";
+     
+     
+     String STAT_TAB = "statistics_tab";
+     String STAT_TAB_LOAD_BUTT = "statistics_tab_load_button";
+     String STAT_TAB_EXPORT_BUTT = "statistics_tab_export_button";
+
+     String STAT_TAB_31HEAD4 = "statistics.3.1.header.4";
+     String STAT_TAB_31HEAD5 = "statistics.3.1.header.5";
+     String STAT_TAB_31HEAD6 = "statistics.3.1.header.6";
+     String STAT_TAB_31HEAD7 = "statistics.3.1.header.7";
+
+     String STAT_TAB_33HEAD1 = "statistics.3.3.header.1";
+     String STAT_TAB_33HEAD2 = "statistics.3.3.header.2";
+     String STAT_TAB_33HEAD3 = "statistics.3.3.header.3";
+     String STAT_TAB_33HEAD4 = "statistics.3.3.header.4";
+     String STAT_TAB_33HEAD5 = "statistics.3.3.header.5";
+     String STAT_TAB_33HEAD6 = "statistics.3.3.header.6";
+
+     String STAT_TAB_34HEAD1 = "statistics.3.4.header.1";
+     String STAT_TAB_34HEAD2 = "statistics.3.4.header.2";
+     String STAT_TAB_34HEAD3 = "statistics.3.4.header.3";
+     String STAT_TAB_34HEAD4 = "statistics.3.4.header.4";
+     String STAT_TAB_34HEAD5 = "statistics.3.4.header.5";
+     String STAT_TAB_34HEAD6 = "statistics.3.4.header.6";
+     String STAT_TAB_34HEAD7 = "statistics.3.4.header.7";
+     String STAT_TAB_34HEAD8 = "statistics.3.4.header.8";
+     String STAT_TAB_34HEAD9 = "statistics.3.4.header.9";
+
+     String STAT_TAB_35HEAD1 = "statistics.3.5.header.1";
+     String STAT_TAB_35HEAD2 = "statistics.3.5.header.2";
+     String STAT_TAB_35HEAD3 = "statistics.3.5.header.3";
+     String STAT_TAB_35HEAD4 = "statistics.3.5.header.4";
+     String STAT_TAB_35HEAD5 = "statistics.3.5.header.5";
+     String STAT_TAB_35HEAD6 = "statistics.3.5.header.6";
+     String STAT_TAB_35HEAD7 = "statistics.3.5.header.7";
+     String STAT_TAB_35HEAD8 = "statistics.3.5.header.8";
+     
 	 
 	 String SETTINGS = "settings";
 	 String BUTT_CANCEL = "button_cancel";

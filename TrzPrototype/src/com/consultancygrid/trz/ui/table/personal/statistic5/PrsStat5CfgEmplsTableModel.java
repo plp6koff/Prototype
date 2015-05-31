@@ -33,14 +33,22 @@ public class PrsStat5CfgEmplsTableModel extends AbstractTableModel {
 		
 		tableHeaders = new Vector<String>();
 		// Init headers
-		tableHeaders.add("MONTH");
-		tableHeaders.add("NAME");
-		tableHeaders.add("GROUP");
-		tableHeaders.add("SP ORDER");
-		tableHeaders.add("SP MERCHANT");
-		tableHeaders.add("SP TUR");
-		tableHeaders.add("SP TUR LAST EDIT");
-		tableHeaders.add("OSREDNEN");
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_35HEAD1));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_35HEAD2));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_35HEAD3));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_35HEAD4));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_35HEAD5));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_35HEAD6));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_35HEAD7));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_35HEAD8));
 	}
 	
 	@Override

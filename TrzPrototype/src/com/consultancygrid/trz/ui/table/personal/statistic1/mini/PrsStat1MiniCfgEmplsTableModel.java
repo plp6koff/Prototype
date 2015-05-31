@@ -38,10 +38,14 @@ public class PrsStat1MiniCfgEmplsTableModel extends AbstractTableModel {
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL19));
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL16));
-		tableHeaders.add("Zaplata po banka");
-		tableHeaders.add("Zaplata v broj");
-		tableHeaders.add("Avans");
-		tableHeaders.add("Ostatuk");
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_31HEAD4));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_31HEAD5));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_31HEAD6));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_31HEAD7));
 		
 	}
 	

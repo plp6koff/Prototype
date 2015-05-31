@@ -10,12 +10,14 @@ import javax.swing.JPanel;
 import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
+import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.personal.statistic3.PrsStat3CfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.statistic3.PrsStat3CfgEmplsTableModel;
 import com.consultancygrid.trz.ui.table.personal.statistic3.PrsStat3Util;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class LoadStatistic3AL extends BaseActionListener {
 
@@ -55,7 +57,8 @@ public class LoadStatistic3AL extends BaseActionListener {
 							  (period != null ? period.getCode() : null));
 			personalConfTable.setModel(model);
 			
-			JButton exportButt = new JButton("Export ...");
+			JButton exportButt = new JButton(ResourceLoaderUtil
+					.getLabels(LabelsConstants.STAT_TAB_EXPORT_BUTT));
 			exportButt.setEnabled(true);
 			exportButt.setBounds(820, 40, 150, 25);
 			exportButt.addActionListener(new ExportStatistic33AL(mainFrame, fc, personalConfTable));

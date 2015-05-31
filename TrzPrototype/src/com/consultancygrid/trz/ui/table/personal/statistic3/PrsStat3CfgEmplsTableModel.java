@@ -9,7 +9,9 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.EmployeeSalary;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 /**
  * @author user
@@ -31,12 +33,18 @@ public class PrsStat3CfgEmplsTableModel extends AbstractTableModel {
 		
 		tableHeaders = new Vector<String>();
 		// Init headers
-		tableHeaders.add("PERIOD_CODE");
-		tableHeaders.add("MESECHNI_RAZHODI_ZA_TRUD");
-		tableHeaders.add("OBSHTO_NETNA_SUMA");
-		tableHeaders.add("ZAPLATA_PO_BANKA");
-		tableHeaders.add("ZAPLATA_V_BROI");
-		tableHeaders.add("DANUCI_ZA_RABOTODATEL");
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_33HEAD1));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_33HEAD2));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_33HEAD3));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_33HEAD4));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_33HEAD5));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_33HEAD6));
 	}
 	
 	@Override

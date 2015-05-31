@@ -201,7 +201,8 @@ public class PrototypeMainFrame extends JFrame {
 		
 		JTabbedPane tabbedPaneStatistics = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPaneStatistics.setBounds(0, 0, 0, 0);
-		tabbedPane.addTab("Statistics", null, tabbedPaneStatistics, null);
+		tabbedPane.addTab(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB), null, tabbedPaneStatistics, null);
 		ImageIcon myAppImage = new ImageIcon("/resources/imgs/empl.png");
 		if(myAppImage != null) {
 			myAppImage =  new ImageIcon(getClass().getResource("/resources/imgs/empl.png"));
@@ -332,14 +333,16 @@ public class PrototypeMainFrame extends JFrame {
 		periodsComboBox1.setRenderer(new PeriodCustomRender());
 		
 		
-		JButton loadButt = new JButton("Load Statistic");
+		JButton loadButt = new JButton(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
 		loadButt.setEnabled(true);
 		loadButt.setBounds(650, 40, 150, 25);
 		loadButt.addActionListener(new LoadStatistic1AL(this, frstStatPanel, periodsComboBox1, pStatCfgEmpls, fc));
 		frstStatPanel.add(loadButt);
 		
 		
-		JButton loadMiniButt = new JButton("Load Statistic Short");
+		JButton loadMiniButt = new JButton(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT) + " Short");
 		loadMiniButt.setEnabled(true);
 		loadMiniButt.setBounds(650, 80, 150, 25);
 		loadMiniButt.addActionListener(new LoadStatistic1MiniAL(this, frstStatPanel, periodsComboBox1, pStatMiniCfgEmpls, fc));
@@ -362,7 +365,8 @@ public class PrototypeMainFrame extends JFrame {
 		pesonPanel.setBounds(20, 150, 1400, 400);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
-		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.1."));
+		pesonPanel.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.1."));
 		
 		JScrollPane pesonPanelMini = new JScrollPane(pStatMiniCfgEmpls);
 		pesonPanelMini.setLayout(new ScrollPaneLayout());
@@ -381,14 +385,16 @@ public class PrototypeMainFrame extends JFrame {
 		pesonPanelMini.setBounds(20, 560, 800, 300);
 		pesonPanelMini.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanelMini.setAutoscrolls(true);
-		pesonPanelMini.setBorder(BorderFactory.createTitledBorder("Statistic 3.1. Mini"));
+		pesonPanelMini.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.1. Mini"));
 		
 		frstStatPanel.setLayout(null);
 //		frstStatPanel.add(comboBoxEmployees);
 		frstStatPanel.add(periodsComboBox1);
 		frstStatPanel.add(pesonPanel);
 		frstStatPanel.add(pesonPanelMini);
-		tabbedPane.addTab("Statistic- 3.1.", frstStatPanel);
+		tabbedPane.addTab(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.1.", frstStatPanel);
 	}
 	
 	
@@ -419,7 +425,8 @@ public class PrototypeMainFrame extends JFrame {
 		periodsComboBox2.setRenderer(new PeriodCustomRender());
 		
 		
-		JButton loadButt = new JButton("Load Statistic");
+		JButton loadButt = new JButton(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
 		loadButt.setEnabled(true);
 		loadButt.setBounds(650, 40, 150, 25);
 		loadButt.addActionListener(new LoadStatistic2AL(this, frstStatPane2,  comboBoxEmployees2, pStatCfgEmpls, fc));
@@ -443,14 +450,16 @@ public class PrototypeMainFrame extends JFrame {
 		pesonPanel.setBounds(20, 150, 1200, 400);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
-		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.2."));
+		pesonPanel.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.2."));
 		
 		
 		frstStatPane2.setLayout(null);
 		frstStatPane2.add(comboBoxEmployees2);
 		frstStatPane2.add(periodsComboBox2);
 		frstStatPane2.add(pesonPanel);
-		tabbedPane.addTab("Statistic- 3.2.", frstStatPane2);
+		tabbedPane.addTab(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + "- 3.2.", frstStatPane2);
 	}
 	
 	/**
@@ -479,7 +488,8 @@ public class PrototypeMainFrame extends JFrame {
 		prsStat3Table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		
-		JButton loadButt = new JButton("Load Statistic");
+		JButton loadButt = new JButton(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
 		loadButt.setEnabled(true);
 		loadButt.setBounds(650, 40, 150, 25);
 		
@@ -503,11 +513,13 @@ public class PrototypeMainFrame extends JFrame {
 		pesonPanel.setBounds(40, 150, 1200, 600);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
-		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.3."));
+		pesonPanel.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.3."));
 		stat3Panel.setLayout(null);
 		stat3Panel.add(periodsComboBox33);
 		stat3Panel.add(pesonPanel);
-		tabbedPane.addTab("Statistic- 3.3.", stat3Panel);
+		tabbedPane.addTab(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + "- 3.3.", stat3Panel);
 	}
 	/**
 	 * 
@@ -539,7 +551,8 @@ public class PrototypeMainFrame extends JFrame {
 		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		
-		JButton loadButt = new JButton("Load Statistic");
+		JButton loadButt = new JButton(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
 		loadButt.setEnabled(true);
 		loadButt.setBounds(650, 40, 150, 25);
 		
@@ -564,12 +577,14 @@ public class PrototypeMainFrame extends JFrame {
 		pesonPanel.setBounds(20, 150, 1200, 600);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
-		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.4."));
+		pesonPanel.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.4."));
 		stat4Panel.setLayout(null);
 		stat4Panel.add(comboBoxEmployees34);
 		stat4Panel.add(periodsComboBox34);
 		stat4Panel.add(pesonPanel);
-		tabbedPane.addTab("Statistic- 3.4.", stat4Panel);
+		tabbedPane.addTab(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " - 3.4.", stat4Panel);
 	}
 
 	/**
@@ -602,7 +617,8 @@ public class PrototypeMainFrame extends JFrame {
 		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		
-		JButton loadButt = new JButton("Load Statistic");
+		JButton loadButt = new JButton(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
 		loadButt.setEnabled(true);
 		loadButt.setBounds(650, 40, 150, 25);
 		
@@ -627,12 +643,14 @@ public class PrototypeMainFrame extends JFrame {
 		pesonPanel.setBounds(20, 150, 1200, 600);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
-		pesonPanel.setBorder(BorderFactory.createTitledBorder("Statistic 3.5."));
+		pesonPanel.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.5."));
 		stat5Panel.setLayout(null);
 		stat5Panel.add(comboBoxEmployees1);
 		stat5Panel.add(periodsComboBox1);
 		stat5Panel.add(pesonPanel);
-		tabbedPane.addTab("Statistic- 3.5.", stat5Panel);
+		tabbedPane.addTab(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + "- 3.5.", stat5Panel);
 	}
 	
 	

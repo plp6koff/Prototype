@@ -9,7 +9,9 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.EmployeeSalary;
+import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 /**
  * @author user
@@ -31,15 +33,24 @@ public class PrsStat4CfgEmplsTableModel extends AbstractTableModel {
 		
 		tableHeaders = new Vector<String>();
 		// Init headers
-		tableHeaders.add("PERIOD_CODE");
-		tableHeaders.add("MATCHCODE");
-		tableHeaders.add("SP");
-		tableHeaders.add("INDIVIDUALNA PREMIA");
-		tableHeaders.add("GRUPOVA PREMIA");
-		tableHeaders.add("OBSHTA PREMIA");
-		tableHeaders.add("OBSHTO PREMII");
-		tableHeaders.add("OTNOSHENIE OBSHTO PREMII SP");
-		tableHeaders.add("TBD");
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD1));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD2));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD3));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD4));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD5));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD6));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD7));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD8));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_34HEAD9));
 	}
 	
 	@Override

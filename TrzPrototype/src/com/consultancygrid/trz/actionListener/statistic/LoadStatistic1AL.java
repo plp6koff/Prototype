@@ -66,7 +66,8 @@ public class LoadStatistic1AL extends BaseActionListener {
 			PrsStat1Util.load(em, model);
 			personalConfTable.setModel(model);
 			
-			JButton exportButt = new JButton("Export ...");
+			JButton exportButt = new JButton(ResourceLoaderUtil
+					.getLabels(LabelsConstants.STAT_TAB_EXPORT_BUTT));
 			exportButt.setEnabled(true);
 			exportButt.setBounds(820, 40, 150, 25);
 			exportButt.addActionListener(new ExportStatistic31AL(mainFrame, fc, personalConfTable, period.getCode()));
