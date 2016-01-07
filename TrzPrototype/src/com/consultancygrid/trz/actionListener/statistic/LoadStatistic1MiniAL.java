@@ -15,8 +15,6 @@ import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
-import com.consultancygrid.trz.ui.table.personal.statistic1.PrsStat1CfgEmplsTableModel;
-import com.consultancygrid.trz.ui.table.personal.statistic1.PrsStat1Util;
 import com.consultancygrid.trz.ui.table.personal.statistic1.mini.PrsStat1MiniCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.statistic1.mini.PrsStat1MiniCfgEmplsTableModel;
 import com.consultancygrid.trz.ui.table.personal.statistic1.mini.PrsStat1MiniUtil;
@@ -65,13 +63,13 @@ public class LoadStatistic1MiniAL extends BaseActionListener {
 									  ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_WARN) , JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			PrsStat1MiniUtil.load(em, model);
+			PrsStat1MiniUtil.load(em, model, period.getCode());
 			personalConfTable.setModel(model);
 			
 			JButton exportButt = new JButton(ResourceLoaderUtil
 					.getLabels(LabelsConstants.STAT_TAB_EXPORT_BUTT) + " Mini");
 			exportButt.setEnabled(true);
-			exportButt.setBounds(820, 40, 150, 25);
+			exportButt.setBounds(1000, 40, 150, 25);
 			exportButt.addActionListener(new ExportStatistic31MiniAL(mainFrame, fc, personalConfTable, period.getCode()));
 			firstInnerPanel.add(exportButt);
 			firstInnerPanel.revalidate();

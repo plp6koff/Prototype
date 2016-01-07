@@ -21,9 +21,11 @@ public class EmployeeSallaryCalculateUtil {
 			Double dodValue,
 			Double oRabotodatelValue,
 			Double oSlujitelValue,
-			Double cacheTaxValue) {
+			Double cacheTaxValue,
+			BigDecimal v19,
+			String notes) {
 
-		Double pVaucher = emplSallary.getV14() != null  ? emplSallary.getV14().doubleValue() : null;
+		Double pVaucher = emplSallary.getV14() != null  ? emplSallary.getV14().doubleValue() :  0.0d;
 		
 		Double oRabotodatelType = (OSIGUROVKI_RABOTODATEL.getValueType()
 				.equals("percent") ? Double.valueOf("0.01") : Double
@@ -77,6 +79,9 @@ public class EmployeeSallaryCalculateUtil {
 		emplSallary.setV16(BigDecimal.valueOf(r));
 	    emplSallary.setV17(BigDecimal.valueOf(s).setScale(2, BigDecimal.ROUND_HALF_UP));
 	    emplSallary.setV18(BigDecimal.valueOf(t).setScale(2, BigDecimal.ROUND_HALF_UP));
+	    emplSallary.setV19((emplSallary.getV19() != null ?  emplSallary.getV19() : BigDecimal.ZERO));
+	    emplSallary.setV20(  BigDecimal.valueOf(q).subtract(emplSallary.getV19()).subtract(BigDecimal.valueOf(c)).setScale(2, BigDecimal.ROUND_HALF_UP));
+	    emplSallary.setS02(notes);
 	}
 	
 	
@@ -93,15 +98,14 @@ public class EmployeeSallaryCalculateUtil {
 			Double dodValue,
 			Double oRabotodatelValue,
 			Double oSlujitelValue,
-			Double cacheTaxValue
-			) {
+			Double cacheTaxValue) {
 
 		Double b = emplSallary.getV01() != null ? emplSallary.getV01().doubleValue() : 0.0d; 
 		Double d = emplSallary.getV03() != null ? emplSallary.getV03().doubleValue() : 0.0d;
 		Double kMarker = emplSallary.getV10() != null ? emplSallary.getV10().doubleValue() : 0.0d;
 		Double nBonus = emplSallary.getV13() != null ? emplSallary.getV13().doubleValue() : 0.0d;
 		
-		Double pVaucher = emplSallary.getV14() != null  ? emplSallary.getV14().doubleValue() : null;
+		Double pVaucher = emplSallary.getV14() != null  ? emplSallary.getV14().doubleValue() :  0.0d;
 		
 		Double oRabotodatelType = (OSIGUROVKI_RABOTODATEL.getValueType()
 				.equals("percent") ? Double.valueOf("0.01") : Double
@@ -152,5 +156,11 @@ public class EmployeeSallaryCalculateUtil {
 		emplSallary.setV16(BigDecimal.valueOf(r));
 	    emplSallary.setV17(BigDecimal.valueOf(s).setScale(2, BigDecimal.ROUND_HALF_UP));
 	    emplSallary.setV18(BigDecimal.valueOf(t).setScale(2, BigDecimal.ROUND_HALF_UP));
+	    if (emplSallary.getV19() == null) {
+	    	emplSallary.setV19(BigDecimal.ZERO);
+	    } else {
+	    	emplSallary.setV19(emplSallary.getV19());
+	    }
+	    emplSallary.setV20(  BigDecimal.valueOf(q).subtract(emplSallary.getV19()).subtract(BigDecimal.valueOf(c)).setScale(2, BigDecimal.ROUND_HALF_UP));
 	}
 }

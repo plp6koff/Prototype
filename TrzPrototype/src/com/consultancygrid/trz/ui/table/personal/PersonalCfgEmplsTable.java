@@ -50,8 +50,11 @@ public class PersonalCfgEmplsTable extends JTable {
 		getColumnModel().getColumn(17).setMinWidth(80);
 		getColumnModel().getColumn(18).setMinWidth(80);
 		getColumnModel().getColumn(19).setMinWidth(80);
+		getColumnModel().getColumn(20).setMinWidth(80);
+		getColumnModel().getColumn(21).setMinWidth(80);
+		getColumnModel().getColumn(22).setMinWidth(100);
 	
-		setRowHeight(50);
+		setRowHeight(30);
 	}
 
 	

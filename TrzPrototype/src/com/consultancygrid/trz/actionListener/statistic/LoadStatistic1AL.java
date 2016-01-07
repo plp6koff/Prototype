@@ -63,13 +63,13 @@ public class LoadStatistic1AL extends BaseActionListener {
 									  ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_WARN) , JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			PrsStat1Util.load(em, model);
+			PrsStat1Util.load(em, model, period.getCode());
 			personalConfTable.setModel(model);
 			
 			JButton exportButt = new JButton(ResourceLoaderUtil
 					.getLabels(LabelsConstants.STAT_TAB_EXPORT_BUTT));
 			exportButt.setEnabled(true);
-			exportButt.setBounds(820, 40, 150, 25);
+			exportButt.setBounds(1000, 40, 150, 25);
 			exportButt.addActionListener(new ExportStatistic31AL(mainFrame, fc, personalConfTable, period.getCode()));
 			firstInnerPanel.add(exportButt);
 			firstInnerPanel.revalidate();

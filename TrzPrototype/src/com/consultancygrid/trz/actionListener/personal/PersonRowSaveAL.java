@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.pmw.tinylog.Logger;
@@ -28,6 +29,7 @@ import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.EmployeeSettings;
+import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.model.PeriodSetting;
 import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
@@ -42,25 +44,31 @@ public class PersonRowSaveAL extends BaseActionListener{
 	private PersonalCfgEmplsTable personalConfTable;
 	private JFrame popup;
 	private JComboBox<Employee> comboBoxEmployee;
+	private JComboBox<String> comboBoxYear;
 	
-	private HashMap<String, JTextField> map ;
+	private HashMap<String, Object> map ;
 	
-	public PersonRowSaveAL(PrototypeMainFrame mainFrame,
-			PersonalCfgEmplsTable personalConfTable, 
-			JComboBox<Employee> comboBoxEmployee,  
-			HashMap<String, JTextField> map,
-			JFrame popup) {
+	public PersonRowSaveAL(
+				PrototypeMainFrame mainFrame,
+				PersonalCfgEmplsTable personalConfTable, 
+				JComboBox<Employee> comboBoxEmployee,  
+				JComboBox<String> comboBoxYear,
+				HashMap<String, Object> map,
+				JFrame popup) {
 		super(mainFrame);
 		this.personalConfTable = personalConfTable;
 		this.comboBoxEmployee = comboBoxEmployee;
+		this.comboBoxYear = comboBoxYear;
 		this.map = map;
 		this.popup = popup;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
+		
 		try {
 			
 			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
@@ -69,6 +77,7 @@ public class PersonRowSaveAL extends BaseActionListener{
 			em.getTransaction().begin();
 			
 			Employee employee =  (Employee)comboBoxEmployee.getSelectedItem();
+			String year = (String) comboBoxYear.getSelectedItem();
 			
 			PersonalCfgEmplsTableModel model = (PersonalCfgEmplsTableModel) personalConfTable.getModel();
 			int i = personalConfTable.getSelectedRow();
@@ -76,16 +85,30 @@ public class PersonRowSaveAL extends BaseActionListener{
 			
 			if (employee != null) {
 				EmployeeSalary emplSallary = model.getEmplSals().get(i);
-				String v01Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL1).getText();
-				String v03Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL3).getText();
-				String v10Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL10).getText();
-				String v13Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL13).getText();
-				String v14Str = map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL14).getText();
+				String v01Str = ((JTextField)map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL1)).getText();
+				String v03Str = ((JTextField)map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL3)).getText();
+				String v10Str = ((JTextField)map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL10)).getText();
+				String v13Str = ((JTextField)map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL13)).getText();
+				String v14Str = ((JTextField)map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL14)).getText();
+				String v19Str = ((JTextField)map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL20)).getText();
+				String vNotesStr = ((JTextArea)map.get(LabelsConstants.PERSONAL_CFG_HEADER_COL22)).getText();
 				
+				final String SQL2FindSett1 
+					= " from EmployeeSettings as settings  where  settings.period.id = :periodId and settings.employee.id = :emplId ";
+				final String SQL2FindSett2 
+				= " from EmployeeSettings as settings  where  settings.period.code like :periodCode and settings.employee.id = :emplId ";
 				
-				Query q1 = em.createQuery(" from EmployeeSettings as settings  where  settings.period.id = :periodId and settings.employee.id = :emplId ");
-				q1.setParameter("periodId", emplSallary.getPeriod().getId());
+				Query q1 = null;
+				
+				if (year == null || "".equals(year)) {
+					q1 = em.createQuery(SQL2FindSett1);
+					q1.setParameter("periodId", emplSallary.getPeriod().getId());
+				} else {
+					q1 = em.createQuery(SQL2FindSett2);
+					q1.setParameter("periodCode", "%"+year+"%");
+				}
 				q1.setParameter("emplId", employee.getId());
+				
 				EmployeeSettings settings = ((List<EmployeeSettings>) q1.getResultList()).get(0);
 				
 				
@@ -110,6 +133,16 @@ public class PersonRowSaveAL extends BaseActionListener{
 				String oBonusName = v14Str;
 				emplSallary.setS01(v14Str);
 				
+				
+				BigDecimal v19 = parseValue(emplSallary.getV19(),v19Str); 
+				Double avans = v19.doubleValue();
+				emplSallary.setV19(v19);
+				
+				if(vNotesStr == null || "".equals(vNotesStr)) {
+					vNotesStr = emplSallary.getS02();
+				} else {
+					emplSallary.setS02(vNotesStr);
+				}
 				
 				Query qPeriodTrzStatic = em
 						.createQuery(" from PeriodSetting as pS where period.id = :periodId");
@@ -155,14 +188,19 @@ public class PersonRowSaveAL extends BaseActionListener{
 						 OSIGUROVKI_RABOTODATEL,
 						 OSIGUROVKI_SLUJITEL,
 						 CACHE_TAX,
-						 dodValue, oRabotodatelValue, oSlujitelValue, cacheTaxValue);
+						 dodValue, 
+						 oRabotodatelValue, 
+						 oSlujitelValue, 
+						 cacheTaxValue, 
+						 v19, 
+						 vNotesStr);
 				
 				em.merge(emplSallary);
 				em.merge(settings);
 				
 				Vector tableData  = new Vector();
 				EmplsSettingsLoadUtil emplsComboUtil = new EmplsSettingsLoadUtil();
-				emplsComboUtil.load(employee, em, tableData, model);
+				emplsComboUtil.load(employee, year, em, tableData, model);
 				model.setData(tableData);
 				popup.setVisible(false);
 			    personalConfTable.clearSelection();

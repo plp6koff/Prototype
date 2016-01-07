@@ -68,12 +68,18 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL16));
 		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL20));
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL21));
+		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL17));
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL18));
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL19));
-	}
+		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL22));
+	}	
 	
 	@Override
 	public String getColumnName(int column) {

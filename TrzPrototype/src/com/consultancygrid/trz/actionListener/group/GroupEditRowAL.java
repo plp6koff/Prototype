@@ -164,7 +164,8 @@ public class GroupEditRowAL extends BaseActionListener{
 			tf5.setText(((Double)model.getValueAt(i+1, 7)).toString());
 			panel.add(tf5);
 			
-			map.put(LabelsConstants.GROUP_CONF_COL5_VALUE2 + "-" + LabelsConstants.GROUP_CONF_HEADER_COL7, tf4);
+			map.put(LabelsConstants.GROUP_CONF_COL5_VALUE2 + "-" + LabelsConstants.GROUP_CONF_HEADER_COL7, tf5);
+			
 			
 			JButton saveBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
 			saveBtn.setBounds(230, 200, 100, 25);

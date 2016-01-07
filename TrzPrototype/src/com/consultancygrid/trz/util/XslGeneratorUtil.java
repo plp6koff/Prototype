@@ -76,11 +76,16 @@ public class XslGeneratorUtil {
 			    	for (int i = 0 ; i < rowData.size(); i ++) {
 			    		
 			    		 if (rowData.get(i) instanceof BigDecimal) {
+			    			 
 			    			 row.createCell(i).setCellValue(((BigDecimal) rowData.get(i)).toString());
 			    			 
 							
-						} else {
-							 row.createCell(i).setCellValue((String)rowData.get(i));
+						} else if (rowData.get(i) instanceof String) {
+							
+							String dataStr  = (String)rowData.get(i);
+							row.createCell(i).setCellValue(dataStr.replace("<html>","")
+					    				.replace("<b>","")
+					    				.replace("</b>",""));
 						}
 			    		 
 			    	}

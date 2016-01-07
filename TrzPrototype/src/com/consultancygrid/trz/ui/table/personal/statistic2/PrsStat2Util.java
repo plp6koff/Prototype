@@ -38,8 +38,9 @@ public class PrsStat2Util {
 			Object[] currentRow = (Object[]) o;
 			Vector<Object> oneRow = new Vector<Object>();
 			int i = 1;
+			boolean boldRow = (null == currentRow[2] || " ".equals(currentRow[2]) || "N/A".equals(currentRow[2]));
 			while (i <= 23) {
-				setData(oneRow, currentRow, i);
+				setData(oneRow, currentRow, i, boldRow);
 				i ++;
 			}
 			tableData.add(oneRow);
@@ -49,7 +50,11 @@ public class PrsStat2Util {
 
 	}
 	
-	private static void setData(Vector<Object> oneRow, Object[] currentRow, int index) {
-		oneRow.add(currentRow[index] == null ? "N/A" : currentRow[index]);
+	private static void setData(Vector<Object> oneRow, Object[] currentRow, int index, boolean bold) {
+		if (bold) {
+			oneRow.add("<html><b>" + (currentRow[index] == null ? "N/A" : currentRow[index]) + "</b>");
+		} else {
+			oneRow.add(currentRow[index] == null ? "N/A" : currentRow[index]);
+		}
 	}
 }

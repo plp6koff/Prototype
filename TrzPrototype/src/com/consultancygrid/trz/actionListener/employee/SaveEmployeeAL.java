@@ -85,15 +85,36 @@ public class SaveEmployeeAL extends BaseActionListener {
 				Period period = periods.get(0);
 				
 				double vauchers = 0.0d;
-				for (PeriodSetting es : period.getPeriodSettings()) {
+				TrzStatic DOD = null;
+				TrzStatic OSIGUROVKI_RABOTODATEL = null;
+				TrzStatic OSIGUROVKI_SLUJITEL = null;
+				TrzStatic CACHE_TAX = null;
+				Double dodValue = 0.0d;
+				Double oRabotodatelValue = 0.0d;
+				Double oSlujitelValue = 0.0d;
+				Double cacheTaxValue = 0.0d;
+				for (PeriodSetting singlePS : period.getPeriodSettings()) {
 					
+					TrzStatic singleTrz = singlePS.getTrzStatic();
 					
-					if  (("VAUCHER1".equals(es.getTrzStatic().getKey()))
-							|| ("VAUCHER2".equals(es.getTrzStatic().getKey()))) {
+					if ("DOD".equals(singleTrz.getKey())) {
+						DOD = singleTrz;
+						dodValue = Double.valueOf(singlePS.getValue());
+					} else if("OSIGUROVKI_RABOTODATEL".equals(singleTrz.getKey())) {
+						OSIGUROVKI_RABOTODATEL = singleTrz;
+						oRabotodatelValue = Double.valueOf(singlePS.getValue());
+					} else if("OSIGUROVKI_SLUJITEL".equals(singleTrz.getKey())) {
+						OSIGUROVKI_SLUJITEL = singleTrz;
+						oSlujitelValue = Double.valueOf(singlePS.getValue());
+					} else if("CACHE_TAX".equals(singleTrz.getKey())) {
+						CACHE_TAX = singleTrz;
+						cacheTaxValue = Double.valueOf(singlePS.getValue());
+					} else if  (("VAUCHER1".equals(singlePS.getTrzStatic().getKey()))
+							|| ("VAUCHER2".equals(singlePS.getTrzStatic().getKey()))) {
 						
-						vauchers = vauchers + Double.valueOf(es.getValue());
+						vauchers = vauchers + Double.valueOf(singlePS.getValue());
 					}
-				}
+				}	
 				
 				
 				if (firstName!= null && !"".equals(firstName)
@@ -106,7 +127,9 @@ public class SaveEmployeeAL extends BaseActionListener {
 					employee.setLastName(lastName);
 					employee.setMatchCode(matchCode);
 					em.persist(employee);
-					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
+					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers,
+							DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL, CACHE_TAX,
+							dodValue, oRabotodatelValue, oSlujitelValue, cacheTaxValue);
 					EmployeeSettingsUtil.createSettings(em, period, employee);
 					EmplComboBoxModel model = (EmplComboBoxModel) employeesCombo.getModel();
 					model.addItem(employee);

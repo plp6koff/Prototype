@@ -137,7 +137,7 @@ public class PDFCreatorUtil {
 
 			String tempFile = input.getXmlFile();
 
-			File baseDir = new File("src/resources");
+			File baseDir = new File("../resources");
 			outDir = new File(baseDir, "out");
 			outDir.mkdirs();
 			// Setup input and output files

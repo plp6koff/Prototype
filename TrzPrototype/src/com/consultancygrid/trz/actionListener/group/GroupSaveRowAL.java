@@ -156,17 +156,23 @@ public class GroupSaveRowAL extends BaseActionListener {
 							4).toString());
 					int allEmployees = Integer.valueOf(currentModel.getValueAt(
 							i, 3).toString());
-					currentModel.setValueAt(percentAll.toString(), i, 6);
-					rowDataI.set(6, percentAll.toString());
-					currentModel.setValueAt(onBoardAll, i, 7);
-					rowDataI.set(7, onBoardAll);
-					bonusAll = grTabPeriodLoaderUtil.calculateBonusAll(
-							profitAll, pABD.doubleValue(),
-							pAOnBPBD.doubleValue(), 1.0d, allEmployees);
-					currentModel.setValueAt(bonusAll.toString(), i, 8);
-					rowDataI.set(8, bonusAll.toString());
+					currentModel.setValueAt(Double.valueOf(percentAll), i, 6);
+					rowDataI.set(6, Double.valueOf(percentAll));
+					currentModel.setValueAt(Double.valueOf(onBoardAll), i, 7);
+					rowDataI.set(7, Double.valueOf(onBoardAll));
+					
+					bonusAll 
+						= grTabPeriodLoaderUtil
+							.calculateBonusAll(profitAll, 
+											  pABD.doubleValue(),
+											  pAOnBPBD.doubleValue(), 
+											  1.0d, 
+											  allEmployees);
+					
+					currentModel.setValueAt(Double.valueOf(bonusAll), i, 8);
+					rowDataI.set(8, Double.valueOf(bonusAll));
 
-					double allTotal = grTabPeriodLoaderUtil
+					Double allTotal = grTabPeriodLoaderUtil
 							.getEmployeePercentAllOnboard(settings);
 					currentModel.setValueAt(allTotal, i, 9);
 					rowDataI.set(9, allTotal);
@@ -179,27 +185,30 @@ public class GroupSaveRowAL extends BaseActionListener {
 							.getValueAt(i, 4).toString());
 					double revenueDept = Double.valueOf(currentModel
 							.getValueAt(i, 2).toString());
-					currentModel.setValueAt(percentGroup, i, 6);
-					rowDataI1.set(6, percentGroup);
-					currentModel.setValueAt(onBoardGroup, i, 7);
-					rowDataI1.set(7, onBoardGroup);
+					currentModel.setValueAt(Double.valueOf(percentGroup), i, 6);
+					rowDataI1.set(6, Double.valueOf(percentGroup));
+					currentModel.setValueAt(Double.valueOf(onBoardGroup), i, 7);
+					rowDataI1.set(7, Double.valueOf(onBoardGroup));
 					bonusGroup = grTabPeriodLoaderUtil.calculateBonusGroup(
 							profitGroup, pGBD.doubleValue(),
 							pGOnBPBD.doubleValue(), 1.0d, allEployeesDept);
-					currentModel.setValueAt(bonusGroup.toString(), i, 8);
+					currentModel.setValueAt(bonusGroup, i, 8);
 					rowDataI1.set(8, bonusGroup);
 
 					i = i + 1;
 					Vector<Object> rowDataI2 = currentModel.getRowData(i);
 					double profitPersonal = Double.valueOf(currentModel
 							.getValueAt(i, 4).toString());
-					currentModel.setValueAt(percentPersonal, i, 6);
-					rowDataI2.set(6, percentPersonal);
+					if (profitPersonal == Double.valueOf("0.0").doubleValue()) {
+						profitPersonal = Double.valueOf("1.0");
+					}
+					currentModel.setValueAt(Double.valueOf(percentPersonal), i, 6);
+					rowDataI2.set(6, Double.valueOf(percentPersonal));
 					bonusPersonal = grTabPeriodLoaderUtil
 							.calculateBonusPersonal(profitPersonal,
 									pPBD.doubleValue(), 1.0d, 1.0d);
-					currentModel.setValueAt(bonusPersonal.toString(), i, 8);
-					rowDataI2.set(8, bonusPersonal.toString());
+					currentModel.setValueAt(bonusPersonal, i, 8);
+					rowDataI2.set(8, bonusPersonal);
 
 					double groupTotal = grTabPeriodLoaderUtil
 							.calculateTotalGroup(revenueDept - profitPersonal,
@@ -271,8 +280,12 @@ public class GroupSaveRowAL extends BaseActionListener {
 
 	}
 
-	private void saveSalary(Double bonusAll, Double bonusGroup,
-			Double bonusPersonal, Period period, String firstName,
+	private void saveSalary(
+			Double bonusAll, 
+			Double bonusGroup,
+			Double bonusPersonal,
+			Period period, 
+			String firstName,
 			String lastName) {
 
 		// try {

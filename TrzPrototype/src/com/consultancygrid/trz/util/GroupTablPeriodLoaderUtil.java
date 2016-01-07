@@ -612,8 +612,12 @@ public class GroupTablPeriodLoaderUtil {
 		oneRow.add(EMPTY_STRING);// To be provided as param
 		oneRow.add(EMPTY_STRING);
 		if (!Double.isNaN(totalPercent)) {
-			oneRow.add(BigDecimal.valueOf(totalPercent)
+			try {
+				oneRow.add(BigDecimal.valueOf(totalPercent)
 					.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+			} catch (NumberFormatException e) {
+				oneRow.add(BigDecimal.ONE.doubleValue());
+			}
 		} else {
 			oneRow.add("NAN");
 		}

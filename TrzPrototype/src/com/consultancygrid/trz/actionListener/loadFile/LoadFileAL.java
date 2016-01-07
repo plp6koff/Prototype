@@ -23,11 +23,15 @@ import javax.swing.JTextField;
 
 
 
+
+
+
 import org.apache.log4j.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
+import com.consultancygrid.trz.data.TrzStaticData;
 import com.consultancygrid.trz.model.AvgInputData;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.DepartmentRevenue;
@@ -96,8 +100,8 @@ public class LoadFileAL extends BaseActionListener {
 		period.setCode(fieldCode.getText());
 		String code = this.fieldCode.getText();
 		Set<String> matchCodes = new HashSet<String>();
-		double vauchers = 0.0d;
-
+		List<Period> allPeriods = null;
+		PeriodComboBoxModel newModel = null;
 		try {
 
 			init();
@@ -114,80 +118,90 @@ public class LoadFileAL extends BaseActionListener {
 			em.persist(period);
 			em.flush();
 
-			vauchers = persistPersonSettings(period);
-			CSVReaderUtil util = new CSVReaderUtil();
-			
-			if (file != null) {
-			
-				util.readCSVcarloFibu(file);
-				log.append("Loading: " + file.getName() + "." + newline);
-				LOG.info("Loading: " + file.getName() + "." + newline);
-				log.setCaretPosition(log.getDocument().getLength());
-			} else {
-				final File folder = new File(
-						ResourceLoaderUtil
-								.getConfig(Constants.DEFAULT_DATA_DIR));
-				if (folder == null || !folder.exists()) {
-					try {
-						JOptionPane
-								.showMessageDialog(
-										mainFrame,
-										"Folder : " + ResourceLoaderUtil.getConfig(Constants.DEFAULT_DATA_DIR)
-										+ " does not exists !!!",
-										ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR),
-										JOptionPane.ERROR_MESSAGE);
-						return;
-					} catch (HeadlessException | IOException e2) {
-						LOG.error(e2);
-					}
-				}
-				for (final File fileEntry : folder.listFiles()) {
-
-					LOG.info(fileEntry.getName());
-					String name = fileEntry.getName();
-					Query q = em.createQuery("from InputFileType  where prefix = :prefix");
-					if (name.startsWith(f1)) {
-						q.setParameter("prefix", f1);
-					} else if (name.startsWith(f2)) {
-						q.setParameter("prefix", f2);
-					} else if (name.startsWith(f3)) {
-						q.setParameter("prefix", f3);
-					} else if (name.startsWith(f4)) {
-						q.setParameter("prefix", f4);
-					} else {
-						LOG.info("File : " +  name + " will be skipped!");
-						continue;
-					}
-					List<InputFileType> selectedFile = (List<InputFileType>) q.getResultList();
-					Set<String> matchCodesTmp 
-						= processSingleFileMatchToInput(fileEntry, em, selectedFile.get(0), period);
-					matchCodes.addAll(matchCodesTmp);
+				TrzStaticData data  = persistPersonSettings(period);
+				CSVReaderUtil util = new CSVReaderUtil();
 				
+				if (file != null) {
+				
+					util.readCSVcarloFibu(file);
+					log.append("Loading: " + file.getName() + "." + newline);
+					LOG.info("Loading: " + file.getName() + "." + newline);
+					log.setCaretPosition(log.getDocument().getLength());
+				} else {
+					final File folder = new File(
+							ResourceLoaderUtil
+									.getConfig(Constants.DEFAULT_DATA_DIR));
+					if (folder == null || !folder.exists()) {
+						try {
+							JOptionPane
+									.showMessageDialog(
+											mainFrame,
+											"Folder : " + ResourceLoaderUtil.getConfig(Constants.DEFAULT_DATA_DIR)
+											+ " does not exists !!!",
+											ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR),
+											JOptionPane.ERROR_MESSAGE);
+							return;
+						} catch (HeadlessException | IOException e2) {
+							LOG.error(e2);
+						}
+					}
+					for (final File fileEntry : folder.listFiles()) {
+	
+						LOG.info(fileEntry.getName());
+						String name = fileEntry.getName();
+						Query q = em.createQuery("from InputFileType  where prefix = :prefix");
+						if (name.startsWith(f1)) {
+							q.setParameter("prefix", f1);
+						} else if (name.startsWith(f2)) {
+							q.setParameter("prefix", f2);
+						} else if (name.startsWith(f3)) {
+							q.setParameter("prefix", f3);
+						} else if (name.startsWith(f4)) {
+							q.setParameter("prefix", f4);
+						} else {
+							LOG.info("File : " +  name + " will be skipped!");
+							continue;
+						}
+						List<InputFileType> selectedFile = (List<InputFileType>) q.getResultList();
+						Set<String> matchCodesTmp 
+							= processSingleFileMatchToInput(fileEntry, em, selectedFile.get(0), period);
+						matchCodes.addAll(matchCodesTmp);
+					
+					}
 				}
+				createPanelMain.remove(createPanelInner);
+				periodComboModel = (PeriodComboBoxModel) comboBoxPeriod.getModel();
+				empl2Period2Depart(em, period, matchCodes, data);
+				
+				Query qPeriods = em.createQuery(" from Period");
+				allPeriods = (List<Period>) qPeriods.getResultList();
+				newModel = new PeriodComboBoxModel();
+				newModel.addAll(allPeriods);
+			em.flush();
+				
+			} catch (Exception e1) {
+				LOG.error(e1);
+				try {
+					JOptionPane.showMessageDialog(mainFrame, ResourceLoaderUtil
+							.getLabels(LabelsConstants.SET_TAB_LOAD_FILE_ERROR),
+							ResourceLoaderUtil
+									.getLabels(LabelsConstants.ALERT_MSG_ERR),
+							JOptionPane.ERROR_MESSAGE);
+				} catch (HeadlessException | IOException e2) {
+					LOG.error(e2);
+					e2.printStackTrace();
+				}
+				rollBack();
+			} finally {
+				commit();
 			}
-			createPanelMain.remove(createPanelInner);
-			periodComboModel = (PeriodComboBoxModel) comboBoxPeriod.getModel();
-			empl2Period2Depart(em, period, matchCodes, vauchers);
-			
-		} catch (Exception e1) {
-			LOG.error(e1);
-			try {
-				JOptionPane.showMessageDialog(mainFrame, ResourceLoaderUtil
-						.getLabels(LabelsConstants.SET_TAB_LOAD_FILE_ERROR),
-						ResourceLoaderUtil
-								.getLabels(LabelsConstants.ALERT_MSG_ERR),
-						JOptionPane.ERROR_MESSAGE);
-			} catch (HeadlessException | IOException e2) {
-				LOG.error(e2);
-			}
-			rollBack();
-		} finally {
-			commit();
-		}
 		
-		periodComboModel.setSelectedItem("Default");
+		
+		comboBoxPeriod.setModel(newModel);
+		comboBoxPeriod.revalidate();
+		comboBoxPeriod.repaint();
+		
 		periodComboModel.addItem(period);
-		comboBoxPeriod.setSelectedItem("Default");
 		comboBoxPeriod.revalidate();
 		comboBoxPeriod.repaint();
 		this.fieldCode.setText("");
@@ -213,11 +227,11 @@ public class LoadFileAL extends BaseActionListener {
 	 * @param matchCodes
 	 * @param vauchers
 	 */
-	public void empl2Period2Depart(EntityManager em, Period period, Set<String> matchCodes, Double vauchers) {
+	public void empl2Period2Depart(EntityManager em, Period period, Set<String> matchCodes, TrzStaticData data ) {
 
 		Map<String, Department> codeDeptPair = createDepEmplPeriod(period);
-		BigDecimal bPeriodRevenue = person2Department(matchCodes, codeDeptPair,	period, vauchers);
-		allPersonsNoDepartments(matchCodes, period, vauchers);
+		BigDecimal bPeriodRevenue = person2Department(matchCodes, codeDeptPair,	period, data);
+		allPersonsNoDepartments(matchCodes, period, data);
 		period.setRevenue(bPeriodRevenue);
 		em.merge(period);
 	}
@@ -232,7 +246,7 @@ public class LoadFileAL extends BaseActionListener {
 	 * @return
 	 */
 	private BigDecimal person2Department(Set<String> matchCodes,
-			Map<String, Department> codeDeptPair, Period period, Double vauchers) {
+			Map<String, Department> codeDeptPair, Period period, TrzStaticData data) {
 
 		
 		Query avgQ = em
@@ -254,7 +268,6 @@ public class LoadFileAL extends BaseActionListener {
 			}
 		}
 		
-		
 		for (Map.Entry<String, BigDecimal> singlePair : dataMap.entrySet()) {
 
 			final String mCode = singlePair.getKey();
@@ -271,10 +284,11 @@ public class LoadFileAL extends BaseActionListener {
 
 				UserDepartment uDept = uDepts.get(0);
 				// Period Match code
-				System.err.println("MATCHCODE : " + mCode);
+				LOG.debug("MATCHCODE : " + mCode);
 				Query emplQ = em.createQuery("from Employee where matchcode = :mCode and isActive = 'Y'");
 				emplQ.setParameter("mCode", mCode);
 				List<Employee> listEmployee = (List<Employee>) emplQ.getResultList();
+				
 				
 				if (listEmployee != null && !listEmployee.isEmpty()) {
 
@@ -283,15 +297,22 @@ public class LoadFileAL extends BaseActionListener {
 					// Department
 					Department department = codeDeptPair.get(uDept.getId().getDepId());
 					// Setting
-					System.err.println("Start Settings create with Period : " + period.getCode());
-					System.err.println("Start Settings create with Employee : " + employee.getMatchCode());
+					LOG.debug("Start Settings create with Period : " + period.getCode());
+					LOG.debug("Start Settings create with Employee : " + employee.getMatchCode());
 					EmployeeSettingsUtil.createSettings(em, period, employee);
 					// Salary
-					System.err.println("Start Salary");
-					EmployeeSalaryUtil.createSalary(em, period, employee,
-							vauchers);
+					LOG.debug("Start Salary");
+					EmployeeSalaryUtil.createSalary(em, period, employee, data.getVauchers(),
+							data.getDOD(),
+							data.getOSIGUROVKI_RABOTODATEL(), 
+							 data.getOSIGUROVKI_SLUJITEL(),
+							 data.getCACHE_TAX(), 
+							 data.getDodValue(),
+							 data.getoRabotodatelValue(),
+							 data.getoSlujitelValue(),
+							 data.getCacheTaxValue());
 					// Department to Period
-					System.err.println("Start Dept Period");
+					LOG.debug("Start Dept Period");
 					createEmplDeptPeriod(em, period, employee, department);
 					
 					// Period Employee Revenue
@@ -308,13 +329,16 @@ public class LoadFileAL extends BaseActionListener {
 	 * @param period
 	 * @param vauchers
 	 */
-	private void allPersonsNoDepartments(Set<String> matchCodes, Period period, Double vauchers) {
+	private void allPersonsNoDepartments(Set<String> matchCodes, Period period, TrzStaticData data) {
 		
 		if (matchCodes != null && !matchCodes.isEmpty()) {
 		Query avgQ = em.createQuery("from AvgInputData  where  id.periodCode = :pCode and matchCode in (:restMatchCodes)");
 		avgQ.setParameter("pCode", period.getCode());
 		avgQ.setParameter("restMatchCodes", matchCodes);
 		List<AvgInputData> avgsNoDept = (List<AvgInputData>) avgQ.getResultList();
+		
+		
+		
 		
 		Map<String, BigDecimal> dataMap = new HashMap<String, BigDecimal>();
 			for (AvgInputData singleAvg : avgsNoDept) {
@@ -344,30 +368,79 @@ public class LoadFileAL extends BaseActionListener {
 				if (empls != null && !empls.isEmpty()) {
 					Employee employee = empls.get(0);
 					EmployeeSettingsUtil.createSettings(em, period, employee);
-					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers);
+					EmployeeSalaryUtil.createSalary(em, period, employee, data.getVauchers(),
+							data.getDOD(),
+							data.getOSIGUROVKI_RABOTODATEL(), 
+							 data.getOSIGUROVKI_SLUJITEL(),
+							 data.getCACHE_TAX(), 
+							 data.getDodValue(),
+							 data.getoRabotodatelValue(),
+							 data.getoSlujitelValue(),
+							 data.getCacheTaxValue());
 					createRevenueEmplPeriod(em, period, employee, revenue);
 				}
 		}
 		}
 	}
 
-	private double persistPersonSettings(Period period) {
+	private TrzStaticData persistPersonSettings(Period period) {
+
 		Double vauchers = 0.0d;
+		TrzStaticData result = new TrzStaticData();
+		
+		TrzStatic DOD = null;
+		TrzStatic OSIGUROVKI_RABOTODATEL = null;
+		TrzStatic OSIGUROVKI_SLUJITEL = null;
+		TrzStatic CACHE_TAX = null;
+		Double dodValue = 0.0d;
+		Double oRabotodatelValue = 0.0d;
+		Double oSlujitelValue = 0.0d;
+		Double cacheTaxValue = 0.0d;
+				
 		for (Entry<TrzStatic, JTextField> entry : map.entrySet()) {
 
 			PeriodSetting ps = new PeriodSetting();
 			ps.setPeriod(period);
 			ps.setTrzStatic(entry.getKey());
 			ps.setValue(entry.getValue().getText());
-			if (("VAUCHER1".equals(entry.getKey().getKey()))
+			
+			if ("DOD".equals(entry.getKey().getKey())) {
+				DOD = entry.getKey();
+				dodValue = Double.valueOf(entry.getValue().getText());
+			} else if("OSIGUROVKI_RABOTODATEL".equals(entry.getKey().getKey())) {
+				OSIGUROVKI_RABOTODATEL = entry.getKey();
+				oRabotodatelValue = Double.valueOf(entry.getValue().getText());
+			} else if("OSIGUROVKI_SLUJITEL".equals(entry.getKey().getKey())) {
+				OSIGUROVKI_SLUJITEL = entry.getKey();
+				oSlujitelValue = Double.valueOf(entry.getValue().getText());
+			} else if("CACHE_TAX".equals(entry.getKey().getKey())) {
+				CACHE_TAX = entry.getKey();
+				cacheTaxValue = Double.valueOf(entry.getValue().getText());
+			} else if (("VAUCHER1".equals(entry.getKey().getKey()))
 					|| ("VAUCHER2".equals(entry.getKey().getKey()))) {
 
 				vauchers = vauchers
 						+ Double.valueOf(entry.getValue().getText());
 			}
+			
+			
 			em.persist(ps);
 		}
-		return vauchers;
+		result.setCACHE_TAX(CACHE_TAX);
+		result.setCacheTaxValue(cacheTaxValue);
+		
+		result.setVauchers(vauchers);
+		
+		result.setDOD(DOD);
+		result.setDodValue(dodValue);
+		
+		result.setoRabotodatelValue(oRabotodatelValue);
+		result.setOSIGUROVKI_RABOTODATEL(OSIGUROVKI_RABOTODATEL);
+		
+		result.setOSIGUROVKI_SLUJITEL(OSIGUROVKI_SLUJITEL);
+		result.setoSlujitelValue(oSlujitelValue);
+		
+		return result;
 	}
 
 	/**
@@ -398,7 +471,7 @@ public class LoadFileAL extends BaseActionListener {
 			em.persist(inputData);
 		}
 		em.flush();
-		Query emplQ = em.createQuery(" from MatchcodeList ");
+		Query emplQ = em.createQuery(" from MatchcodeList");
 		List<MatchcodeList> resultMatchcodeList = (List<MatchcodeList>) emplQ.getResultList();
 		Map<String, String> translationMap = new HashMap<String, String>();
 		for (MatchcodeList mCL : resultMatchcodeList) {
@@ -420,7 +493,7 @@ public class LoadFileAL extends BaseActionListener {
 				inputData.setPeriod(period);
 				em.persist(inputData);
 			} else {
-				LOG.info("ERRORO : "  + rawName + " NOT EXISTS!!!");
+				LOG.info("ERRO : "  + rawName + " NOT EXISTS!!!");
 			}
 		}
 		em.flush();

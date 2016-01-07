@@ -53,13 +53,13 @@ public interface LabelsConstants {
 	 
 	 String PERSONAL_CFG_HEADER_COL20 = "personal_cfg_header_col20";
 	 String PERSONAL_CFG_HEADER_COL21 = "personal_cfg_header_col21";
-	 String PERSONAL_CFG_HEADER_COL22 = "personal_cfg_header_col22";
-	 String PERSONAL_CFG_HEADER_COL23 = "personal_cfg_header_col23";
-	 
-	 String PERSONAL_CFG_HEADER_COL24 = "personal_cfg_header_col24";
-	 String PERSONAL_CFG_HEADER_COL25 = "personal_cfg_header_col25";
-	 String PERSONAL_CFG_HEADER_COL26 = "personal_cfg_header_col26";
-	 String PERSONAL_CFG_HEADER_COL27 = "personal_cfg_header_col27";
+     String PERSONAL_CFG_HEADER_COL22 = "personal_cfg_header_col22";
+//	 String PERSONAL_CFG_HEADER_COL23 = "personal_cfg_header_col23";
+//	 
+//	 String PERSONAL_CFG_HEADER_COL24 = "personal_cfg_header_col24";
+//	 String PERSONAL_CFG_HEADER_COL25 = "personal_cfg_header_col25";
+//	 String PERSONAL_CFG_HEADER_COL26 = "personal_cfg_header_col26";
+//	 String PERSONAL_CFG_HEADER_COL27 = "personal_cfg_header_col27";
 	 
 	 String PERSONAL_CFG_EDIT_BTN = "personal_cfg_edit_btn";
 	 String PERSONAL_CFG_SAVE_BTN = "personal_cfg_save_btn";

@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -47,14 +48,19 @@ public class PersonRowEditAL extends BaseActionListener{
 
 	private PersonalCfgEmplsTable personalConfTable;
 	private JComboBox comboBoxEmployee;
+	private JComboBox<String> comboBoxYear;
 	
 	private HashMap<TrzStatic, JTextField> map ;
 	private HashMap<Department, JTextField> mapDept;
 	
-	public PersonRowEditAL(PrototypeMainFrame mainFrame, PersonalCfgEmplsTable personalConfTable, JComboBox comboBoxEmployee) {
+	public PersonRowEditAL(PrototypeMainFrame mainFrame, 
+						   PersonalCfgEmplsTable personalConfTable, 
+						   JComboBox comboBoxEmployee,
+						   JComboBox<String> comboBoxYear) {
 		super(mainFrame);
 		this.personalConfTable = personalConfTable;
 		this.comboBoxEmployee = comboBoxEmployee;
+		this.comboBoxYear = comboBoxYear;
 	}
 
 	@Override
@@ -69,6 +75,7 @@ public class PersonRowEditAL extends BaseActionListener{
 			em.getTransaction().begin();
 			
 			Employee employee =  (Employee)comboBoxEmployee.getSelectedItem();
+			String year = (String) comboBoxYear.getSelectedItem();
 			
 			PersonalCfgEmplsTableModel model = (PersonalCfgEmplsTableModel) personalConfTable.getModel();
 			int i = personalConfTable.getSelectedRow();
@@ -81,7 +88,7 @@ public class PersonRowEditAL extends BaseActionListener{
 			
 			
 			JFrame popUp = new JFrame();
-			popUp.setBounds(100, 100, 400, 550);
+			popUp.setBounds(100, 100, 400, 650);
 			popUp.setAlwaysOnTop(true);
 			popUp.setResizable(true);
 			//popUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,11 +96,11 @@ public class PersonRowEditAL extends BaseActionListener{
 					.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN) + " " + employee.getFirstName() + " " + employee.getLastName());
 			popUp.setVisible(true);
 			
-			HashMap<String, JTextField> map = new HashMap<String, JTextField>();
+			HashMap<String, Object> map = new HashMap<String, Object>();
 			
 			JPanel panel = new JPanel();
 			panel.setLayout(null);
-			panel.setBounds(0, 0, 400, 500);
+			panel.setBounds(0, 0, 400, 600);
 			popUp.getContentPane().add(panel);
 			
 			JLabel l1 = new JLabel(ResourceLoaderUtil
@@ -153,14 +160,38 @@ public class PersonRowEditAL extends BaseActionListener{
 			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL14, tf4);
 			
 			
+			JLabel l5 = new JLabel(ResourceLoaderUtil
+					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL20));
+			l5.setBounds(30, 380, 150, 25);
+			panel.add(l5);
+			JTextField tf5 = new JTextField();
+			tf5.setBounds(200, 380, 100, 25);
+			tf5.setText(model.getValueAt(i, 17) != null ? ((BigDecimal)model.getValueAt(i, 17)).toString() : BigDecimal.ZERO.toString());
+			panel.add(tf5);
+			
+			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL20, tf5);
+			
+			
+			JLabel l7 = new JLabel(ResourceLoaderUtil
+					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL22));
+			l7.setBounds(30, 420, 100, 25);
+			panel.add(l7);
+			
+			JTextArea tf7 = new JTextArea();
+			tf7.setBounds(150, 420, 200, 60);
+			tf7.setText((String)model.getValueAt(i, 22));
+			panel.add(tf7);
+			
+			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL22, tf7);
+			
 			
 			JButton saveBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
-			saveBtn.setBounds(50, 450, 100, 25);
-			saveBtn.addActionListener(new PersonRowSaveAL(mainFrame, personalConfTable, comboBoxEmployee, map, popUp));
+			saveBtn.setBounds(50, 500, 100, 25);
+			saveBtn.addActionListener(new PersonRowSaveAL(mainFrame, personalConfTable, comboBoxEmployee, comboBoxYear, map, popUp));
 			panel.add(saveBtn);
 			JButton cnclBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.BUTT_CANCEL));
 			cnclBtn.addActionListener(new PersonalRowCancelAL(mainFrame, personalConfTable, comboBoxEmployee, popUp));
-			cnclBtn.setBounds(170, 450, 100, 25); 
+			cnclBtn.setBounds(170, 500, 100, 25); 
 			panel.add(cnclBtn);
 			
 			//EmplsSettingsLoadUtil emplsComboUtil = new EmplsSettingsLoadUtil();

@@ -14,7 +14,7 @@ import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-import org.pmw.tinylog.Logger;
+import org.apache.log4j.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
@@ -33,6 +33,8 @@ import com.consultancygrid.trz.ui.table.group.GroupCfgEmplsTableModel;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class PeriodDelRowAL extends BaseActionListener{
+	
+	private static Logger log = Logger.getLogger(PeriodDelRowAL.class); 
 
 	private JComboBox<Period> comboBoxPeriod;
 	private JComboBox<Period> comboBoxPeriod2;
@@ -69,7 +71,7 @@ public class PeriodDelRowAL extends BaseActionListener{
 			= (PeriodComboBoxModel) comboBoxPeriod2.getModel();
 			int indx = comboBoxPeriod.getSelectedIndex();
 			Period prd  = pCBM.getSelectedItem();
-			if (prd == null ) {
+			if ( prd == null || prd.getId() == null ) {
 				JOptionPane.showMessageDialog(mainFrame,  
 						"Please Select period !",
 						ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_WARN) , JOptionPane.WARNING_MESSAGE);
@@ -112,28 +114,26 @@ public class PeriodDelRowAL extends BaseActionListener{
 			q.setParameter("periodId", prd.getId());
 			List<InputData> allInputDatas = (List<InputData>) q.getResultList();
 			for (InputData in: allInputDatas) {
-				//PeriodSetting attachedEs = em.find(PeriodSetting.class, ps.getId());
 				em.remove(in);
 			}
 			
-			System.out.println("Period : " + prd.getCode() + " Deleted" );
+			log.debug("Period : " + prd.getCode() + " Deleted" );
 			Period attachedPrd = em.find(Period.class, prd.getId());
 			em.remove(attachedPrd);
 			
 			Query qPeriods = em.createQuery(" from Period");
 			List<Period> allPeriods = (List<Period>) qPeriods.getResultList();
-			
+			PeriodComboBoxModel newModel = new PeriodComboBoxModel();
+			newModel.addAll(allPeriods);
 			
 			em.flush();
-			//((PeriodComboBoxModel) 
-			//		comboBoxPeriod.getModel()).гreinit(allPeriods);
-			comboBoxPeriod.remove(indx);
+
+			
+			comboBoxPeriod.setModel(newModel);
 			comboBoxPeriod.revalidate();
 			comboBoxPeriod.repaint();
 			
-			((PeriodComboBoxModel) 
-					comboBoxPeriod2.getModel()).reinit(allPeriods);
-			comboBoxPeriod2.remove(indx);
+			comboBoxPeriod2.setModel(newModel);
 			comboBoxPeriod2.revalidate();
 			comboBoxPeriod2.repaint();
 			
@@ -145,13 +145,13 @@ public class PeriodDelRowAL extends BaseActionListener{
 			departTable2.revalidate();
 			
 		} catch (Exception e1) {
-			Logger.error(e1);
+			log.error(e1);
 			try {
 				JOptionPane.showMessageDialog(mainFrame, 
 						 "Period delete failure !", 
 						 ResourceLoaderUtil.getLabels(LabelsConstants.ALERT_MSG_ERR),JOptionPane.ERROR_MESSAGE);
 			} catch (HeadlessException | IOException e2) {
-				e2.printStackTrace();
+				log.error(e2);
 			}
 			if (em!= null && em.isOpen()) {
 				em.getTransaction().rollback();

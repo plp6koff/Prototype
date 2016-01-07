@@ -2,15 +2,15 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <param name="Threshold" value="info"/>
         <param name="Target" value="System.out"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{ABSOLUTE} [%t] %-5p %c{1} - %m%n"/>
         </layout>
     </appender>
-    <appender name="rolling-file" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="trzInfo1.log"/>
+    <appender name="INFO_ALL" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="trzAll.log"/>
         <param name="MaxFileSize" value="1000KB"/>
     <!-- Keep one backup file -->
         <param name="MaxBackupIndex" value="4"/>
@@ -18,19 +18,55 @@
             <param name="ConversionPattern" value="%d [%t] %-5p %l - %m%n"/>
         </layout>
     </appender>
-
+  <appender name="HIB_FILE" class="org.apache.log4j.RollingFileAppender"> 
+        <param name="file" value="hibernate.log"/>
+        <param name="MaxFileSize" value="1000KB"/>
+    <!-- Keep one backup file -->
+        <param name="MaxBackupIndex" value="4"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d [%t] %-5p %l - %m%n"/>
+        </layout>
+    </appender>
+	<appender name="HIBERNATE_SQL_FILE" class="org.apache.log4j.RollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="hibernate-sql.log"/>
+		<param name="Append" value="true"/>
+		<param name="MaxFileSize" value="10MB"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%x] [%X{Document}] %-35.35c{3} (%L)- %m%n"/>
+		</layout>
+	</appender>
+	<appender name="ALL_ERRORS_FILE" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="error.log"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<param name="Threshold" value="ERROR"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%x] [%X{Document}] %-35.35c{3} (%L) - %m%n"/>
+		</layout>
+	</appender>
 	<category name="org.hibernate">  
-        <priority value="DEBUG" />  
-    </category>  
-    <category name="java.sql">  
-        <priority value="debug" />  
-    </category>  
-    <category name="java.sql">  
-        <priority value="debug" />  
-    </category>  
+        <priority value="INFO" />
+        <appender-ref ref="HIB_FILE"/>
+		<appender-ref ref="CONSOLE"/>  
+    </category>
+    <category name="org.hibernate.sql">  
+        <priority value="DEBUG" />
+        <appender-ref ref="HIBERNATE_SQL_FILE"/>
+		<appender-ref ref="CONSOLE"/>  
+    </category>     
+    <category name="com.consultancygrid.trz">  
+        <priority value="DEBUG" />
+        <appender-ref ref="INFO_ALL"/>
+        <appender-ref ref="CONSOLE"/>  
+    </category>
+    <category name="com.consultancygrid" additivity="false">
+		<priority value="ERROR"/>
+		<appender-ref ref="ALL_ERRORS_FILE"/>
+	</category>    
     <root>
-        <priority value ="info" />
-        <appender-ref ref="console" />
-        <appender-ref ref="rolling-file" />
+        <priority value ="OFF" />
     </root>
 </log4j:configuration>

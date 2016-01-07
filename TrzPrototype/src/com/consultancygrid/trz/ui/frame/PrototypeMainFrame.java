@@ -164,7 +164,7 @@ public class PrototypeMainFrame extends JFrame {
 		setTitle("T-R-Z");
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1280, 1000);
+		setBounds(100, 100, 1480, 1000);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 0, 0);
@@ -175,21 +175,25 @@ public class PrototypeMainFrame extends JFrame {
 		// First Tab
 		Query qE = em.createQuery(" select e from Employee as e where e.isActive = 'Y' order by e.firstName ");
 		List<Employee> employees = (List<Employee>) qE.getResultList();
+
+		Query qPeriod = em.createQuery(" from Period order by code desc");
+		List<Period> allPeriods = (List<Period>) qPeriod.getResultList();
 		
 		
 		EmplComboBoxModel emplComboBoxModel = new EmplComboBoxModel(employees);
 		JComboBox comboBoxEmployees = new JComboBox<>(emplComboBoxModel);
 		PersonalCfgEmplsTable personalConfTable = new PersonalCfgEmplsTable();
 		personalConfTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		comboBoxEmployees.setBounds(150, 40, 300, 25);
+		comboBoxEmployees.setBounds(50, 40, 300, 25);
 		comboBoxEmployees.setRenderer(new EmployeeCustomRender());
 		
+		String[] yearStrings = { "","2012", "2013", "2014", "2015", "2016","2017","2018","2019","2020" };
+		JComboBox<String> yearsCB = new JComboBox<String>(yearStrings);
+		yearsCB.setBounds(360, 40, 300, 25);
 		//Draw
-		drawFirstTab(tabbedPane, comboBoxEmployees, personalConfTable);
+		drawFirstTab(tabbedPane, comboBoxEmployees, yearsCB, personalConfTable);
 		
 		//######### Second Tab ####################
-		Query qPeriod = em.createQuery(" from Period order by code desc");
-		List<Period> allPeriods = (List<Period>) qPeriod.getResultList();
 		PeriodComboBoxModel trzComboBoxModel = new PeriodComboBoxModel(allPeriods);
 		JComboBox periodsComboBox = new JComboBox<>(trzComboBoxModel);
 		//Table1  Departments
@@ -336,7 +340,7 @@ public class PrototypeMainFrame extends JFrame {
 		JButton loadButt = new JButton(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
 		loadButt.setEnabled(true);
-		loadButt.setBounds(650, 40, 150, 25);
+		loadButt.setBounds(650, 40, 300, 25);
 		loadButt.addActionListener(new LoadStatistic1AL(this, frstStatPanel, periodsComboBox1, pStatCfgEmpls, fc));
 		frstStatPanel.add(loadButt);
 		
@@ -344,7 +348,7 @@ public class PrototypeMainFrame extends JFrame {
 		JButton loadMiniButt = new JButton(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT) + " Short");
 		loadMiniButt.setEnabled(true);
-		loadMiniButt.setBounds(650, 80, 150, 25);
+		loadMiniButt.setBounds(650, 80, 300, 25);
 		loadMiniButt.addActionListener(new LoadStatistic1MiniAL(this, frstStatPanel, periodsComboBox1, pStatMiniCfgEmpls, fc));
 		frstStatPanel.add(loadMiniButt);
 		
@@ -447,7 +451,7 @@ public class PrototypeMainFrame extends JFrame {
 		header.setDefaultRenderer(new HeaderRenderer(header
 				.getDefaultRenderer()));
 
-		pesonPanel.setBounds(20, 150, 1200, 400);
+		pesonPanel.setBounds(20, 100, 1200, 400);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
 		pesonPanel.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
@@ -660,14 +664,22 @@ public class PrototypeMainFrame extends JFrame {
 	 * @param tabbedPane
 	 * @throws IOException
 	 */
-	private void drawFirstTab(JTabbedPane tabbedPane, JComboBox comboBoxEmployees, PersonalCfgEmplsTable personalConfTable) throws IOException {
+	private void drawFirstTab(JTabbedPane tabbedPane, 
+				JComboBox comboBoxEmployees, 
+				JComboBox<String> comboBoxYear, 
+				PersonalCfgEmplsTable personalConfTable) throws IOException {
 
 		JPanel firstInnerPanel = new JPanel(null);
 		JFileChooser fc = new JFileChooser();
 		
+		JButton loadPersonalButt = new JButton("Load");
+		loadPersonalButt.setEnabled(true);
+		loadPersonalButt.setBounds(700, 40, 100, 25);
+		firstInnerPanel.add(loadPersonalButt);
+		
 		JButton saveButt = new JButton("Export as PDF ...");
 		saveButt.setEnabled(true);
-		saveButt.setBounds(650, 40, 150, 25);
+		saveButt.setBounds(900, 40, 150, 25);
 		
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		saveButt.addActionListener(new SaveFileAL(this, fc, null,  comboBoxEmployees, personalConfTable));
@@ -675,14 +687,22 @@ public class PrototypeMainFrame extends JFrame {
 		JButton editRow = new JButton(
 				ResourceLoaderUtil
 						.getLabels(LabelsConstants.PERSONAL_CFG_EDIT_BTN));
-		editRow.setBounds(490, 40, 150, 25);
-		editRow.addActionListener(new PersonRowEditAL(this, personalConfTable,
-				comboBoxEmployees));
+		editRow.setBounds(900, 70, 150, 25);
+		editRow.addActionListener(
+				new PersonRowEditAL(this,
+									personalConfTable,
+									comboBoxEmployees,
+									comboBoxYear));
 		firstInnerPanel.add(editRow);
 
-		EmployeePersonTabComboAL emplsComboAL = new EmployeePersonTabComboAL(
-				this, comboBoxEmployees, personalConfTable);
-		comboBoxEmployees.addActionListener(emplsComboAL);
+		EmployeePersonTabComboAL emplsComboAL 
+				= new EmployeePersonTabComboAL(
+							this, 
+							comboBoxEmployees,
+							comboBoxYear,
+							personalConfTable);
+		loadPersonalButt.addActionListener(emplsComboAL);
+		//comboBoxEmployees.addActionListener(emplsComboAL);
 
 		JScrollPane pesonPanel = new JScrollPane(personalConfTable);
 		pesonPanel.setLayout(new ScrollPaneLayout());
@@ -698,12 +718,13 @@ public class PrototypeMainFrame extends JFrame {
 		header.setDefaultRenderer(new HeaderRenderer(header
 				.getDefaultRenderer()));
 
-		pesonPanel.setBounds(20, 150, 1200, 600);
+		pesonPanel.setBounds(20, 100, 1400, 700);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
 		pesonPanel.setBorder(BorderFactory.createTitledBorder("Employees"));
 		firstInnerPanel.setLayout(null);
 		firstInnerPanel.add(comboBoxEmployees);
+		firstInnerPanel.add(comboBoxYear);
 		firstInnerPanel.add(pesonPanel);
 		tabbedPane.addTab(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CONF_TAB_LABEL),
 					firstInnerPanel);

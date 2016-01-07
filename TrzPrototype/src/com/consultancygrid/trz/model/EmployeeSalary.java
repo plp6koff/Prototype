@@ -53,6 +53,7 @@ public class EmployeeSalary implements java.io.Serializable {
 	private BigDecimal v22;
 	private BigDecimal v23;
 	private String s01;
+	private String s02;
 	
 	public EmployeeSalary() {
 	}
@@ -69,7 +70,7 @@ public class EmployeeSalary implements java.io.Serializable {
 			BigDecimal v09, BigDecimal v10, BigDecimal v11, BigDecimal v12,
 			BigDecimal v13, BigDecimal v14, BigDecimal v15, BigDecimal v16,
 			BigDecimal v17, BigDecimal v18, BigDecimal v19, BigDecimal v20,
-			BigDecimal v21, BigDecimal v22, BigDecimal v23,String s01) {
+			BigDecimal v21, BigDecimal v22, BigDecimal v23,String s01, String s02) {
 		this.id = id;
 		this.employee = employee;
 		this.period = period;
@@ -97,6 +98,7 @@ public class EmployeeSalary implements java.io.Serializable {
 		this.v22 = v22;
 		this.v23 = v23;
 		this.s01 = s01;
+		this.s02 = s02;
 	}
 
 	@GenericGenerator(name = "es_trz_uuid_gen", strategy = "com.consultancygrid.trz.model.CustomUUIDGenerator")
@@ -345,6 +347,15 @@ public class EmployeeSalary implements java.io.Serializable {
 
 	public void setS01(String s01) {
 		this.s01 = s01;
+	}
+	
+	@Column(name = "S02", length = 500)
+	public String getS02() {
+		return this.s02;
+	}
+
+	public void setS02(String s02) {
+		this.s02 = s02;
 	}
 
 }

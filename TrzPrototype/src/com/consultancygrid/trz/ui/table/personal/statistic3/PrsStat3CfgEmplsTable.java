@@ -31,12 +31,12 @@ public class PrsStat3CfgEmplsTable extends JTable {
 		setBorder(new EmptyBorder(1, 1, 1, 1));
 		setModel(new PrsStat3CfgEmplsTableModel());
 		getColumnModel().getColumn(0).setMinWidth(100);
-		getColumnModel().getColumn(1).setMinWidth(150);
+		getColumnModel().getColumn(1).setMinWidth(200);
 		getColumnModel().getColumn(2).setMinWidth(200);
 		getColumnModel().getColumn(3).setMinWidth(200);
 		getColumnModel().getColumn(4).setMinWidth(200);
-		getColumnModel().getColumn(5).setMinWidth(150);
-		setRowHeight(50);
+		getColumnModel().getColumn(5).setMinWidth(200);
+		setRowHeight(25);
 	}
 
 	
