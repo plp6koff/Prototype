@@ -41,14 +41,25 @@ public class PrsStat1MiniUtil {
 				i ++;
 			}
 			
-			Object zpltBroi = (currentRow[6] == null ? "0.0" : currentRow[6]);
-			BigDecimal zpltBroiBD = null;
-			if (zpltBroi instanceof BigDecimal) {
-				zpltBroiBD = (BigDecimal) zpltBroi;
-			} else if (zpltBroi instanceof String) {
-				zpltBroiBD = BigDecimal.valueOf(Double.valueOf((String)zpltBroi));
+			Object zpltNeto = (currentRow[3] == null ? "0.0" : currentRow[3]);
+			BigDecimal zpltNetoBD = null;
+			if (zpltNeto instanceof BigDecimal) {
+				zpltNetoBD = (BigDecimal) zpltNeto;
+			} else if (zpltNeto instanceof String) {
+				zpltNetoBD = BigDecimal.valueOf(Double.valueOf((String)zpltNeto));
 			}
-			setBoldData(oneRow, boldRow, zpltBroiBD.toString());
+			
+			
+			Object zpltBank = (currentRow[4] == null ? "0.0" : currentRow[4]);
+			BigDecimal zpltBankBD = null;
+			if (zpltBank instanceof BigDecimal) {
+				zpltBankBD = (BigDecimal) zpltBank;
+			} else if (zpltBank instanceof String) {
+				zpltBankBD = BigDecimal.valueOf(Double.valueOf((String)zpltBank));
+			}
+			BigDecimal zpltBroj = zpltNetoBD.subtract(zpltBankBD);
+			
+			setBoldData(oneRow, boldRow, zpltBroj.toString());
 			
 			Object avans = (currentRow[5] == null ? "0.0" : currentRow[5]);
 			BigDecimal avansBD = null;
@@ -59,15 +70,15 @@ public class PrsStat1MiniUtil {
 			}
 			setBoldData(oneRow, boldRow, avansBD.toString());
 			
-			Object vaucher = (currentRow[7] == null ? "0.0" : currentRow[7]);
-			BigDecimal vaucherBD = null;
-			if (vaucher instanceof BigDecimal) {
-				vaucherBD = (BigDecimal) vaucher;
-			} else if (vaucher instanceof String) {
-				vaucherBD = BigDecimal.valueOf(Double.valueOf((String)vaucher));
-			}
-			
-			setBoldData(oneRow, boldRow, zpltBroiBD.subtract(avansBD).subtract(vaucherBD));
+//			Object vaucher = (currentRow[7] == null ? "0.0" : currentRow[7]);
+//			BigDecimal vaucherBD = null;
+//			if (vaucher instanceof BigDecimal) {
+//				vaucherBD = (BigDecimal) vaucher;
+//			} else if (vaucher instanceof String) {
+//				vaucherBD = BigDecimal.valueOf(Double.valueOf((String)vaucher));
+//			}
+//			
+			setBoldData(oneRow, boldRow, zpltBroj.subtract(avansBD));
 			for (int j = 0 ; j < oneRow.size(); j ++) {
 				System.err.print(oneRow.get(j));
 				System.out.print(":");

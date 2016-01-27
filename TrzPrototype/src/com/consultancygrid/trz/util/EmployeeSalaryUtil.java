@@ -29,17 +29,36 @@ public class EmployeeSalaryUtil {
 		q.setParameter("employeeId", empl.getId());
 		List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q.getResultList();
 
+		
+		String SQL3 = "SELECT p1_individualna_premia,p2_grupova_premia,p3_obshta_premia FROM RENUMERATIONS where FK_EMPLOYEE_ID = :employeeId AND  FK_PERIOD_ID = :periodId";
+		
 		EmployeeSalary salary = new EmployeeSalary();
 		if (emplSals != null && !emplSals.isEmpty()) {
 
+			Query q1 = null;
+			q1 =  em.createNativeQuery(SQL3);
+			q1.setParameter("employeeId",empl.getId().toString());
+			q1.setParameter("periodId", period.getId().toString());
+			
 			EmployeeSalary lastSalary = emplSals.get(0);
 			//to be copied
 			salary.setV01(lastSalary.getV01());
 			//to be copied
 			salary.setV03(lastSalary.getV03());
-			salary.setV06(lastSalary.getV06());
-			salary.setV07(lastSalary.getV07());
-			salary.setV08(lastSalary.getV08());
+			//View check
+			List<?> rsltIntrn = q1.getResultList();
+			if (rsltIntrn != null && !rsltIntrn.isEmpty()) {
+				Object[] objcts = (Object[] ) rsltIntrn.get(0);
+				salary.setV06((BigDecimal)objcts[0]);
+				salary.setV07((BigDecimal)objcts[1]);
+				salary.setV08((BigDecimal)objcts[2]);
+			} else {
+				salary.setV06(lastSalary.getV06());
+				salary.setV07(lastSalary.getV07());
+				salary.setV08(lastSalary.getV08());
+			}
+		
+			
 			//to be copied
 			salary.setV10(lastSalary.getV10());
 			//to be copied

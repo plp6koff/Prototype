@@ -28,6 +28,8 @@ import com.consultancygrid.trz.model.RevenueEmplPeriod;
 
 public class GroupTablPeriodLoaderUtil {
 
+	private final static String SQL3 = "SELECT p1_individualna_premia,p2_grupova_premia,p3_obshta_premia FROM RENUMERATIONS where FK_EMPLOYEE_ID = :employeeId AND  FK_PERIOD_ID = :periodId";
+	
 	public Set<UUID> loadData(Period period, EntityManager em, Vector tableData)
 			throws IOException {
 
@@ -80,15 +82,28 @@ public class GroupTablPeriodLoaderUtil {
 					emplSettings = employee.getEmployeeSettingses().iterator()
 							.next();
 				}
+				
+				
+				Query q1 = null;
+				q1 =  em.createNativeQuery(SQL3);
+				q1.setParameter("employeeId", employee.getId().toString());
+				q1.setParameter("periodId", period.getId().toString());
+				
+				List<?> rsltIntrn = q1.getResultList();
+				Object[] objcts = (Object[] ) rsltIntrn.get(0);
+				
 				employeeSetingsIds.add(emplSettings.getId());
 				final Double percentPersonal = getEmployeePercentPersonal(emplSettings);
 				final BigInteger emplBonus = getEmployeeRevenue(em, period,
 						employee);
-				final double bonusAll = add1thRow(tableData, employee,
+				final double bonusAll = ((BigDecimal)objcts[2]).doubleValue();
+				add1thRow(tableData, employee,
 						department, allEmployeesCount.intValue(), period,
 						emplBonus, emplSettings);
-				final double bonusGroup = add2thRow(tableData, employee, department, depBonus, emplBonus, emplSettings, deptPerns);
-				final double bonusPersonal = add3thRow(tableData, employee,
+				final double bonusGroup =  ((BigDecimal)objcts[1]).doubleValue();
+				add2thRow(tableData, employee, department, depBonus, emplBonus, emplSettings, deptPerns);
+				final double bonusPersonal =    ((BigDecimal)objcts[0]).doubleValue();
+				add3thRow(tableData, employee,
 						department, emplBonus, percentPersonal);
 				final double totalBonus = bonusAll + bonusGroup + bonusPersonal;
 				final double totalPercent = (totalBonus * 100)

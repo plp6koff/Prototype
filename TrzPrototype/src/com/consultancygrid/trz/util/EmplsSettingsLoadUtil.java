@@ -22,7 +22,7 @@ public class EmplsSettingsLoadUtil {
 
 	private final static String SQL1 = " from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.code desc";
 	private final static String SQL2 = " from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId and emplSalary.period.code like :periodCode";
-	
+	private final static String SQL3 = "SELECT p1_individualna_premia,p2_grupova_premia,p3_obshta_premia FROM RENUMERATIONS where FK_EMPLOYEE_ID = :employeeId AND  FK_PERIOD_ID = :periodId";
 	public void load(Employee employee,
 					String year,
 					EntityManager em, 
@@ -36,19 +36,36 @@ public class EmplsSettingsLoadUtil {
 			q = em.createQuery(SQL2);
 			q.setParameter("employeeId", employee.getId());
 			q.setParameter("periodCode", "%" + year + "%");
+			
+		
 		} else {
 			
 			q = em.createQuery(SQL1);
 			q.setParameter("employeeId", employee.getId());
+			
 		}
+		
+		
 		List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q.getResultList();
 		model.setEmplSals(emplSals);
 		
 		for (EmployeeSalary emplSal : emplSals) {
 			
+			Query q1 = null;
+			q1 =  em.createNativeQuery(SQL3);
+			q1.setParameter("employeeId", employee.getId().toString());
+			q1.setParameter("periodId", emplSal.getPeriod().getId().toString());
+			
+			List<?> rsltIntrn = q1.getResultList();
+			Object[] objcts = (Object[] ) rsltIntrn.get(0);
+			System.out.println("A:" + objcts[0]);
+			System.out.println("B:" + objcts[1]);
+			System.out.println("C:" + objcts[2]);
+			
 			//TODO select for each 
 			EmployeeSettings emplSettings = null;
 			Vector<Object> oneRow = new Vector<Object>();
+			
 			//0
 			oneRow.add(emplSal.getPeriod().getCode());
 			//1
@@ -62,11 +79,11 @@ public class EmplsSettingsLoadUtil {
 			//4
 			oneRow.add(emplSal.getV05());
 			//5
-			oneRow.add(emplSal.getV06());
-			oneRow.add(emplSal.getV07());
+			oneRow.add(objcts[0]);
+			oneRow.add(objcts[1]);
 			//6
 			//7
-			oneRow.add(emplSal.getV08());
+			oneRow.add(objcts[2]);
 			//8
 			oneRow.add(emplSal.getV09());
 			//9
