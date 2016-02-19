@@ -20,9 +20,9 @@ public class PrsStat5Util {
 		String queryNative = "SELECT  1, PERIOD_CODE, MATCHCODE,  DEPARTMENT_REVENUE , SP_ORDER, SP_SALES, SP_TOUR, SP_TOUR_SERVE, AVERAGE_SP from EMPLOYEE_REVENUE "
 		 + " where 1=1 and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( PERIOD_CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
 		 + " union all "
-		 + " SELECT  2, null, MATCHCODE,  sum(DEPARTMENT_REVENUE) , sum(SP_ORDER), sum(SP_SALES), sum(SP_TOUR), sum(SP_TOUR_SERVE), sum(AVERAGE_SP) from EMPLOYEE_REVENUE "
+		 + " SELECT  2, null, null,  sum(DEPARTMENT_REVENUE) , sum(SP_ORDER), sum(SP_SALES), sum(SP_TOUR), sum(SP_TOUR_SERVE), sum(AVERAGE_SP) from EMPLOYEE_REVENUE "
 		 + " where 1=1 and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( PERIOD_CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
-		 + " group by 1,MATCHCODE " 
+		 + " group by 1  " 
 		 + " order by 1,2,3 asc ";
 		
 		

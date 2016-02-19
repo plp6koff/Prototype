@@ -19,7 +19,7 @@ public class PrsStat1MiniUtil {
 				+ " FROM EMPLOYEE_STATS  "
 				+ " where 1=1 and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
 				+ " union all "
-				+ " SELECT 2,'n.a.', sum(V18),sum(V15),sum(V02),sum(V19),sum(ZAPLATA_V_BROI),sum(V14) , null"
+				+ " SELECT 2,null, sum(V18),sum(V15),sum(V02),sum(V19),sum(ZAPLATA_V_BROI),sum(V14) , null"
 				+ " FROM EMPLOYEE_STATS  "
 				+ " where 1=1  and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
 				+ " group by 2 " + " order by 1,2,3 asc ";

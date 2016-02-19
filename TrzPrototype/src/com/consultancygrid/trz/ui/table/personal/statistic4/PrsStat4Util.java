@@ -16,9 +16,9 @@ public class PrsStat4Util {
 		String queryNative = "SELECT  1, PERIOD_CODE, MATCHCODE,  SP , INDIVIDUALNA_PREMIA, GRUPOVA_PREMIA, OBSHTA_PREMIA, OBSHTO_PREMII, OTNOSHENIE_OBSHTO_PREMIA_SP,TBD from EMPLOYEE_BONUSES "
 				+ " where 1=1 and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( PERIOD_CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
 				+ " union all "
-				+ " SELECT  2, null , MATCHCODE,  sum(SP) , sum(INDIVIDUALNA_PREMIA), sum(GRUPOVA_PREMIA), sum(OBSHTA_PREMIA), sum(OBSHTO_PREMII), sum(OTNOSHENIE_OBSHTO_PREMIA_SP),sum(TBD) from EMPLOYEE_BONUSES "
+				+ " SELECT  2, null , null,  sum(SP) , sum(INDIVIDUALNA_PREMIA), sum(GRUPOVA_PREMIA), sum(OBSHTA_PREMIA), sum(OBSHTO_PREMII), sum(OTNOSHENIE_OBSHTO_PREMIA_SP),sum(TBD) from EMPLOYEE_BONUSES "
 				+ " where 1=1 and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( PERIOD_CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
-				+ " group by 2,MATCHCODE " 
+				+ " group by 2  " 
 				+ " order by 1,2,3 asc ";
 		
 		
