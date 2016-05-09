@@ -27,20 +27,20 @@ public class LoadStatistic2AL extends BaseActionListener {
 	private JPanel firstInnerPanel;
 	private JComboBox<Employee> comboBoxEmployee;
 	private JFileChooser fc;
-	//private JComboBox<Period> comboBoxPeriod;
+	JComboBox<String> yearsCB;
 	private PrsStat2CfgEmplsTable personalConfTable;
 	
 	public LoadStatistic2AL(
 			PrototypeMainFrame mainFrame, 
 			JPanel firstInnerPanel,
-			//JComboBox<Period> comboBoxPeriod,
+			JComboBox<String> yearsCB,
 			JComboBox<Employee> comboBoxEmployee,
 			PrsStat2CfgEmplsTable personalConfTable,
 			JFileChooser fc) {
 
 		super(mainFrame);
 		this.firstInnerPanel = firstInnerPanel;
-		//this.comboBoxPeriod = comboBoxPeriod;
+		this.yearsCB = yearsCB;
 		this.comboBoxEmployee = comboBoxEmployee;
 		this.personalConfTable = personalConfTable;
 		this.fc = fc;
@@ -54,21 +54,21 @@ public class LoadStatistic2AL extends BaseActionListener {
 			init();
 			PrsStat2CfgEmplsTableModel model = new PrsStat2CfgEmplsTableModel();
 			EmplComboBoxModel emplMod = ((EmplComboBoxModel) comboBoxEmployee.getModel());
-		//	PeriodComboBoxModel periodMod = ((PeriodComboBoxModel) comboBoxPeriod.getModel());
+			String year = (String) yearsCB.getSelectedItem();
 			
 			Employee employee = emplMod.getSelectedItem();
 			//Period 	 period   = periodMod.getSelectedItem();
 			
 			
 			PrsStat2Util.load(em, model, 
-					"",
+					year ,
 					(employee != null ? employee.getMatchCode() : ""));
 			personalConfTable.setModel(model);
 			
 			JButton exportButt = new JButton(ResourceLoaderUtil
 					.getLabels(LabelsConstants.STAT_TAB_EXPORT_BUTT));
 			exportButt.setEnabled(true);
-			exportButt.setBounds(820, 40, 250, 25);
+			exportButt.setBounds(820,100, 250, 25);
 			exportButt.addActionListener(new ExportStatistic32AL(mainFrame, fc, personalConfTable, (employee != null ? employee.getMatchCode() : "ÄllEmployees")));
 			firstInnerPanel.add(exportButt);
 			firstInnerPanel.revalidate();

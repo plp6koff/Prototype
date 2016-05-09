@@ -21,10 +21,10 @@ public class PrsStat2Util {
 				+ " FROM EMPLOYEE_STATS " 
 				+ " where 1=1 and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) " 
 				+ " union all "
-				+ " SELECT 2,MATCHCODE,  null,  sum(V01),sum( V02),sum(  V03),sum(  V04),sum(  V05),sum(  V06),sum(  V07),sum(  V08),sum(  V09),sum(  V10),sum(  V11),sum(  V12),sum(  V13), null,sum(  V14),sum(  V15),sum(  V16),sum(  V17),sum(  V18),sum(  V19),sum(v11-v02) "
+				+ " SELECT 2,null,  null,  sum(V01),sum( V02),sum(  V03),sum(  V04),sum(  V05),sum(  V06),sum(  V07),sum(  V08),sum(  V09),sum(  V10),sum(  V11),sum(  V12),sum(  V13), null,sum(  V14),sum(  V15),sum(  V16),sum(  V17),sum(  V18),sum(  V19),sum(v11-v02) "
 				+ " FROM EMPLOYEE_STATS  "
 				+ " where 1=1  and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) " 
-				+ " group by 2,MATCHCODE "
+				+ " group by 2 "
 				+ " order by 1,2,3 asc ";
 		
 		

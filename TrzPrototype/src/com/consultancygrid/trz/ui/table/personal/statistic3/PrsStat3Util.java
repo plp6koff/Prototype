@@ -18,7 +18,7 @@ public class PrsStat3Util {
 				 + " union all "
 				 + " SELECT  2, null, sum(MECHNI_RAZHODI_ZA_TRUD) , sum(OBSHTO_NETNA_SUMA), sum(ZAPLATA_PO_BANKA) , sum(ZAPLATA_V_BROI), sum(DANUCI_ZA_RABOTODATEL) from EMPLOYER_COSTS "
 				 + " where 1=1 and  ( PERIOD_CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
-				 + " group by 2,PERIOD_CODE " 
+				 + " group by 2 " 
 				 + " order by 1,2,3 asc ";
 				
 				

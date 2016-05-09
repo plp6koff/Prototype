@@ -424,16 +424,17 @@ public class PrototypeMainFrame extends JFrame {
 		PrsStat2CfgEmplsTable pStatCfgEmpls = new PrsStat2CfgEmplsTable();
 		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		JComboBox periodsComboBox2 = new JComboBox<>(trzComboBoxModel);
-		periodsComboBox2.setBounds(150, 40, 300, 25);
-		periodsComboBox2.setRenderer(new PeriodCustomRender());
+				
+		String[] yearStrings = { "","2012", "2013", "2014", "2015", "2016","2017","2018","2019","2020" };
+		JComboBox<String> yearsCB = new JComboBox<String>(yearStrings);
+		yearsCB.setBounds(150, 80, 300, 25);
 		
 		
 		JButton loadButt = new JButton(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
 		loadButt.setEnabled(true);
 		loadButt.setBounds(650, 40, 150, 25);
-		loadButt.addActionListener(new LoadStatistic2AL(this, frstStatPane2,  comboBoxEmployees2, pStatCfgEmpls, fc));
+		loadButt.addActionListener(new LoadStatistic2AL(this, frstStatPane2,  yearsCB,comboBoxEmployees2, pStatCfgEmpls, fc));
 		frstStatPane2.add(loadButt);
 		
 		
@@ -451,7 +452,7 @@ public class PrototypeMainFrame extends JFrame {
 		header.setDefaultRenderer(new HeaderRenderer(header
 				.getDefaultRenderer()));
 
-		pesonPanel.setBounds(20, 100, 1200, 400);
+		pesonPanel.setBounds(20, 150, 1200, 400);
 		pesonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanel.setAutoscrolls(true);
 		pesonPanel.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
@@ -460,7 +461,7 @@ public class PrototypeMainFrame extends JFrame {
 		
 		frstStatPane2.setLayout(null);
 		frstStatPane2.add(comboBoxEmployees2);
-		frstStatPane2.add(periodsComboBox2);
+		frstStatPane2.add(yearsCB);
 		frstStatPane2.add(pesonPanel);
 		tabbedPane.addTab(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB) + "- 3.2.", frstStatPane2);
@@ -624,7 +625,7 @@ public class PrototypeMainFrame extends JFrame {
 		JButton loadButt = new JButton(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
 		loadButt.setEnabled(true);
-		loadButt.setBounds(650, 40, 150, 25);
+		loadButt.setBounds(650, 40, 200, 25);
 		
 		PrsStat5CfgEmplsTable prsStat5Table = new PrsStat5CfgEmplsTable();
 		loadButt.addActionListener(new LoadStatistic5AL(this, stat5Panel, periodsComboBox1, comboBoxEmployees1, prsStat5Table, fc));

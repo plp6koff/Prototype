@@ -26,6 +26,8 @@ import javax.swing.JTextField;
 
 
 
+
+
 import org.apache.log4j.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
@@ -317,6 +319,7 @@ public class LoadFileAL extends BaseActionListener {
 					
 					// Period Employee Revenue
 					createRevenueEmplPeriod(em, period, employee,  revenue);
+					
 				}
 			}
 		}

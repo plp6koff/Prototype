@@ -69,7 +69,7 @@ public class LoadStatistic1MiniAL extends BaseActionListener {
 			JButton exportButt = new JButton(ResourceLoaderUtil
 					.getLabels(LabelsConstants.STAT_TAB_EXPORT_BUTT) + " Mini");
 			exportButt.setEnabled(true);
-			exportButt.setBounds(1000, 40, 150, 25);
+			exportButt.setBounds(1000, 80, 200, 25);
 			exportButt.addActionListener(new ExportStatistic31MiniAL(mainFrame, fc, personalConfTable, period.getCode()));
 			firstInnerPanel.add(exportButt);
 			firstInnerPanel.revalidate();

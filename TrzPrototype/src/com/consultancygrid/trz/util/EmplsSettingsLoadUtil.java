@@ -58,11 +58,10 @@ public class EmplsSettingsLoadUtil {
 			
 			List<?> rsltIntrn = q1.getResultList();
 			Object[] objcts = (Object[] ) rsltIntrn.get(0);
-			System.out.println("A:" + objcts[0]);
-			System.out.println("B:" + objcts[1]);
-			System.out.println("C:" + objcts[2]);
 			
-			//TODO select for each 
+			checkData(objcts, emplSal, em);
+			
+			 
 			EmployeeSettings emplSettings = null;
 			Vector<Object> oneRow = new Vector<Object>();
 			
@@ -79,11 +78,11 @@ public class EmplsSettingsLoadUtil {
 			//4
 			oneRow.add(emplSal.getV05());
 			//5
-			oneRow.add(objcts[0]);
-			oneRow.add(objcts[1]);
+			oneRow.add(emplSal.getV06());
 			//6
+			oneRow.add(emplSal.getV07());
 			//7
-			oneRow.add(objcts[2]);
+			oneRow.add(emplSal.getV08());
 			//8
 			oneRow.add(emplSal.getV09());
 			//9
@@ -97,6 +96,7 @@ public class EmplsSettingsLoadUtil {
 			Double h = emplSal.getV07() != null ? emplSal.getV07().doubleValue() : 0.0d;
 			Double i = emplSal.getV08() != null ? emplSal.getV08().doubleValue() : 0.0d;
 			Double j = g + i + h;
+			emplSal.setV09(BigDecimal.valueOf(j));
 			
 			Double kMarker = emplSal.getV10() != null ? emplSal.getV10().doubleValue() : 0.0d;
 			
@@ -138,5 +138,43 @@ public class EmplsSettingsLoadUtil {
 			
 		}
 		
+	}
+	
+	
+	private EmployeeSalary checkData(Object[] objcts, EmployeeSalary emplSalary, EntityManager em ) {
+
+		System.out.println("A:" + objcts[0]);
+		System.out.println("B:" + objcts[1]);
+		System.out.println("C:" + objcts[2]);
+		
+		BigDecimal v6View = (BigDecimal) objcts[0];
+		BigDecimal v7View = (BigDecimal) objcts[1];
+		BigDecimal v8View = (BigDecimal) objcts[2];
+		boolean update = false;
+		if (emplSalary.getV06() != null && emplSalary.getV06() != v6View) {
+			emplSalary.setV06(v6View);
+			update = true;
+		}
+		if (emplSalary.getV07() != null && emplSalary.getV07() != v7View) {
+			emplSalary.setV07(v7View);
+			update = true;
+		}
+		if (emplSalary.getV08() != null && emplSalary.getV08() != v8View) {
+			emplSalary.setV08(v8View);
+			update = true;
+		}
+		if (update) {
+			emplSalary.setV09(emplSalary.getV08()
+								.add(emplSalary.getV07())
+								.add(emplSalary.getV06()));
+			try {
+				//em.refresh(emplSalary);
+				em.merge(emplSalary);
+				em.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return emplSalary;
 	}
 }

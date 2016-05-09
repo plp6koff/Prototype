@@ -77,6 +77,8 @@ public class PrsStat2CfgEmplsTableModel extends AbstractTableModel {
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB_31HEAD6));
 		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_31HEAD7));
+		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB_31HEAD4));
 		
 	}

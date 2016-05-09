@@ -55,7 +55,7 @@ public class PrsStat2CfgEmplsTable extends JTable {
 		getColumnModel().getColumn(20).setMinWidth(80);
 		getColumnModel().getColumn(21).setMinWidth(80);
 		getColumnModel().getColumn(22).setMinWidth(80);
-	
+		getColumnModel().getColumn(23).setMinWidth(80);
 		setRowHeight(25);
 	}
 

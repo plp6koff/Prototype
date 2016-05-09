@@ -68,7 +68,7 @@ public class LoadStatistic5AL extends BaseActionListener {
 			JButton exportButt = new JButton(ResourceLoaderUtil
 					.getLabels(LabelsConstants.STAT_TAB_EXPORT_BUTT));
 			exportButt.setEnabled(true);
-			exportButt.setBounds(820, 40, 150, 25);
+			exportButt.setBounds(650, 80, 200, 25);
 			exportButt.addActionListener(new ExportStatistic35AL(mainFrame, fc, personalConfTable));
 			firstInnerPanel.add(exportButt);
 			firstInnerPanel.revalidate();
