@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
@@ -25,6 +26,7 @@ import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
+import com.consultancygrid.trz.util.HibernateUtil;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 /**
@@ -48,16 +50,15 @@ public class EmployeeDeactivationTabComboAL extends BaseActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		EntityManagerFactory factory = null;
+		
 		EntityManager em = null;
+		EntityTransaction trx = null;
 		Set<String> matchCodes = null;
 		try {
 
-			factory = Persistence
-					.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
+			em = HibernateUtil.getEntityManager();
+			trx = em.getTransaction();
+			trx.begin();
 
 			DefaultTableModel employeeModel = (DefaultTableModel) table
 					.getModel();
@@ -106,16 +107,12 @@ public class EmployeeDeactivationTabComboAL extends BaseActionListener {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-			if (em != null && em.isOpen()) {
-				em.getTransaction().rollback();
-				em.close();
+			if (trx!= null && trx.isActive()) {
+				trx.rollback();
 			}
-
 		} finally {
-			if (em != null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
-				factory.close();
+			if (trx!= null && trx.isActive()) {
+				trx.commit();
 			}
 		}
 

@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -21,18 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-
-
-
-
-
-
-
 import org.apache.log4j.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
+import com.consultancygrid.trz.data.StaticDataLoader;
 import com.consultancygrid.trz.data.TrzStaticData;
 import com.consultancygrid.trz.model.AvgInputData;
 import com.consultancygrid.trz.model.Department;
@@ -43,7 +36,6 @@ import com.consultancygrid.trz.model.InputData;
 import com.consultancygrid.trz.model.InputFileType;
 import com.consultancygrid.trz.model.MatchcodeList;
 import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.PeriodSetting;
 import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.RevenueEmplPeriod;
 import com.consultancygrid.trz.model.TrzStatic;
@@ -103,7 +95,7 @@ public class LoadFileAL extends BaseActionListener {
 		String code = this.fieldCode.getText();
 		Set<String> matchCodes = new HashSet<String>();
 		List<Period> allPeriods = null;
-		PeriodComboBoxModel newModel = null;
+		PeriodComboBoxModel newModel =  new PeriodComboBoxModel();
 		try {
 
 			init();
@@ -120,16 +112,17 @@ public class LoadFileAL extends BaseActionListener {
 			em.persist(period);
 			em.flush();
 
-				TrzStaticData data  = persistPersonSettings(period);
-				CSVReaderUtil util = new CSVReaderUtil();
+			TrzStaticData data  = 
+					StaticDataLoader.persistPersonSettings(period, map, em);
+			CSVReaderUtil util = new CSVReaderUtil();
 				
-				if (file != null) {
+			if (file != null) {
 				
 					util.readCSVcarloFibu(file);
 					log.append("Loading: " + file.getName() + "." + newline);
 					LOG.info("Loading: " + file.getName() + "." + newline);
 					log.setCaretPosition(log.getDocument().getLength());
-				} else {
+			} else {
 					final File folder = new File(
 							ResourceLoaderUtil
 									.getConfig(Constants.DEFAULT_DATA_DIR));
@@ -145,8 +138,8 @@ public class LoadFileAL extends BaseActionListener {
 							return;
 						} catch (HeadlessException | IOException e2) {
 							LOG.error(e2);
-						}
 					}
+			}
 					for (final File fileEntry : folder.listFiles()) {
 	
 						LOG.info(fileEntry.getName());
@@ -179,7 +172,7 @@ public class LoadFileAL extends BaseActionListener {
 				allPeriods = (List<Period>) qPeriods.getResultList();
 				newModel = new PeriodComboBoxModel();
 				newModel.addAll(allPeriods);
-			em.flush();
+				em.flush();
 				
 			} catch (Exception e1) {
 				LOG.error(e1);
@@ -229,7 +222,10 @@ public class LoadFileAL extends BaseActionListener {
 	 * @param matchCodes
 	 * @param vauchers
 	 */
-	public void empl2Period2Depart(EntityManager em, Period period, Set<String> matchCodes, TrzStaticData data ) {
+	public void empl2Period2Depart(EntityManager em,
+								   Period period, 
+								   Set<String> matchCodes, 
+								   TrzStaticData data ) {
 
 		Map<String, Department> codeDeptPair = createDepEmplPeriod(period);
 		BigDecimal bPeriodRevenue = person2Department(matchCodes, codeDeptPair,	period, data);
@@ -248,7 +244,9 @@ public class LoadFileAL extends BaseActionListener {
 	 * @return
 	 */
 	private BigDecimal person2Department(Set<String> matchCodes,
-			Map<String, Department> codeDeptPair, Period period, TrzStaticData data) {
+										Map<String, Department> codeDeptPair,
+										Period period, 
+										TrzStaticData data) {
 
 		
 		Query avgQ = em
@@ -304,15 +302,7 @@ public class LoadFileAL extends BaseActionListener {
 					EmployeeSettingsUtil.createSettings(em, period, employee);
 					// Salary
 					LOG.debug("Start Salary");
-					EmployeeSalaryUtil.createSalary(em, period, employee, data.getVauchers(),
-							data.getDOD(),
-							data.getOSIGUROVKI_RABOTODATEL(), 
-							 data.getOSIGUROVKI_SLUJITEL(),
-							 data.getCACHE_TAX(), 
-							 data.getDodValue(),
-							 data.getoRabotodatelValue(),
-							 data.getoSlujitelValue(),
-							 data.getCacheTaxValue());
+					EmployeeSalaryUtil.createSalary(em, period, employee, data);
 					// Department to Period
 					LOG.debug("Start Dept Period");
 					createEmplDeptPeriod(em, period, employee, department);
@@ -371,80 +361,13 @@ public class LoadFileAL extends BaseActionListener {
 				if (empls != null && !empls.isEmpty()) {
 					Employee employee = empls.get(0);
 					EmployeeSettingsUtil.createSettings(em, period, employee);
-					EmployeeSalaryUtil.createSalary(em, period, employee, data.getVauchers(),
-							data.getDOD(),
-							data.getOSIGUROVKI_RABOTODATEL(), 
-							 data.getOSIGUROVKI_SLUJITEL(),
-							 data.getCACHE_TAX(), 
-							 data.getDodValue(),
-							 data.getoRabotodatelValue(),
-							 data.getoSlujitelValue(),
-							 data.getCacheTaxValue());
+					EmployeeSalaryUtil.createSalary(em, period, employee, data);
 					createRevenueEmplPeriod(em, period, employee, revenue);
 				}
 		}
 		}
 	}
 
-	private TrzStaticData persistPersonSettings(Period period) {
-
-		Double vauchers = 0.0d;
-		TrzStaticData result = new TrzStaticData();
-		
-		TrzStatic DOD = null;
-		TrzStatic OSIGUROVKI_RABOTODATEL = null;
-		TrzStatic OSIGUROVKI_SLUJITEL = null;
-		TrzStatic CACHE_TAX = null;
-		Double dodValue = 0.0d;
-		Double oRabotodatelValue = 0.0d;
-		Double oSlujitelValue = 0.0d;
-		Double cacheTaxValue = 0.0d;
-				
-		for (Entry<TrzStatic, JTextField> entry : map.entrySet()) {
-
-			PeriodSetting ps = new PeriodSetting();
-			ps.setPeriod(period);
-			ps.setTrzStatic(entry.getKey());
-			ps.setValue(entry.getValue().getText());
-			
-			if ("DOD".equals(entry.getKey().getKey())) {
-				DOD = entry.getKey();
-				dodValue = Double.valueOf(entry.getValue().getText());
-			} else if("OSIGUROVKI_RABOTODATEL".equals(entry.getKey().getKey())) {
-				OSIGUROVKI_RABOTODATEL = entry.getKey();
-				oRabotodatelValue = Double.valueOf(entry.getValue().getText());
-			} else if("OSIGUROVKI_SLUJITEL".equals(entry.getKey().getKey())) {
-				OSIGUROVKI_SLUJITEL = entry.getKey();
-				oSlujitelValue = Double.valueOf(entry.getValue().getText());
-			} else if("CACHE_TAX".equals(entry.getKey().getKey())) {
-				CACHE_TAX = entry.getKey();
-				cacheTaxValue = Double.valueOf(entry.getValue().getText());
-			} else if (("VAUCHER1".equals(entry.getKey().getKey()))
-					|| ("VAUCHER2".equals(entry.getKey().getKey()))) {
-
-				vauchers = vauchers
-						+ Double.valueOf(entry.getValue().getText());
-			}
-			
-			
-			em.persist(ps);
-		}
-		result.setCACHE_TAX(CACHE_TAX);
-		result.setCacheTaxValue(cacheTaxValue);
-		
-		result.setVauchers(vauchers);
-		
-		result.setDOD(DOD);
-		result.setDodValue(dodValue);
-		
-		result.setoRabotodatelValue(oRabotodatelValue);
-		result.setOSIGUROVKI_RABOTODATEL(OSIGUROVKI_RABOTODATEL);
-		
-		result.setOSIGUROVKI_SLUJITEL(OSIGUROVKI_SLUJITEL);
-		result.setoSlujitelValue(oSlujitelValue);
-		
-		return result;
-	}
 
 	/**
 	 * Pupulate

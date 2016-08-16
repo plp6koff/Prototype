@@ -76,52 +76,25 @@ public class AddEmpl2PeriodAL extends BaseActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
-		try {
+	public void eventCore() {
 			
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+		Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
+		Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
+		Department dept = ((Department) comboBoxDepartment.getModel().getSelectedItem());
 			
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
-			
-			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
-			Employee empl = ((Employee) comboBoxEmployee.getModel().getSelectedItem());
-			Department dept = ((Department) comboBoxDepartment.getModel().getSelectedItem());
-			
-			createEmplDeptPeriod(em, period, empl, dept);
-			createSettings(em, period, empl);
-			createSalary(em, period, empl);
+		createEmplDeptPeriod(em, period, empl, dept);
+		createSettings(em, period, empl);
+		createSalary(em, period, empl);
 				
-			reinitForm(em);	
-			try {
+		reinitForm(em);	
+		try {
 				JOptionPane.showMessageDialog(mainFrame, JOptionPane.INFORMATION_MESSAGE ,
 						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_SUCCESS), JOptionPane.INFORMATION_MESSAGE);
-			} catch (HeadlessException | IOException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-		} catch (Exception e1) {
-			Logger.error(e1);
-			try {
 				JOptionPane.showMessageDialog(mainFrame, JOptionPane.ERROR_MESSAGE ,
-						 ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ERROR), JOptionPane.ERROR_MESSAGE);
-			} catch (HeadlessException | IOException e2) {
-				// TODO Auto-generated catch block
+						ResourceLoaderUtil.getLabels(LabelsConstants.SET_TAB_EMPL2PER_ERROR), JOptionPane.ERROR_MESSAGE);
+		} catch (HeadlessException | IOException e2) {
 				e2.printStackTrace();
-			}
-			if (em!= null && em.isOpen()) {
-				em.getTransaction().rollback();
-				em.close();
-			}
-		} finally {
-			if (em!= null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
-				factory.close();
-			}
-		}	
+		}
 	}
 	
 	private void reinitForm(EntityManager em) {

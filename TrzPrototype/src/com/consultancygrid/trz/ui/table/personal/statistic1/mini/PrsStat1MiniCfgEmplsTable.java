@@ -31,13 +31,13 @@ public class PrsStat1MiniCfgEmplsTable extends JTable {
 		setBorder(new EmptyBorder(1, 1, 1, 1));
 		setModel(new PrsStat1MiniCfgEmplsTableModel());
 		getColumnModel().getColumn(0).setMinWidth(150);
-		getColumnModel().getColumn(1).setMaxWidth(150);
-		getColumnModel().getColumn(2).setMinWidth(110);
+		getColumnModel().getColumn(1).setMaxWidth(250);
+		getColumnModel().getColumn(2).setMinWidth(150);
 		getColumnModel().getColumn(3).setMinWidth(150);
-		getColumnModel().getColumn(4).setMinWidth(150);
-		getColumnModel().getColumn(5).setMinWidth(110);
-		getColumnModel().getColumn(6).setMinWidth(110);
-		
+		getColumnModel().getColumn(4).setMaxWidth(250);
+		getColumnModel().getColumn(5).setMinWidth(150);
+		getColumnModel().getColumn(6).setMinWidth(150);
+		getColumnModel().getColumn(7).setMinWidth(150);
 		setRowHeight(25);
 	}
 

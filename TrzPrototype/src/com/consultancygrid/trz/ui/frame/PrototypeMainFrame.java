@@ -145,6 +145,7 @@ public class PrototypeMainFrame extends JFrame {
 					if (tx != null && tx.isActive()) {
 						tx.commit();
 					}
+					System.out.println("Main EM is closing");
 				}
 				
 			}
@@ -225,6 +226,7 @@ public class PrototypeMainFrame extends JFrame {
 		tabbedPane.setIconAt(2, myAppStat);
 		
 		drawStatistic31FirstTab(tabbedPaneStatistics, trzComboBoxModel);
+		drawStatistic3MiniFirstTab(tabbedPaneStatistics, trzComboBoxModel);
 		drawStatistic32FirstTab(tabbedPaneStatistics, trzComboBoxModel, emplComboBoxModel);
 		drawStat33Tab(tabbedPaneStatistics, trzComboBoxModel);		
 		drawStat34Tab(tabbedPaneStatistics, trzComboBoxModel, emplComboBoxModel);
@@ -319,23 +321,13 @@ public class PrototypeMainFrame extends JFrame {
 		JPanel frstStatPanel = new JPanel(null);
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//		JComboBox comboBoxEmployees1 = new JComboBox<>(emplComboBoxModel);
-//		personalConfTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-//		comboBoxEmployees1.setBounds(150, 40, 300, 25);
-//		comboBoxEmployees1.setRenderer(new EmployeeCustomRender());
 		JComboBox periodsComboBox1 = new JComboBox<>(trzComboBoxModel);
 		
 		PrsStat1CfgEmplsTable pStatCfgEmpls = new PrsStat1CfgEmplsTable();
 		pStatCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		PrsStat1MiniCfgEmplsTable pStatMiniCfgEmpls = new PrsStat1MiniCfgEmplsTable();
-		pStatMiniCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		
 		periodsComboBox1.setBounds(150, 40, 300, 25);
 		periodsComboBox1.setRenderer(new PeriodCustomRender());
-		
 		
 		JButton loadButt = new JButton(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT));
@@ -343,14 +335,6 @@ public class PrototypeMainFrame extends JFrame {
 		loadButt.setBounds(650, 40, 300, 25);
 		loadButt.addActionListener(new LoadStatistic1AL(this, frstStatPanel, periodsComboBox1, pStatCfgEmpls, fc));
 		frstStatPanel.add(loadButt);
-		
-		
-		JButton loadMiniButt = new JButton(ResourceLoaderUtil
-				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT) + " Short");
-		loadMiniButt.setEnabled(true);
-		loadMiniButt.setBounds(650, 80, 300, 25);
-		loadMiniButt.addActionListener(new LoadStatistic1MiniAL(this, frstStatPanel, periodsComboBox1, pStatMiniCfgEmpls, fc));
-		frstStatPanel.add(loadMiniButt);
 		
 		JScrollPane pesonPanel = new JScrollPane(pStatCfgEmpls);
 		pesonPanel.setLayout(new ScrollPaneLayout());
@@ -372,6 +356,45 @@ public class PrototypeMainFrame extends JFrame {
 		pesonPanel.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB) + " 3.1."));
 		
+		frstStatPanel.setLayout(null);
+		frstStatPanel.add(periodsComboBox1);
+		frstStatPanel.add(pesonPanel);
+		tabbedPane.addTab(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.1.", frstStatPanel);
+	}
+	
+	/**
+	 * 
+	 * @param comboBox
+	 * @param tabbedPane
+	 * @throws IOException
+	 */
+	private void drawStatistic3MiniFirstTab(JTabbedPane tabbedPane, 
+			PeriodComboBoxModel trzComboBoxModel) throws IOException {
+		
+		
+		JPanel frstStatPanel = new JPanel(null);
+		
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		JComboBox periodsComboBox1 = new JComboBox<>(trzComboBoxModel);
+		
+		PrsStat1MiniCfgEmplsTable pStatMiniCfgEmpls = new PrsStat1MiniCfgEmplsTable();
+		pStatMiniCfgEmpls.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+		periodsComboBox1.setBounds(150, 40, 300, 25);
+		periodsComboBox1.setRenderer(new PeriodCustomRender());
+		
+
+		JButton loadMiniButt = new JButton(ResourceLoaderUtil
+				.getLabels(LabelsConstants.STAT_TAB_LOAD_BUTT) + " Short");
+		loadMiniButt.setEnabled(true);
+		loadMiniButt.setBounds(650, 40, 300, 25);
+		loadMiniButt.addActionListener(new LoadStatistic1MiniAL(this, frstStatPanel, periodsComboBox1, pStatMiniCfgEmpls, fc));
+		frstStatPanel.add(loadMiniButt);
+			
 		JScrollPane pesonPanelMini = new JScrollPane(pStatMiniCfgEmpls);
 		pesonPanelMini.setLayout(new ScrollPaneLayout());
 		pesonPanelMini.setColumnHeader(new JViewport() {
@@ -386,22 +409,18 @@ public class PrototypeMainFrame extends JFrame {
 		headerMini.setDefaultRenderer(new HeaderRenderer(headerMini
 				.getDefaultRenderer()));
 
-		pesonPanelMini.setBounds(20, 560, 800, 300);
+		pesonPanelMini.setBounds(20, 100, 1000, 600);
 		pesonPanelMini.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pesonPanelMini.setAutoscrolls(true);
 		pesonPanelMini.setBorder(BorderFactory.createTitledBorder(ResourceLoaderUtil
 				.getLabels(LabelsConstants.STAT_TAB) + " 3.1. Mini"));
 		
 		frstStatPanel.setLayout(null);
-//		frstStatPanel.add(comboBoxEmployees);
 		frstStatPanel.add(periodsComboBox1);
-		frstStatPanel.add(pesonPanel);
 		frstStatPanel.add(pesonPanelMini);
 		tabbedPane.addTab(ResourceLoaderUtil
-				.getLabels(LabelsConstants.STAT_TAB) + " 3.1.", frstStatPanel);
+				.getLabels(LabelsConstants.STAT_TAB) + " 3.1. Mini", frstStatPanel);
 	}
-	
-	
 	/**
 	 * 
 	 * @param comboBox

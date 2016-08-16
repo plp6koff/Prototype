@@ -1,21 +1,9 @@
 package com.consultancygrid.trz.actionListener.personal;
 
-import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
-
-import java.awt.Dialog;
-import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
-import java.util.Map.Entry;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -25,23 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.pmw.tinylog.Logger;
-
 import com.consultancygrid.trz.actionListener.BaseActionListener;
-import com.consultancygrid.trz.base.Constants;
 import com.consultancygrid.trz.base.LabelsConstants;
 import com.consultancygrid.trz.model.Department;
 import com.consultancygrid.trz.model.Employee;
-import com.consultancygrid.trz.model.EmployeeSalary;
-import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.PeriodSetting;
-import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTable;
 import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTableModel;
-import com.consultancygrid.trz.util.EmplsSettingsLoadUtil;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class PersonRowEditAL extends BaseActionListener{
@@ -63,16 +42,7 @@ public class PersonRowEditAL extends BaseActionListener{
 		this.comboBoxYear = comboBoxYear;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		EntityManagerFactory factory = null;
-		EntityManager em = null;
-		try {
-			
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
+	protected void eventCore() throws IOException {
 			
 			Employee employee =  (Employee)comboBoxEmployee.getSelectedItem();
 			String year = (String) comboBoxYear.getSelectedItem();
@@ -114,7 +84,6 @@ public class PersonRowEditAL extends BaseActionListener{
 			
 			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL1, tf1);
 			
-			
 			JLabel l6 = new JLabel(ResourceLoaderUtil
 					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL3));
 			l6.setBounds(30, 100, 150, 60);
@@ -125,7 +94,6 @@ public class PersonRowEditAL extends BaseActionListener{
 			panel.add(tf6);
 			
 			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL3, tf6);
-			
 			
 			JLabel l2 = new JLabel(ResourceLoaderUtil
 					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL10));
@@ -159,7 +127,6 @@ public class PersonRowEditAL extends BaseActionListener{
 			panel.add(tf4);
 			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL14, tf4);
 			
-			
 			JLabel l5 = new JLabel(ResourceLoaderUtil
 					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL20));
 			l5.setBounds(30, 380, 150, 25);
@@ -170,7 +137,6 @@ public class PersonRowEditAL extends BaseActionListener{
 			panel.add(tf5);
 			
 			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL20, tf5);
-			
 			
 			JLabel l7 = new JLabel(ResourceLoaderUtil
 					.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL22));
@@ -184,7 +150,6 @@ public class PersonRowEditAL extends BaseActionListener{
 			
 			map.put(LabelsConstants.PERSONAL_CFG_HEADER_COL22, tf7);
 			
-			
 			JButton saveBtn = new JButton(ResourceLoaderUtil.getLabels(LabelsConstants.PERSONAL_CFG_SAVE_BTN));
 			saveBtn.setBounds(50, 500, 100, 25);
 			saveBtn.addActionListener(new PersonRowSaveAL(mainFrame, personalConfTable, comboBoxEmployee, comboBoxYear, map, popUp));
@@ -194,21 +159,9 @@ public class PersonRowEditAL extends BaseActionListener{
 			cnclBtn.setBounds(170, 500, 100, 25); 
 			panel.add(cnclBtn);
 			
-			//EmplsSettingsLoadUtil emplsComboUtil = new EmplsSettingsLoadUtil();
-			//emplsComboUtil.load(employee, em, model);
-			
 			personalConfTable.validate();
 			personalConfTable.repaint();
 			
-		} catch (Exception e1) {
-			Logger.error(e1);
-
-		} finally {
-			if (em!= null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
-			}
-		}	
 	}
 	
 }

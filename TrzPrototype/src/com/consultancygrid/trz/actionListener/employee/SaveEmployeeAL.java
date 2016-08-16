@@ -1,6 +1,11 @@
 package com.consultancygrid.trz.actionListener.employee;
-import static com.consultancygrid.trz.base.LabelsConstants.*;
-import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
+import static com.consultancygrid.trz.base.LabelsConstants.ALERT_MSG_ERR;
+import static com.consultancygrid.trz.base.LabelsConstants.SET_CRT_EMPL_FNAME;
+import static com.consultancygrid.trz.base.LabelsConstants.SET_CRT_EMPL_LNAME;
+import static com.consultancygrid.trz.base.LabelsConstants.SET_CRT_EMPL_MATCHODE;
+import static com.consultancygrid.trz.base.LabelsConstants.SET_CRT_EMPL_SAVE_ERR;
+import static com.consultancygrid.trz.base.LabelsConstants.SET_CRT_EMPL_VALID1;
+import static com.consultancygrid.trz.base.LabelsConstants.SET_CRT_EMPL_VALID2;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,11 +14,9 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.EntityTransaction;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,16 +27,15 @@ import org.pmw.tinylog.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
+import com.consultancygrid.trz.data.StaticDataLoader;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.PeriodSetting;
-import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
 import com.consultancygrid.trz.ui.table.employee.EmployeeActiveTableModel;
-import com.consultancygrid.trz.ui.table.personal.PersonalCfgEmplsTableModel;
 import com.consultancygrid.trz.util.EmployeeSalaryUtil;
 import com.consultancygrid.trz.util.EmployeeSettingsUtil;
+import com.consultancygrid.trz.util.HibernateUtil;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class SaveEmployeeAL extends BaseActionListener {
@@ -57,15 +59,13 @@ public class SaveEmployeeAL extends BaseActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		EntityManagerFactory factory = null;
 		EntityManager em = null;
+		EntityTransaction trx = null;
 		try {
 
-			factory = Persistence
-					.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
+			em = HibernateUtil.getEntityManager();
+			trx = em.getTransaction();
+			trx.begin();;
 
 			JTextField fnField = params.get(SET_CRT_EMPL_FNAME);
 			JTextField lnField = params.get(SET_CRT_EMPL_LNAME);
@@ -84,39 +84,6 @@ public class SaveEmployeeAL extends BaseActionListener {
 				
 				Period period = periods.get(0);
 				
-				double vauchers = 0.0d;
-				TrzStatic DOD = null;
-				TrzStatic OSIGUROVKI_RABOTODATEL = null;
-				TrzStatic OSIGUROVKI_SLUJITEL = null;
-				TrzStatic CACHE_TAX = null;
-				Double dodValue = 0.0d;
-				Double oRabotodatelValue = 0.0d;
-				Double oSlujitelValue = 0.0d;
-				Double cacheTaxValue = 0.0d;
-				for (PeriodSetting singlePS : period.getPeriodSettings()) {
-					
-					TrzStatic singleTrz = singlePS.getTrzStatic();
-					
-					if ("DOD".equals(singleTrz.getKey())) {
-						DOD = singleTrz;
-						dodValue = Double.valueOf(singlePS.getValue());
-					} else if("OSIGUROVKI_RABOTODATEL".equals(singleTrz.getKey())) {
-						OSIGUROVKI_RABOTODATEL = singleTrz;
-						oRabotodatelValue = Double.valueOf(singlePS.getValue());
-					} else if("OSIGUROVKI_SLUJITEL".equals(singleTrz.getKey())) {
-						OSIGUROVKI_SLUJITEL = singleTrz;
-						oSlujitelValue = Double.valueOf(singlePS.getValue());
-					} else if("CACHE_TAX".equals(singleTrz.getKey())) {
-						CACHE_TAX = singleTrz;
-						cacheTaxValue = Double.valueOf(singlePS.getValue());
-					} else if  (("VAUCHER1".equals(singlePS.getTrzStatic().getKey()))
-							|| ("VAUCHER2".equals(singlePS.getTrzStatic().getKey()))) {
-						
-						vauchers = vauchers + Double.valueOf(singlePS.getValue());
-					}
-				}	
-				
-				
 				if (firstName!= null && !"".equals(firstName)
 					&&	lastName!= null && !"".equals(lastName)
 					&&  matchCode!= null && !"".equals(matchCode)) {
@@ -127,9 +94,8 @@ public class SaveEmployeeAL extends BaseActionListener {
 					employee.setLastName(lastName);
 					employee.setMatchCode(matchCode);
 					em.persist(employee);
-					EmployeeSalaryUtil.createSalary(em, period, employee, vauchers,
-							DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL, CACHE_TAX,
-							dodValue, oRabotodatelValue, oSlujitelValue, cacheTaxValue);
+					EmployeeSalaryUtil.createSalary(em, period, employee,
+							StaticDataLoader.load(period.getId(), em));
 					EmployeeSettingsUtil.createSettings(em, period, employee);
 					EmplComboBoxModel model = (EmplComboBoxModel) employeesCombo.getModel();
 					model.addItem(employee);
@@ -179,16 +145,12 @@ public class SaveEmployeeAL extends BaseActionListener {
 				} catch (HeadlessException | IOException e2) {
 					e2.printStackTrace();
 				}
-			if (em != null && em.isOpen()) {
-				em.getTransaction().rollback();
-				em.close();
-			}
-
+				if (trx!= null && trx.isActive()) {
+					trx.rollback();
+				}
 		} finally {
-			if (em != null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
-				factory.close();
+			if (trx!= null && trx.isActive()) {
+				trx.commit();
 			}
 		}
 	}

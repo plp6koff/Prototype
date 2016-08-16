@@ -35,6 +35,8 @@ public class PrsStat1MiniCfgEmplsTableModel extends AbstractTableModel {
 		// Init headers
 		tableHeaders.add("MATCHCODE");
 		tableHeaders.add(ResourceLoaderUtil
+				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL0));
+		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL19));
 		tableHeaders.add(ResourceLoaderUtil
 				.getLabels(LabelsConstants.PERSONAL_CFG_HEADER_COL16));

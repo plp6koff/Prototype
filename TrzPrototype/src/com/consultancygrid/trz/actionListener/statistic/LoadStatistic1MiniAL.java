@@ -24,7 +24,6 @@ public class LoadStatistic1MiniAL extends BaseActionListener {
 
 
 	private JPanel firstInnerPanel;
-	//private JComboBox<Employee> comboBoxEmployee;
 	private JFileChooser fc;
 	private JComboBox<Period> comboBoxPeriod;
 	private PrsStat1MiniCfgEmplsTable personalConfTable;
@@ -50,10 +49,7 @@ public class LoadStatistic1MiniAL extends BaseActionListener {
 		try {
 			init();
 			PrsStat1MiniCfgEmplsTableModel model = new PrsStat1MiniCfgEmplsTableModel();
-			//EmplComboBoxModel emplMod = ((EmplComboBoxModel) comboBoxEmployee.getModel());
 			PeriodComboBoxModel periodMod = ((PeriodComboBoxModel) comboBoxPeriod.getModel());
-			
-			//Employee employee = emplMod.getSelectedItem();
 			Period 	 period   = periodMod.getSelectedItem();
 			
 			if (//employee == null || 
@@ -69,7 +65,7 @@ public class LoadStatistic1MiniAL extends BaseActionListener {
 			JButton exportButt = new JButton(ResourceLoaderUtil
 					.getLabels(LabelsConstants.STAT_TAB_EXPORT_BUTT) + " Mini");
 			exportButt.setEnabled(true);
-			exportButt.setBounds(1000, 80, 200, 25);
+			exportButt.setBounds(1000, 40, 200, 25);
 			exportButt.addActionListener(new ExportStatistic31MiniAL(mainFrame, fc, personalConfTable, period.getCode()));
 			firstInnerPanel.add(exportButt);
 			firstInnerPanel.revalidate();

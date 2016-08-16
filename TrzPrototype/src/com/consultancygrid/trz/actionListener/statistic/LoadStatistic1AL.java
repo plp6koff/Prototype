@@ -24,7 +24,6 @@ public class LoadStatistic1AL extends BaseActionListener {
 
 
 	private JPanel firstInnerPanel;
-	//private JComboBox<Employee> comboBoxEmployee;
 	private JFileChooser fc;
 	private JComboBox<Period> comboBoxPeriod;
 	private PrsStat1CfgEmplsTable personalConfTable;
@@ -50,10 +49,8 @@ public class LoadStatistic1AL extends BaseActionListener {
 		try {
 			init();
 			PrsStat1CfgEmplsTableModel model = new PrsStat1CfgEmplsTableModel();
-			//EmplComboBoxModel emplMod = ((EmplComboBoxModel) comboBoxEmployee.getModel());
 			PeriodComboBoxModel periodMod = ((PeriodComboBoxModel) comboBoxPeriod.getModel());
 			
-			//Employee employee = emplMod.getSelectedItem();
 			Period 	 period   = periodMod.getSelectedItem();
 			
 			if (//employee == null || 

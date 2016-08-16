@@ -15,11 +15,11 @@ public class PrsStat1MiniUtil {
 			String periodCode) {
 
 		Vector tableData = new Vector();
-		String queryNative = "SELECT 1,MATCHCODE, V18, V15,  V02,   V19, ZAPLATA_V_BROI, V14, CODE "
+		String queryNative = "SELECT 1,MATCHCODE, CODE,  V18, V15,  V02,   V19, ZAPLATA_V_BROI, V14 "
 				+ " FROM EMPLOYEE_STATS  "
 				+ " where 1=1 and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
 				+ " union all "
-				+ " SELECT 2,null, sum(V18),sum(V15),sum(V02),sum(V19),sum(ZAPLATA_V_BROI),sum(V14) , null"
+				+ " SELECT 2,null, null, sum(V18),sum(V15),sum(V02),sum(V19),sum(ZAPLATA_V_BROI),sum(V14) "
 				+ " FROM EMPLOYEE_STATS  "
 				+ " where 1=1  and ( MATCHCODE=:P_MATCHCODE or :P_MATCHCODE is null)  and ( CODE like :P_PERIODCODE||'%' or :P_PERIODCODE is null) "
 				+ " group by 2 " + " order by 1,2,3 asc ";
@@ -34,14 +34,14 @@ public class PrsStat1MiniUtil {
 			// TODO select for each
 			Vector<Object> oneRow = new Vector<Object>();
 			int i = 1;
-			boolean boldRow = (null == currentRow[8] || " ".equals(currentRow[8]) || "N/A".equals(currentRow[8]));
+			boolean boldRow = (null == currentRow[2] || " ".equals(currentRow[2]) || "N/A".equals(currentRow[2]));
 			
-			while (i <= 4) {
+			while (i <= 5) {
 				setData(oneRow, currentRow, i, boldRow);
 				i ++;
 			}
 			
-			Object zpltBroi = (currentRow[6] == null ? "0.0" : currentRow[6]);
+			Object zpltBroi = (currentRow[7] == null ? "0.0" : currentRow[7]);
 			BigDecimal zpltBroiBD = null;
 			if (zpltBroi instanceof BigDecimal) {
 				zpltBroiBD = (BigDecimal) zpltBroi;
@@ -50,7 +50,7 @@ public class PrsStat1MiniUtil {
 			}
 			setBoldData(oneRow, boldRow, zpltBroiBD.toString());
 			
-			Object avans = (currentRow[5] == null ? "0.0" : currentRow[5]);
+			Object avans = (currentRow[6] == null ? "0.0" : currentRow[6]);
 			BigDecimal avansBD = null;
 			if (avans instanceof BigDecimal) {
 				avansBD = (BigDecimal) avans;
@@ -59,7 +59,7 @@ public class PrsStat1MiniUtil {
 			}
 			setBoldData(oneRow, boldRow, avansBD.toString());
 			
-			Object vaucher = (currentRow[7] == null ? "0.0" : currentRow[7]);
+			Object vaucher = (currentRow[8] == null ? "0.0" : currentRow[8]);
 			BigDecimal vaucherBD = null;
 			if (vaucher instanceof BigDecimal) {
 				vaucherBD = (BigDecimal) vaucher;

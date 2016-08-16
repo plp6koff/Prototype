@@ -12,14 +12,18 @@ import com.consultancygrid.trz.model.Period;
 
 public class EmployeeSettingsUtil {
 
+	private static String SQL 
+	= " from EmployeeSettings as settings  where  settings.employee.id = :employeeId order by settings.period.code desc";
+	private static String EMPL_ID_PARAM = "employeeId"; 
+	
 	public static void createSettings(EntityManager em, Period period, Employee empl) {
 
 		EmployeeSettings settings = new EmployeeSettings();
 		settings.setPeriod(period);
 		settings.setEmployee(empl);
 
-		Query q = em.createQuery(" from EmployeeSettings as settings  where  settings.employee.id = :employeeId order by settings.period.code desc");
-		q.setParameter("employeeId", empl.getId());
+		Query q = em.createQuery(SQL);
+		q.setParameter(EMPL_ID_PARAM, empl.getId());
 		List<EmployeeSettings> emplSettingsList = (List<EmployeeSettings>) q.getResultList();
 		EmployeeSettings initSettings = null;
 		if (emplSettingsList != null && !emplSettingsList.isEmpty()) {

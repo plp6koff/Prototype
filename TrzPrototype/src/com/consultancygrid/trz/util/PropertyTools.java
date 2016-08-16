@@ -7,18 +7,27 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-
+/**
+ * Utility class used for manipulation with property files
+ * 
+ * @author Nikolai Gagov (2008-4-18)
+ * 
+ * <br>
+ *         <b>History:</b> <br>
+ *         2008-4-18 Nikolai Gagov created <br>
+ */
 public class PropertyTools {
 
-	//private static final Log   log				= LogFactory.getLog(PropertyTools.class);
-	private static final Logger log = Logger.getLogger(PropertyTools.class);
-	
-	public static final String PROPERTIES_VERSION = "properties.version";
+	// private static final Log log = LogFactory.getLog(PropertyTools.class);
+	private static final Logger log				= Logger.getLogger(PropertyTools.class);
+
+	public static final String  PROPERTIES_VERSION = "properties.version";
 
 	protected PropertyTools() {
 	}
@@ -43,6 +52,30 @@ public class PropertyTools {
 				propsIs.close();
 			}
 		}
+		return props;
+	}
+
+	/**
+	 * Loads external property file
+	 * 
+	 * @param propertyFile
+	 * @return loaded property file inside Properties object
+	 * @throws IOEXception
+	 */
+	public static Properties loadExternalPropertyFile(String propertyFile) throws IOException {
+
+		InputStream in = null;
+		final Properties props = new Properties();
+
+		try {
+			in = new FileInputStream(propertyFile);
+			props.load(in);
+		} catch (FileNotFoundException ex) {
+			log.error(ex);
+		} finally {
+			in.close();
+		}
+
 		return props;
 	}
 
@@ -86,8 +119,8 @@ public class PropertyTools {
 	/**
 	 * 
 	 * Tries to load a properties from the file system. <br>
-	 * 1. If the file doesn't exist, loads the properties from resource,
-	 * creates the external file by saving in it the contents of the resource
+	 * 1. If the file doesn't exist, loads the properties from resource, creates
+	 * the external file by saving in it the contents of the resource
 	 * properties, and returns the loaded from the resources properties.<br>
 	 * 2. If the external file does exist, reads the version of both (external
 	 * and resource) property files from a special versionProperty.<br>
@@ -125,7 +158,8 @@ public class PropertyTools {
 			}
 			int fileVersion = getPropertiesVersion(fileProperties, versionProperty);
 			int resourcePropsVersion = getPropertiesVersion(result, versionProperty);
-			log.info(MessageFormat.format("External file version: {0}. Resource file version: {1}", fileVersion, resourcePropsVersion));
+			log.info(MessageFormat.format("External file version: {0}. Resource file version: {1}", fileVersion,
+										  resourcePropsVersion));
 			if (fileVersion >= resourcePropsVersion) {
 				result = fileProperties;
 			} else {
@@ -135,7 +169,7 @@ public class PropertyTools {
 				FileOutputStream fos = new FileOutputStream(externalFile);
 				try {
 					result.store(fos, MessageFormat.format("File overwritten due to newer version appeared in resources.\n"
-														   + "Resource used:{0}\n" + "Old properties was:\n{1}",
+																   + "Resource used:{0}\n" + "Old properties was:\n{1}",
 														   defaultPropertiesResource, oldProperties.toString()));
 				} finally {
 					fos.close();
@@ -179,4 +213,23 @@ public class PropertyTools {
 		return stream;
 	}
 
+	public static URL getResource(String resourceName) {
+		final String stripped = resourceName.startsWith("/") ? resourceName.substring(1) : resourceName;
+		return getResource(resourceName, stripped);
+	}
+
+	private static URL getResource(String resourceName, String stripped) {
+		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		URL url = null;
+		if (classLoader != null) {
+			url = classLoader.getResource(stripped);
+		}
+		if (url == null) {
+			url = PropertyTools.class.getResource(resourceName);
+		}
+		if (url == null) {
+			url = PropertyTools.class.getClassLoader().getResource(stripped);
+		}
+		return url;
+	}
 }

@@ -18,6 +18,8 @@ import org.apache.log4j.Logger;
 
 import com.consultancygrid.trz.actionListener.BaseActionListener;
 import com.consultancygrid.trz.base.LabelsConstants;
+import com.consultancygrid.trz.data.StaticDataLoader;
+import com.consultancygrid.trz.data.TrzStaticData;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.EmployeeSettings;
@@ -276,8 +278,6 @@ public class GroupSaveRowAL extends BaseActionListener {
 		} finally {
 			commit();
 		}
-
-
 	}
 
 	private void saveSalary(
@@ -287,11 +287,7 @@ public class GroupSaveRowAL extends BaseActionListener {
 			Period period, 
 			String firstName,
 			String lastName) {
-
-		// try {
-		//
-		// init();
-
+		
 		Query qSal = em
 				.createQuery("select sal from EmployeeSalary as sal  join sal.employee as empl  where "
 						+ "  empl.firstName = :firstName and empl.lastName = :lastName and sal.period.id = :periodId");
@@ -299,55 +295,13 @@ public class GroupSaveRowAL extends BaseActionListener {
 		qSal.setParameter("firstName", firstName);
 		qSal.setParameter("lastName", lastName);
 
-		List<EmployeeSalary> allSallaries = (List<EmployeeSalary>) qSal
-				.getResultList();
+		@SuppressWarnings("unchecked")
+		List<EmployeeSalary> allSallaries = (List<EmployeeSalary>) qSal.getResultList();
 		EmployeeSalary salary = allSallaries.get(0);
 
-		Query qPeriodTrzStatic = em
-				.createQuery(" from PeriodSetting as pS where period.id = :periodId");
-		qPeriodTrzStatic.setParameter("periodId", period.getId());
-
-		List<PeriodSetting> settings = (List<PeriodSetting>) qPeriodTrzStatic
-				.getResultList();
-
-		TrzStatic DOD = null;
-		TrzStatic OSIGUROVKI_RABOTODATEL = null;
-		TrzStatic OSIGUROVKI_SLUJITEL = null;
-		TrzStatic CACHE_TAX = null;
-		Double dodValue = 0.0d;
-		Double oRabotodatelValue = 0.0d;
-		Double oSlujitelValue = 0.0d;
-		Double cacheTaxValue = 0.0d;
-		for (PeriodSetting singlePS : settings) {
-
-			TrzStatic singleTrz = singlePS.getTrzStatic();
-
-			if ("DOD".equals(singleTrz.getKey())) {
-				DOD = singleTrz;
-				dodValue = Double.valueOf(singlePS.getValue());
-			} else if ("OSIGUROVKI_RABOTODATEL".equals(singleTrz.getKey())) {
-				OSIGUROVKI_RABOTODATEL = singleTrz;
-				oRabotodatelValue = Double.valueOf(singlePS.getValue());
-			} else if ("OSIGUROVKI_SLUJITEL".equals(singleTrz.getKey())) {
-				OSIGUROVKI_SLUJITEL = singleTrz;
-				oSlujitelValue = Double.valueOf(singlePS.getValue());
-			} else if("CACHE_TAX".equals(singleTrz.getKey())) {
-				CACHE_TAX = singleTrz;
-				cacheTaxValue = Double.valueOf(singlePS.getValue());
-			} 
-		}
-
-		EmployeeSallaryCalculateUtil.updateSettings(bonusPersonal, bonusGroup,
-				bonusAll, salary, DOD, OSIGUROVKI_RABOTODATEL, CACHE_TAX, 
-				OSIGUROVKI_SLUJITEL, dodValue, oRabotodatelValue, 
-				oSlujitelValue, cacheTaxValue);
+		TrzStaticData data =  StaticDataLoader.load(period.getId(), em);
+		EmployeeSallaryCalculateUtil.updateSettings(bonusPersonal, bonusGroup, bonusAll, salary, data);
 		em.merge(salary);
-		// } catch (Exception e1) {
-		// logger.error(e1);
-		// rollBack();
-		// } finally {
-		// commit();
-		// }
 	}
 
 	private BigDecimal parseValue(BigDecimal initValue, String newValStr) {

@@ -6,39 +6,41 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.consultancygrid.trz.data.TrzStaticData;
 import com.consultancygrid.trz.model.Employee;
 import com.consultancygrid.trz.model.EmployeeSalary;
 import com.consultancygrid.trz.model.Period;
-import com.consultancygrid.trz.model.PeriodSetting;
-import com.consultancygrid.trz.model.TrzStatic;
 
 public class EmployeeSalaryUtil {
 
-	public static  void createSalary(EntityManager em, Period period, Employee empl,  Double vauchers,
-			TrzStatic DOD,
-			TrzStatic OSIGUROVKI_RABOTODATEL, 
-			TrzStatic OSIGUROVKI_SLUJITEL,
-			TrzStatic CACHE_TAX, 
-			Double dodValue,
-			Double oRabotodatelValue,
-			Double oSlujitelValue,
-			Double cacheTaxValue) {
+	private static final String SQL3 = "SELECT p1_individualna_premia,p2_grupova_premia,p3_obshta_premia FROM RENUMERATIONS where FK_EMPLOYEE_ID = :employeeId AND  FK_PERIOD_ID = :periodId";
+	private static final String SQL1 = " from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.code desc";
+	private static final String EMPL_ID_PARAM = "employeeId";
+	private static final String PERIOD_ID_PARAM = "periodId";
+	
+	/**
+	 * Method to create salary 
+	 * @param em
+	 * @param period
+	 * @param empl
+	 * @param data
+	 */
+	public static  void createSalary(EntityManager em, 
+									 Period period, 
+									 Employee empl,  
+									 TrzStaticData data) {
 
-		Query q = em
-				.createQuery(" from EmployeeSalary as emplSalary  where  emplSalary.employee.id = :employeeId order by emplSalary.period.code desc");
-		q.setParameter("employeeId", empl.getId());
+		Query q = em.createQuery(SQL1);
+		q.setParameter(EMPL_ID_PARAM, empl.getId());
 		List<EmployeeSalary> emplSals = (List<EmployeeSalary>) q.getResultList();
-
-		
-		String SQL3 = "SELECT p1_individualna_premia,p2_grupova_premia,p3_obshta_premia FROM RENUMERATIONS where FK_EMPLOYEE_ID = :employeeId AND  FK_PERIOD_ID = :periodId";
-		
 		EmployeeSalary salary = new EmployeeSalary();
+		
 		if (emplSals != null && !emplSals.isEmpty()) {
 
 			Query q1 = null;
 			q1 =  em.createNativeQuery(SQL3);
-			q1.setParameter("employeeId",empl.getId().toString());
-			q1.setParameter("periodId", period.getId().toString());
+			q1.setParameter(EMPL_ID_PARAM,empl.getId().toString());
+			q1.setParameter(PERIOD_ID_PARAM, period.getId().toString());
 			
 			EmployeeSalary lastSalary = emplSals.get(0);
 			//to be copied
@@ -68,8 +70,7 @@ public class EmployeeSalaryUtil {
 			//to be copied
 			salary.setV20(BigDecimal.ZERO);
 			salary.setV21(lastSalary.getV15());
-			salary.setV14(BigDecimal.valueOf(vauchers));
-			
+			salary.setV14(BigDecimal.valueOf(data.getVauchers()));
 			
 			EmployeeSallaryCalculateUtil
 			.calcSettings(
@@ -79,10 +80,9 @@ public class EmployeeSalaryUtil {
 					extractValue(lastSalary.getV13()), 
 					lastSalary.getS01(), 
 					salary, 
-					DOD, OSIGUROVKI_RABOTODATEL, OSIGUROVKI_SLUJITEL, CACHE_TAX,
-					dodValue, oRabotodatelValue, oSlujitelValue, cacheTaxValue,
 					lastSalary.getV19(),
-					null);
+					null,
+					data);
 		} 
 		
 		salary.setEmployee(empl);

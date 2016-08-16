@@ -144,8 +144,17 @@ public class PersonalCfgEmplsTableModel extends AbstractTableModel {
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
 		super.setValueAt(aValue, rowIndex, columnIndex);
-		fireTableRowsUpdated(rowIndex, columnIndex);
-		fireTableDataChanged(); 
+		Vector objcts = (Vector) data.get(rowIndex);
+		objcts.set(columnIndex, aValue) ;
+		fireTableCellUpdated(rowIndex, columnIndex);
+		fireTableDataChanged();
+	}
+	
+	public void setRowAt(Vector newRow, int rowIndex) {
+		// TODO Auto-generated method stub
+		Vector objcts = (Vector) data.set(rowIndex, newRow);
+		fireTableRowsUpdated(rowIndex, rowIndex);
+		fireTableDataChanged();
 	}
 
 	public Vector<String> getTableHeaders() {

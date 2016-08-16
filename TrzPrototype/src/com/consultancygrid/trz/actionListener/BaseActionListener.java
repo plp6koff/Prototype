@@ -61,4 +61,12 @@ public  class BaseActionListener implements ActionListener {
 		transaction = em.getTransaction();
 		transaction.begin();
 	}
+	
+	protected void openTransaction() {
+		if (em == null || transaction == null )  {
+			init();
+		} else if (!transaction.isActive()) {
+			transaction.begin();
+		}
+	}
 }

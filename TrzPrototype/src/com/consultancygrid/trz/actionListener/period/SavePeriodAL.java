@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -34,6 +35,7 @@ import com.consultancygrid.trz.model.RevenueDeptPeriod;
 import com.consultancygrid.trz.model.TrzStatic;
 import com.consultancygrid.trz.ui.combo.PeriodComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
+import com.consultancygrid.trz.util.HibernateUtil;
 import com.consultancygrid.trz.util.ResourceLoaderUtil;
 
 public class SavePeriodAL extends BaseActionListener{
@@ -65,14 +67,14 @@ public class SavePeriodAL extends BaseActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		EntityManagerFactory factory = null;
+		
 		EntityManager em = null;
+		EntityTransaction trx = null;
 		try {
 			
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			
-			em = factory.createEntityManager();
-			em.getTransaction().begin();
+			em = HibernateUtil.getEntityManager();
+			trx = em.getTransaction();
+			trx.begin();;
 			
 			Period tempPeriod = new Period();
 			tempPeriod.setCode(fieldCode.getText());
@@ -165,15 +167,12 @@ public class SavePeriodAL extends BaseActionListener{
 			} catch (HeadlessException | IOException e2) {
 				e2.printStackTrace();
 			}
-			if (em!= null && em.isOpen()) {
-				em.getTransaction().rollback();
-				em.close();
+			if (trx!= null && trx.isActive()) {
+				trx.rollback();
 			}
-
 		} finally {
-			if (em!= null && em.isOpen()) {
-				em.getTransaction().commit();
-				em.close();
+			if (trx!= null && trx.isActive()) {
+				trx.commit();
 			}
 		}	
 	}

@@ -1,13 +1,10 @@
 package com.consultancygrid.trz.actionListener.period;
 
-import static com.consultancygrid.trz.base.Constants.PERSISTENCE_UNIT_NAME;
-
 import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
 
@@ -19,6 +16,7 @@ import com.consultancygrid.trz.model.Period;
 import com.consultancygrid.trz.ui.combo.DepartmentComboBoxModel;
 import com.consultancygrid.trz.ui.combo.EmplComboBoxModel;
 import com.consultancygrid.trz.ui.frame.PrototypeMainFrame;
+import com.consultancygrid.trz.util.HibernateUtil;
 /**
  * ACtion Listener for code list
  * 
@@ -44,16 +42,13 @@ public class SettingsPeriodComboAL extends BaseActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		
-		EntityManagerFactory factory = null;
 		EntityManager em = null;
+		EntityTransaction trx = null;
 		try {
 			
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-			
-			em = factory.createEntityManager();
-
-			em.getTransaction().begin();
-
+			em = HibernateUtil.getEntityManager();
+			trx = em.getTransaction();
+			trx.begin();;
 			Period period = ((Period) comboBoxPeriod.getModel().getSelectedItem());
 
 			Query q = em.createQuery(" select distinct rDP.department from RevenueDeptPeriod as rDP  where  rDP.period.id = :periodId");
@@ -71,10 +66,12 @@ public class SettingsPeriodComboAL extends BaseActionListener {
 			
 		} catch (Exception e1) {
 			Logger.error(e1);
-
+			if (trx!= null && trx.isActive()) {
+				trx.rollback();
+			}
 		} finally {
-			if (em!= null && em.isOpen()) {
-				em.close();
+			if (trx!= null && trx.isActive()) {
+				trx.commit();
 			}
 		}
 	}
