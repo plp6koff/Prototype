@@ -1,0 +1,123 @@
+2016-07-19 09:34:21,454 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - BaONl1BIMAAhocz.jpg-large
+2016-07-19 09:34:21,457 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : BaONl1BIMAAhocz.jpg-large will be skipped!
+2016-07-19 09:34:21,457 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - job.sql
+2016-07-19 09:34:21,457 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : job.sql will be skipped!
+2016-07-19 09:34:21,457 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - labels_bg.properties
+2016-07-19 09:34:21,459 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : labels_bg.properties will be skipped!
+2016-07-19 09:34:21,460 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - LOCAL@trz1.sql
+2016-07-19 09:34:21,460 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : LOCAL@trz1.sql will be skipped!
+2016-07-19 09:34:21,460 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - order 2015 02.csv
+2016-07-19 09:34:21,526 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.util.CSVReaderUtil.readCSVcarloFibu(CSVReaderUtil.java:31) - File Parsed!
+2016-07-19 09:34:21,605 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - sales 2015 02.Csv
+2016-07-19 09:34:21,662 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.util.CSVReaderUtil.readCSVcarloFibu(CSVReaderUtil.java:31) - File Parsed!
+2016-07-19 09:34:21,675 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.processSingleFileMatchToInput(LoadFileAL.java:422) - ERRO : DanielIvanov NOT EXISTS!!!
+2016-07-19 09:34:21,694 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - Statistic-2null.xls
+2016-07-19 09:34:21,694 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : Statistic-2null.xls will be skipped!
+2016-07-19 09:34:21,695 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - Statistic-3.xls
+2016-07-19 09:34:21,695 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : Statistic-3.xls will be skipped!
+2016-07-19 09:34:21,695 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - Statistic-5.xls
+2016-07-19 09:34:21,695 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : Statistic-5.xls will be skipped!
+2016-07-19 09:34:21,696 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - Statistic-null.xls
+2016-07-19 09:34:21,696 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : Statistic-null.xls will be skipped!
+2016-07-19 09:34:21,696 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - TestXSL.xls
+2016-07-19 09:34:21,696 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:157) - File : TestXSL.xls will be skipped!
+2016-07-19 09:34:21,696 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - tur last change 2015 02.csv
+2016-07-19 09:34:21,732 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.util.CSVReaderUtil.readCSVcarloFibu(CSVReaderUtil.java:31) - File Parsed!
+2016-07-19 09:34:21,755 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.actionPerformed(LoadFileAL.java:145) - turhauptdisponent 2015 02.csv
+2016-07-19 09:34:21,778 [AWT-EventQueue-0] INFO  com.consultancygrid.trz.util.CSVReaderUtil.readCSVcarloFibu(CSVReaderUtil.java:31) - File Parsed!
+2016-07-19 09:34:21,965 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : APOPOV
+2016-07-19 09:34:21,973 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:21,973 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : APOPOV
+2016-07-19 09:34:21,997 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,149 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,211 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : KNEDIALKOV
+2016-07-19 09:34:22,219 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,219 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : KNEDIALKOV
+2016-07-19 09:34:22,243 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,352 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,385 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : IRANGELOV
+2016-07-19 09:34:22,392 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,393 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : IRANGELOV
+2016-07-19 09:34:22,414 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,470 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,487 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : MGADJEV
+2016-07-19 09:34:22,492 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,493 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : MGADJEV
+2016-07-19 09:34:22,505 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,550 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,563 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : SNENKOVA
+2016-07-19 09:34:22,570 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,571 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : SNENKOVA
+2016-07-19 09:34:22,583 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,629 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,658 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : OMARKOV
+2016-07-19 09:34:22,662 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,662 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : OMARKOV
+2016-07-19 09:34:22,675 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,728 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,741 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : KALEVA
+2016-07-19 09:34:22,745 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,745 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : KALEVA
+2016-07-19 09:34:22,756 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,797 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,817 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : ABALDARANO
+2016-07-19 09:34:22,820 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,820 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : ABALDARANO
+2016-07-19 09:34:22,832 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,863 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,874 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : METODORCHE
+2016-07-19 09:34:22,877 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,877 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : METODORCHE
+2016-07-19 09:34:22,885 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,919 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,929 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : MIGNATOV
+2016-07-19 09:34:22,932 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,932 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : MIGNATOV
+2016-07-19 09:34:22,940 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:22,980 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:22,991 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : MDIMITROV
+2016-07-19 09:34:22,994 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:22,994 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : MDIMITROV
+2016-07-19 09:34:23,002 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,042 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,052 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : ITSUTSOVA
+2016-07-19 09:34:23,056 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:23,056 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : ITSUTSOVA
+2016-07-19 09:34:23,067 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,107 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,117 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : MPAVLOVA
+2016-07-19 09:34:23,121 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:23,121 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : MPAVLOVA
+2016-07-19 09:34:23,130 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,185 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,194 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : EDIMITROV
+2016-07-19 09:34:23,198 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:23,198 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : EDIMITROV
+2016-07-19 09:34:23,206 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,244 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,255 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : ASERRA
+2016-07-19 09:34:23,259 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:23,259 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : ASERRA
+2016-07-19 09:34:23,265 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,297 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,310 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : VSIMEONOV
+2016-07-19 09:34:23,313 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:23,313 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : VSIMEONOV
+2016-07-19 09:34:23,320 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,355 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,367 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : MTOSHEVA
+2016-07-19 09:34:23,371 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:23,371 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : MTOSHEVA
+2016-07-19 09:34:23,382 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,425 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,435 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : ABESHKOVA
+2016-07-19 09:34:23,438 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:23,438 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : ABESHKOVA
+2016-07-19 09:34:23,446 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,480 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,488 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : VPETROV
+2016-07-19 09:34:23,490 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:300) - Start Settings create with Period : 2017-09
+2016-07-19 09:34:23,491 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:301) - Start Settings create with Employee : VPETROV
+2016-07-19 09:34:23,498 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:304) - Start Salary
+2016-07-19 09:34:23,539 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:307) - Start Dept Period
+2016-07-19 09:34:23,550 [AWT-EventQueue-0] DEBUG com.consultancygrid.trz.actionListener.loadFile.LoadFileAL.person2Department(LoadFileAL.java:287) - MATCHCODE : NNIKOLOV

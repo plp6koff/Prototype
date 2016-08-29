@@ -1,0 +1,17 @@
+.dialog-pane {
+	-fx-graphic: url("../image/warning-ico.png");
+	-fx-background-color: #e2ecf4;
+}
+
+.header-panel {
+	-fx-background-color: #e2ecf4;
+}
+
+.button-bar {
+	visibility: hidden;
+}
+
+.label {
+	-fx-font-size: 15px;
+	-fx-font-weight: bold;
+}

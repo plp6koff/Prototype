@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import fxmltableview.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" styleClass="mainFxmlClass"
+	prefHeight="580.0" prefWidth="1450.0" xmlns:fx="http://javafx.com/fxml"
+	fx:controller="com.bprocess.bng.tools.billViewerNG.ui.controller.MainController">
+	<children>
+		<HBox fx:id="hboxInvoiceText" alignment="CENTER_LEFT" prefHeight="145.0"
+			prefWidth="1442.0" AnchorPane.leftAnchor="14.0"
+			AnchorPane.rightAnchor="750.0" AnchorPane.topAnchor="-8.0" spacing="2.0" >
+			<children>
+				<Text strokeType="OUTSIDE" strokeWidth="0.0" fx:id="invoiceTitle">
+					<font>
+						<Font name="System Bold" size="20.0" />
+					</font>
+					<HBox.margin>
+						<Insets top="64.0" right="30.0" />
+					</HBox.margin>
+				</Text>
+				<Text strokeType="OUTSIDE" strokeWidth="0.0" fx:id="invoiceCount">
+					<HBox.margin>
+						<Insets top="64.0" />
+					</HBox.margin>
+				</Text>
+				<Text strokeType="OUTSIDE" strokeWidth="0.0" fx:id="invoiceCountText">
+					<HBox.margin>
+						<Insets top="64.0" />
+					</HBox.margin>
+				</Text>
+			</children>
+		</HBox>
+		<HBox fx:id="hboxColumnSearch" alignment="CENTER_RIGHT"
+			prefHeight="145.0" prefWidth="1436.0" AnchorPane.leftAnchor="0.0"
+			AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="-8.0" spacing="10.0" >
+			<children>
+				<Label fx:id="allColumnSearchLabel"/>
+				<TextField fx:id="allColumnSearch" maxWidth="100.0"
+					HBox.hgrow="ALWAYS" />
+				<Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetTable" styleClass="blueButton" />
+			</children>
+			<padding>
+				<Insets top="62.0" />
+			</padding>
+		</HBox>
+		<TableView fx:id="table" 
+			tableMenuButtonVisible="true" AnchorPane.bottomAnchor="81.0"
+			AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"
+			AnchorPane.topAnchor="120.0">
+			
+			<!-- <columnResizePolicy>
+            	<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy> -->
+			
+			<columns>
+				<TableColumn fx:id="number" minWidth="115.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="number" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="invoiceType" minWidth="95.0" maxWidth="95.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="invoiceType" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="date" minWidth="110.0" maxWidth="110.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="date" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="exclVat" minWidth="75.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="exclVat" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="inclVat" minWidth="70.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="inclVat" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="totalVat" minWidth="75.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="totalVat" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="currency" minWidth="60.0" maxWidth="60.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="currency" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="supplierName" minWidth="180.0" >
+				
+				</TableColumn>
+				<TableColumn fx:id="supplierIdent" minWidth="165.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="supplierIdent" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="buyerName" minWidth="180.0" >
+				
+				</TableColumn>
+				<TableColumn fx:id="buyerIdent" minWidth="150.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="buyerIdent" />
+					</cellValueFactory>
+				</TableColumn>
+				
+				<TableColumn fx:id="creationDate" minWidth="120.0" maxWidth="120.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="creationDate" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="error" minWidth="120.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="error" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="wfSteps" minWidth="60.0" maxWidth="60.0" />
+				<TableColumn fx:id="zip" minWidth="45.0" maxWidth="45.0" text="Proof" />
+				<TableColumn fx:id="cdc" minWidth="90.0" maxWidth="90.0" text="CDC" />
+				<TableColumn fx:id="softwareVersion" minWidth="115.0" maxWidth="115.0" >
+					<cellValueFactory>
+						<PropertyValueFactory property="softwareVersion" />
+					</cellValueFactory>
+				</TableColumn>
+			</columns>
+		</TableView>
+		
+		<HBox prefHeight="65.0"  AnchorPane.bottomAnchor="0.0"
+			AnchorPane.leftAnchor="20.0" spacing="10.0" alignment="CENTER_LEFT" >
+			<children>
+				<Label fx:id="limitLabel" />
+				<TextField fx:id="changeLimit" prefWidth="50.0" onAction="#changeLimit" />
+			</children>
+			<padding>
+				<Insets right="10.0" top="-40.0" />
+			</padding>
+		</HBox>
+		<HBox maxWidth="380.0" minWidth="80.0" prefHeight="65.0"
+			prefWidth="350.0" AnchorPane.bottomAnchor="0.0"
+			AnchorPane.rightAnchor="20.0" spacing="10.0" alignment="CENTER_RIGHT" >
+			<children>
+				<ComboBox fx:id="exportComboBox" prefWidth="220.0" styleClass="comboClass" />
+				<Button fx:id="exportButton" maxWidth="100.0" mnemonicParsing="false" styleClass="blueButton" disable="true" onAction="#initExportButton" />
+			</children>
+			<padding>
+				<Insets left="10.0" top="-40.0" />
+			</padding>
+		</HBox>
+		<StackPane fx:id="pagePanel" prefHeight="65.0" prefWidth="1040.0"
+			AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="190.0"
+			AnchorPane.rightAnchor="300.0">
+			<children>
+				<Pagination fx:id="pagination" currentPageIndex="5" />
+			</children>
+		</StackPane>
+		<VBox alignment="TOP_LEFT" prefHeight="25.0" prefWidth="1345.0">
+			<children>
+				<AnchorPane prefHeight="10.0" prefWidth="1345.0">
+					<children>
+						<Button fx:id="customSearch" alignment="TOP_LEFT"
+							mnemonicParsing="false" onAction="#handleButtonAction" minWidth="117.0" maxWidth="117.0"
+							AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0"
+							AnchorPane.topAnchor="5.0" styleClass="blueButton, searchbutton" />
+						<Button fx:id="fastSearch" alignment="TOP_LEFT"
+							mnemonicParsing="false" onAction="#toggleExtendableSearch"
+							AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="125.0"
+							AnchorPane.topAnchor="5.0" styleClass="blueButton, fastSearchbutton" />
+						<Button fx:id="enLang" alignment="TOP_RIGHT"
+							HBox.hgrow="ALWAYS" 
+							AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="1325.0"
+							AnchorPane.topAnchor="5.0" styleClass="langButton, enLang"/>
+						<Button fx:id="deLang" alignment="TOP_RIGHT"
+							AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="1360.0"
+							AnchorPane.topAnchor="5.0" styleClass="langButton, deLang" />
+						<Button fx:id="frLang" alignment="TOP_RIGHT"
+							AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="1390.0"
+							AnchorPane.topAnchor="5.0" styleClass="langButton, frLang" />
+					</children>
+				</AnchorPane>
+				<AnchorPane fx:id="extendableSearchPane" minHeight="50.0"
+					prefHeight="80.0" prefWidth="-1">
+					<children>
+						<GridPane hgap="10.0" minHeight="40.0" prefHeight="80.0"
+							prefWidth="-1" snapToPixel="true" vgap="0.0"
+							AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+							<children>
+								<Label fx:id="searchInvNumberLabel" GridPane.columnIndex="0"
+									GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+								<TextField fx:id="filterFieldInvoice"
+									GridPane.columnIndex="1" GridPane.rowIndex="0" />
+								<Label fx:id="searchCurrencyLabel" GridPane.columnIndex="2"
+									GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+								<ComboBox fx:id="filterFieldCurrency"
+									GridPane.columnIndex="3" GridPane.rowIndex="0" styleClass="comboClass">
+								</ComboBox> 
+								<Label fx:id="searchSuppLabel" GridPane.columnIndex="4"
+									GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+								<TextField fx:id="filterFieldSupplierName"
+									GridPane.columnIndex="5" GridPane.rowIndex="0" />
+								<Label fx:id="searchSuppIdentLabel"
+									GridPane.columnIndex="6" GridPane.halignment="RIGHT"
+									GridPane.rowIndex="0" />
+								<TextField fx:id="filterFieldSupplierIdent"
+									GridPane.columnIndex="7" GridPane.rowIndex="0" />
+								<Label fx:id="searchBuyerLabel" GridPane.columnIndex="0"
+									GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+								<TextField fx:id="filterFieldBuyerName"
+									GridPane.columnIndex="1" GridPane.rowIndex="1" />
+								<Label fx:id="searchBuyerIdentLabel" GridPane.columnIndex="2"
+									GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+								<TextField fx:id="filterFieldBuyerIdent"
+									GridPane.columnIndex="3" GridPane.rowIndex="1" />
+								<Label fx:id="searchInvoiceTypeLabel" GridPane.columnIndex="4"
+									GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+								<ComboBox fx:id="filterFieldInvoiceType" GridPane.columnIndex="5"
+									GridPane.rowIndex="1" styleClass="comboClass">
+								</ComboBox>
+							</children>
+							<columnConstraints>
+								<ColumnConstraints hgrow="ALWAYS" minWidth="10.0"
+									prefWidth="120.0" />
+								<ColumnConstraints hgrow="ALWAYS" minWidth="10.0"
+									prefWidth="150.0" />
+								<ColumnConstraints hgrow="ALWAYS" minWidth="10.0"
+									prefWidth="150.0" />
+								<ColumnConstraints hgrow="ALWAYS" minWidth="10.0"
+									prefWidth="150.0" />
+								<ColumnConstraints hgrow="ALWAYS" minWidth="10.0"
+									prefWidth="105.0" />
+								<ColumnConstraints hgrow="ALWAYS" minWidth="10.0"
+									prefWidth="150.0" />
+								<ColumnConstraints hgrow="ALWAYS" minWidth="10.0"
+									prefWidth="160.0" />
+								<ColumnConstraints hgrow="ALWAYS" minWidth="10.0"
+									prefWidth="150.0" />
+							</columnConstraints>
+							<padding>
+								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+							</padding>
+							<rowConstraints>
+								<RowConstraints maxHeight="32.0" minHeight="10.0"
+									prefHeight="22.0" vgrow="ALWAYS" />
+								<RowConstraints maxHeight="32.0" minHeight="10.0"
+									prefHeight="22.0" vgrow="ALWAYS" />
+							</rowConstraints>
+						</GridPane>
+					</children>
+				</AnchorPane>
+			</children>
+		</VBox>
+	</children>
+</AnchorPane>

@@ -1,0 +1,8 @@
+.header-panel {
+    -fx-background-color: #e2ecf4;
+    -fx-font-weight: bold;
+}
+
+.label {
+	-fx-font-weight: bold;
+}

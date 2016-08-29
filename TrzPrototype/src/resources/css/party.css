@@ -1,0 +1,61 @@
+.anchorPane {
+	-fx-background-color: #f0f5f9;
+}
+
+.gridPane {
+    -fx-alignment: center;
+    -fx-background-color: lightblue;
+    -fx-padding: 2;
+    -fx-hgap: 2;
+    -fx-vgap: 2;
+}
+
+.paneAttribute {
+	-fx-background-color: #449ace;
+	-fx-padding: 5;
+}
+
+.paneValue {
+	-fx-background-color: #f0f5f9;
+	-fx-padding: 5;
+}
+
+.childAttribute {
+	-fx-background-color: #449ace;
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+}
+
+.childValue {
+	-fx-font-size: 12px;
+}
+
+.header-panel {
+    -fx-background-color: #e2ecf4;
+    -fx-font-weight: bold;
+}
+
+.button-bar {
+	-fx-pref-height: 0.0;
+}
+
+.label {
+	-fx-padding: 0 4 0 4;
+}
+
+#identLabel {
+	-fx-pref-width: 110.0;
+}
+
+#codes > .label {
+	-fx-padding: 0 4 0 4; 	
+}
+
+.hyperlink:focused {
+    -fx-border-color: transparent;
+	-fx-underline: false;
+}
+
+.hyperlink:hover {
+    -fx-underline: false;
+}

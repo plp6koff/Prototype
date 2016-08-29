@@ -1,0 +1,154 @@
+.mainFxmlClass {
+  -fx-background-color: #f0f5f9;
+}
+/*TABLE */
+.table-column{-fx-base:#449ace;}
+.table-row-cell:odd { -fx-background: #e2ecf4;}
+.table-row-cell:even { -fx-background: #f0f5f9;}
+
+.table-view {
+    -fx-base: #e2ecf4;
+    -fx-control-inner-background: #e2ecf4;
+    -fx-background-color: #e2ecf4;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: #C0C0C0;
+}
+
+.table-row-cell:empty {
+-fx-background-color: #e2ecf4;
+}
+
+.table-row-cell:empty .table-cell {
+-fx-border-width: 0px;
+}
+
+.table-row-cell:empty .table-cell .tooltip {
+    -fx-background-radius: 0 0 0 0;
+    -fx-background-color: #e2ecf4;
+    -fx-text-fill: #e2ecf4;
+    }
+    
+.tooltip {
+    -fx-background-radius: 7 7 7 7;
+    -fx-background-color: linear-gradient(#FF9900, #DEDEDE);
+    -fx-text-fill: #000066;
+}
+
+.orangeButton {
+  -fx-background-color: 
+         linear-gradient(#ffd65b, #e68400),
+         linear-gradient(#ffef84, #f2ba44),
+         linear-gradient(#ffea6a, #efaa22),
+         linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+         linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), 
+rgba(255,255,255,0));
+     -fx-background-radius: 10;
+     -fx-background-insets: 0,1,2,3,0;
+     /*-fx-text-fill: #654b00;*/
+     -fx-font-weight: bold;
+     -fx-font-size: 14px;
+     -fx-padding: 5 10 5 10;
+}
+
+.orangeButton:hover {
+    -fx-background-color:
+        linear-gradient(from 0% 93% to 0% 100%, #e68400 0%, #e68400 100%),
+        #efaa22,
+        #efaa22,
+        radial-gradient(center 50% 50%, radius 100%, #f2ba44, #e68400);
+        -fx-cursor: hand;
+}
+
+.dialog-pane {
+    -fx-background-color: #f0f5f9;
+}
+
+.button-bar {
+    -fx-font-size: 16px;
+    -fx-background-color: #f0f5f9;
+    -fx-font-family: "Andalus";
+}
+
+.content.label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold; 
+    -fx-fill: blue;
+}
+
+.header-panel {
+    -fx-background-color: #f0f5f9;
+    -fx-font-style: italic;
+}
+
+.dialog-pane {
+    -fx-graphic: url("../image/plus-ico.png");
+}
+
+.comboClass {
+	-fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-radius: 3, 2, 2;
+}
+
+/* search button */
+
+.blueButton {
+  -fx-background-color: 
+         linear-gradient(#89CEF8, #449ACE),
+         linear-gradient(#58BCFA, #48A0D7),
+         linear-gradient(#54B5F1, #4BA6DE),
+         linear-gradient(#51AFEA 0%, #4EA9E2 50%, #4EA9E2 100%),
+         linear-gradient(from 0% 0% to 20% 65%, rgba(255,255,255,0.9), 
+rgba(255,255,255,0));
+     -fx-background-radius: 10;
+     -fx-background-insets: 0,1,2,3,0;
+     /*-fx-text-fill: #654b00;*/
+     -fx-font-weight: bold;
+     -fx-font-size: 14px;
+     -fx-padding: 5 10 5 10;
+     -fx-alignment: center;
+     -fx-background-position: left;
+}
+
+.searchbutton {
+	-fx-graphic: url("../image/search-icon.png");
+}
+
+.fastSearchbutton {
+	-fx-graphic: url("../image/clock.png");
+}
+
+.langButton {
+	-fx-background-size: 100% 100%;
+	-fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;  
+}
+
+.langButton:hover {
+	-fx-cursor: hand;
+}
+
+.enLang{
+	-fx-graphic: url("../image/en_flag.png");
+}
+
+.deLang {
+	-fx-graphic: url("../image/de_flag.png");
+}
+
+.frLang {
+	-fx-graphic: url("../image/flag_fr.png");
+}
+
+.blueButton:hover {
+    -fx-background-color:
+        linear-gradient(from 0% 93% to 0% 100%, #449ACE 0%, #449ACE 100%),
+        #51B3F0,
+        #51B3F0,
+        radial-gradient(center 50% 50%, radius 100%, #51B3F0, #449ACE);
+        -fx-cursor: hand;
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" styleClass="mainFxmlClass"
+	prefHeight="580.0" prefWidth="1450.0" xmlns:fx="http://javafx.com/fxml"
+	fx:controller="com.consultancygrid.trz.ui.controller.EmployeeViewController">
+	<children>
+		<TableView fx:id="table" tableMenuButtonVisible="false" 
+			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+			AnchorPane.topAnchor="25.0" AnchorPane.bottomAnchor="5.0" >
+			<columns>
+				<TableColumn minWidth="100.0" prefWidth="100.0" text="%period"
+					fx:id="period" >
+					<cellValueFactory>
+						<PropertyValueFactory property="period" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn minWidth="200.0" prefWidth="200.0" text="%v0"
+					fx:id="v0">
+					<cellValueFactory>
+						<PropertyValueFactory property="v0" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn minWidth="100.0" prefWidth="100.0" text="%v1"
+					fx:id="v1" >
+					<cellValueFactory>
+						<PropertyValueFactory property="v2" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn minWidth="140.0" prefWidth="130.0" text="%v2"
+					fx:id="v2" >
+					<cellValueFactory>
+						<PropertyValueFactory property="v2" />
+					</cellValueFactory>
+				</TableColumn>
+			</columns>
+		</TableView>
+	</children>
+</AnchorPane>
